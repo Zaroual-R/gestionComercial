@@ -11,3 +11,113 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.my-aside{
+  padding :"20px";
+}
+
+.my-footer{
+  margin-bottom: 0px;
+}
+/* style management of product*/
+.ajouter-produit{
+  margin-left:17.7%;
+  border:10px solid #000 ;
+  padding:20px;
+}
+.list-produit{
+  margin-left:18%;
+  padding:10px;
+  padding-bottom:300px;
+}
+.product-listCategore-serach{
+  
+
+}
+
+.modefier-produit{
+  margin-left:17.7%;
+  padding:10px;
+  border:10px solid #000;
+}
+.ajouter-categorie{
+  margin-left:17.8%;
+  padding:10px;
+  margin-bottom: 300px;
+  border:10px solid #000;
+  padding-bottom: 400px;
+}
+.list-categorie{
+  margin-left:18%;
+  padding:10px;
+  margin-bottom: 300px;
+    
+}
+.modefie-categorie{
+  margin-left:17.7%;
+  padding:10px;
+  margin-bottom: 300px;
+  border:10px solid #000;
+}
+
+/* end style management of product*/
+
+/*start style of clients*/
+.ajouter-client{
+  margin-left:17.7%;
+  padding:10px;
+  border:10px solid #000;
+}
+.list-client{
+  margin-left:17.7%;
+  padding:10px;
+  margin-bottom: 400px;
+}
+.form-list-client{
+   margin-bottom: 0px;
+}
+.modefier-client{
+  margin-left:17.7%;
+  padding:10px;
+  border:10px solid #000;
+}
+/*end style of clients */
+
+/*start style of commande*/
+.ajouter-cmd{
+  border:10px solid #000;
+  margin-left:17.7%;
+  padding:10px;
+  padding-bottom:100px;
+  width:85%;
+}
+.ajouter-cmd-form{
+  
+}
+.list-addC-client{
+  margin-left:17.7%;
+  padding :10px;
+  padding-bottom:280px;
+}
+.list-commande{
+  margin-left:17.7%;
+  padding:10px;
+  margin-bottom:280px;
+  width:80%;
+  border:10px solid #000 ;
+}
+.btn-ajouter-cmd{
+  margin-bottom: 10px;
+}
+.btn-reset-cmd{
+  margin-bottom: 10px;
+}
+.modefier-cmd{
+  border:10px solid #000 ;
+  margin-left:17.7%;
+  padding:10px;
+  padding-bottom:100px;
+  width:85%;
+}
+
+/*end style of commande*/
+
