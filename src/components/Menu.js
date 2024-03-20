@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink,Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 const Menu = () => {
   return (
     <aside className="main-sidebar sidebar-dark-primary elevation-4 my-aside">
@@ -16,7 +16,7 @@ const Menu = () => {
             <img src="../dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="UserImage" />
           </div>
           <div className="info">
-            <a href="#" className="d-block">rachid zaroual</a>
+            <a href="#" className="d-block text-md">Rachid Zaroual</a>
           </div>
         </div>
         {/* Sidebar Menu */}
@@ -24,14 +24,15 @@ const Menu = () => {
           <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             {/* Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library */}
-            <li className="nav-item has-treeview menu-open">
-                <NavLink to='/'>
-                  <i className="nav-icon fas fa-tachometer-alt" />
-                  <p>
-                    Dashboard
-                  </p>
-                </NavLink>
-            </li>
+         <li class="nav-item has-treeview menu-open">
+            <NavLink to='/' className='nav-link active'>
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Dashboard
+                <i class=""></i>
+              </p>
+            </NavLink>
+          </li>
             <li className="nav-item">
               <NavLink to='/' className='nav-link'>
                 <i className="nav-icon fas fa-th" />
@@ -104,7 +105,7 @@ const Menu = () => {
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-edit" />
                 <p>
-                   Commandes
+                  Commandes
                   <i className="fas fa-angle-left right" />
                 </p>
               </a>

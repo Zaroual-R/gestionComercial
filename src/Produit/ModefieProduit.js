@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRef,useState,useEffect } from 'react'
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import CategorieService from '../backEndService/CategorieService';
 import ProductService from '../backEndService/ProductService';
 
@@ -11,6 +11,7 @@ const ModefieProduit = () => {
     const details1=useRef();
     const categorieProduit1=useRef();
     const [errors,setErrors]=useState({});
+    const [alertMessage,setAlertMessage]=useState("");
     let isValide=true;
     const [categories,setCategories]=useState([]);
     const location=useLocation();
@@ -137,38 +138,69 @@ const ModefieProduit = () => {
         }));
         console.log(produit);
         validateForm();
+        setAlertMessage("");
     }
 
     /*start handleSubmit function*/
     const handleSubmit = (e) => {
         e.preventDefault();
         if(validateForm()) {
-            ProductService.updateProduct(produit)
+            ProductService.updateProduct(produit,idP)
                 .then(responce =>{
                     console.log("produit modefié avec succes",responce.data);
                     setProduit({
-                        refProd:refP,
+                        refProd:'',
                         nomProd: '',
                         prixUnitaireHT: 0,
                         details: '',
                         category:0
                     });
                     handleReset2();
+                    setAlertMessage("success");
                 })
                 .catch(error =>{
                     console.error("error de modefier le produit ",error);
+                    setAlertMessage("error");
                 })
 
         }   
     }
     /*end handleSubmit function*/
-  
+    const alertOfSucces = () =>{
+        return (<div className='alert alert-success ' role="alert">
+            le produit a été ajouté avec succés
+         </div>)
+     }
+     //function to return alert of error
+     //function to return error
+     const alertOfError = () =>{
+         return(
+             <div className='alert alert-danger' role="alert">
+                 error dans l'ajout de produit 
+             </div>
+         )
+     }
+ 
+     //function to return a correspondant alert
+     const alert = (message) =>{
+         switch(message){
+             case "error":
+                 return  alertOfError();
+             case "success":
+                 return  alertOfSucces();
+             default :
+                 return null;
+             
+         }
+           
+     }
   return (
     <div className="container modefier-produit">
     <div className='row '>
       <div className='col-8'>
       <form onSubmit={handleSubmit}>
           <h1>Modefier produit</h1>
+          {alert(alertMessage)}
           <hr></hr>
           <div className="form-outline mb-4">
               <label className="form-label" htmlFor="refProduit">Référece produit :</label>

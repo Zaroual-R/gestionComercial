@@ -9,6 +9,7 @@ const AjouterProduit = () => {
     const details=useRef();
     const categorieProduit=useRef();
     const [errors,setErrors]=useState({});
+    const [alertMessage,setAlertMessage]=useState("");
     const [produit ,setProduit]=useState({refProd:'',nomProd:'',prixUnitaireHT:0,details:'',category:0,})
     let isValide=true;
     const [categories,setCategories]=useState([]);
@@ -114,6 +115,7 @@ const AjouterProduit = () => {
             [name]: value
         }));
         console.log(produit);
+        setAlertMessage("");
     }
     
 
@@ -134,13 +136,43 @@ const AjouterProduit = () => {
                         category:0.0
                     });
                     handleReset2();
+                    setAlertMessage("success");
                 })
                 .catch(error =>{
                     console.error("error de l'ajout de produit ",error);
+                    setAlertMessage("error");
                 })
 
         }   
     }
+    const alertOfSucces = () =>{
+        return (<div className='alert alert-success ' role="alert">
+            le produit a été ajouté avec succés
+         </div>)
+     }
+     //function to return alert of error
+     //function to return error
+     const alertOfError = () =>{
+         return(
+             <div className='alert alert-danger' role="alert">
+                 error dans l'ajout de produit 
+             </div>
+         )
+     }
+ 
+     //function to return a correspondant alert
+     const alert = (message) =>{
+         switch(message){
+             case "error":
+                 return  alertOfError();
+             case "success":
+                 return  alertOfSucces();
+             default :
+                 return null;
+             
+         }
+           
+     }
      /*end function handle submit*/
      
     return (
@@ -149,6 +181,7 @@ const AjouterProduit = () => {
             <div className='col-8'>
             <form onSubmit={handleSubmit} >
                 <h2>Nouveau produit</h2>
+                {alert(alertMessage)}
                 <hr></hr>
                 <div className="form-outline mb-4">
                     <label className="form-label" htmlFor="refProduit">Référece produit :</label>

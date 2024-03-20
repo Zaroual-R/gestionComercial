@@ -12,6 +12,7 @@ const ModefieClient = () => {
     const emailField1 = useRef();
     const codePostalField1 = useRef();
     const [errors, setErrors] = useState({});
+    const [alertMessage,setAlertMessage]=useState("");
     let isValide = true;
 
     const location = useLocation()
@@ -150,6 +151,7 @@ const ModefieClient = () => {
         }));
         console.log(client);
         validatForm(); // Valider le formulaire après chaque changement
+        setAlertMessage("")
     }
 
     //start hundle submit functio 
@@ -172,13 +174,42 @@ const ModefieClient = () => {
                         }
                     );
                     handleReset2();
+                    setAlertMessage("success")
                 })
                 .catch(error => {
                     console.error("error de modefication de client");
+                    setAlertMessage("error")
                 })
         }
     }
-
+    const alertOfSucces = () =>{
+        return (<div className='alert alert-success ' role="alert">
+            le client a été modefié avec succés
+         </div>)
+     }
+     //function to return alert of error
+     //function to return error
+     const alertOfError = () =>{
+         return(
+             <div className='alert alert-danger' role="alert">
+                 error dans la modefication de client 
+             </div>
+         )
+     }
+ 
+     //function to return a correspondant alert
+     const alert = (message) =>{
+         switch(message){
+             case "error":
+                 return  alertOfError();
+             case "success":
+                 return  alertOfSucces();
+             default :
+                 return null;
+             
+         }
+           
+     }
 
     return (
         <div className="container ajouter-client">
@@ -186,6 +217,7 @@ const ModefieClient = () => {
                 <div className='col-8 ' >
                     <form onSubmit={handleSubmit}>
                         <h2 className='text-dark'>Modefier Client</h2>
+                        {alert(alertMessage)}
                         <hr></hr>
                         <div className="form-outline mb-4">
                             <label className="form-label" htmlFor="nomClient">Nom</label>

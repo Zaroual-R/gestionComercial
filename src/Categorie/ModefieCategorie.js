@@ -7,6 +7,7 @@ const ModefieCategorie = () => {
     const [errors,setErrors]=useState({});
     let isfvalid=true;
     const [categorie,setCategorie]=useState();
+    const [alertMessage,setAlertMessage]=useState("");
     const params = useParams();
     const idCategorie=params.idCat;
     console.log("voici l id recupere"+idCategorie)
@@ -56,6 +57,7 @@ const ModefieCategorie = () => {
     const handleChange = (e) =>{
         validatForm();
         setCategorie(nomCategorieField1.current.value);
+        setAlertMessage("");
     }
     //start handlesubmit function 
     const handleSubmit = (e) =>{
@@ -66,18 +68,49 @@ const ModefieCategorie = () => {
                         console.log("categorie a été modifie avec succes",responce.data)
                         setCategorie('');
                         nomCategorieField1.current.value='';
+                        setAlertMessage("success");
                     })
                     .catch(error =>{
                         console.error("error dans la modefication de categorir");
+                        setAlertMessage("error");
                     })
         }
     }
+    const alertOfSucces = () =>{
+        return (<div className='alert alert-success ' role="alert">
+            la categorie a été modefié avec succés
+         </div>)
+     }
+     //function to return alert of error
+     //function to return error
+     const alertOfError = () =>{
+         return(
+             <div className='alert alert-danger' role="alert">
+                 error dans la modefication de categorie 
+             </div>
+         )
+     }
+ 
+     //function to return a correspondant alert
+     const alert = (message) =>{
+         switch(message){
+             case "error":
+                 return  alertOfError();
+             case "success":
+                 return  alertOfSucces();
+             default :
+                 return null;
+             
+         }
+           
+     }
   return (
     <div className='container modefie-categorie'>
     <div className='row'>
         <div className='col-8'>
             <form onSubmit={handleSubmit}>
                 <h2>Modefier Categorie</h2>
+                {alert(alertMessage)}
                 <hr />
                 <input type="text" id="idCategorie"  hidden/>
                 <div className="form-outline mb-4">

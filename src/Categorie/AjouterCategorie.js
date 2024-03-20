@@ -4,6 +4,7 @@ import CategorieService from '../backEndService/CategorieService';
 const AjouterCategorie = () => {
     const nomCategorieField=useRef();
     const [errors,setErrors]=useState({});
+    const [alertMessage,setAlertMessage]=useState("");
     let isfvalid=true;
     const [categorie,setCategorie]=useState('');
     //start form validation function
@@ -53,6 +54,7 @@ const AjouterCategorie = () => {
         validatForm();
         const nomCategorieValue=e.target.value;
         setCategorie(nomCategorieValue);
+        setAlertMessage("");
     }
     //start handlesubmit function 
     const handleSubmit = (e) =>{
@@ -63,19 +65,50 @@ const AjouterCategorie = () => {
                     console.log("categorie ajouté avec succes ",responce.data);
                     setCategorie('');
                     nomCategorieField.current.value=''; 
+                    setAlertMessage("success");
                 })
                 .catch(error => {
                     console.error("error pour l'ajout de categorie",error);
+                    setAlertMessage("error");
                 })
                
         }
     }
+    const alertOfSucces = () =>{
+        return (<div className='alert alert-success ' role="alert">
+            la categorie a été ajouté avec succés
+         </div>)
+     }
+     //function to return alert of error
+     //function to return error
+     const alertOfError = () =>{
+         return(
+             <div className='alert alert-danger' role="alert">
+                 error dans l'ajout de categorie 
+             </div>
+         )
+     }
+ 
+     //function to return a correspondant alert
+     const alert = (message) =>{
+         switch(message){
+             case "error":
+                 return  alertOfError();
+             case "success":
+                 return  alertOfSucces();
+             default :
+                 return null;
+             
+         }
+           
+     }
     return (
         <div className='container ajouter-categorie'>
             <div className='row'>
                 <div className='col-8'>
                     <form onSubmit={handleSubmit}>
                         <h1>Nouveau Categorie </h1>
+                        {alert(alertMessage)}
                         <hr />
                         <div className="form-outline mb-4">
                             <label className="form-label" htmlFor="nomCategorieField">Nom categorie :</label>

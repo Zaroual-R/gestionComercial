@@ -8,8 +8,8 @@ class ProductService {
         return axios.post(`${API_URL}/create`, produitDto);
     }
 
-    updateProduct(produitDto) {
-        return axios.put(`${API_URL}/update`, produitDto);
+    updateProduct(produitDto ,id) {
+        return axios.put(`${API_URL}/update/${id}`, produitDto);
     }
 
     deleteProduct(id) {
