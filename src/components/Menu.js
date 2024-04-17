@@ -128,28 +128,22 @@ const Menu = () => {
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-warehouse" />
                 <p>
-                  Stock
+                  Gestion Fournisseur
                   <i className="fas fa-angle-left right" />
                 </p>
               </a>
               <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <a href="pages/forms/general.html" className="nav-link">
+                  <NavLink to="/AjouterFournisseur" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>General Elements</p>
-                  </a>
+                    <p>Nouveau Fournisseur</p>
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a href="pages/forms/advanced.html" className="nav-link">
+                  <NavLink to="/ListFournisseur" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>Advanced Elements</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/forms/editors.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Editors</p>
-                  </a>
+                    <p>Consulter fournisseurs</p>
+                  </NavLink>
                 </li>
               </ul>
             </li>
@@ -157,28 +151,22 @@ const Menu = () => {
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-file-invoice" />
                 <p>
-                  Factures
+                  Achat
                   <i className="fas fa-angle-left right" />
                 </p>
               </a>
               <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <a href="pages/tables/simple.html" className="nav-link">
+                  <NavLink to="/CommandeFournisseur" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>Simple Tables</p>
-                  </a>
+                    <p>Nouveau commande</p>
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a href="pages/tables/data.html" className="nav-link">
+                  <NavLink to="/ListCmdFour" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>DataTables</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/tables/jsgrid.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>jsGrid</p>
-                  </a>
+                    <p>list commande</p>
+                  </NavLink>
                 </li>
               </ul>
             </li>

@@ -173,7 +173,8 @@ const AjouterCmd = () => {
                 console.log(lignCmdEnvoyer)
 
                 setLignCommandeAfficher(prevState => ([...prevState, lignCmdAfficher]));
-                setLignCommandeEnvoyer(prevState =>( [...prevState, lignCmdEnvoyer]))
+                setLignCommandeEnvoyer(prevState =>( [...prevState, lignCmdEnvoyer]));
+                
             })
             .catch(error => {
                 console.error("error to get product", error);

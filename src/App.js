@@ -19,6 +19,20 @@ import ListCommande from './Commands/ListCommande';
 import ModefieCmd from './Commands/ModefieCmd';
 import AddCmd from './Commands/AddCmd';
 import ModefieCategorie from './Categorie/ModefieCategorie';
+import AjouterFournisseur from './fournisseur/AjouterFournisseur';
+import ListFournisseur from './fournisseur/ListFournisseur';
+import ModefierFournisseur from './fournisseur/ModefierFournisseur';
+import MoreDetails from './fournisseur/MoreDetails';
+import CommandeFournisseur from './fournisseur/CommandeFournisseur';
+import BonCmdDocument from './fournisseur/BonCmdDocument';
+import CreateEmail from './fournisseur/CreateEmail';
+import ListCmdFour from './CommandeFour/ListCmdFour';
+import DetailsCommande from './CommandeFour/DetailsCommande';
+import AjouterBonLivraison from './CommandeFour/AjouterBonLivraison'
+import AjouterFactureFour from './CommandeFour/AjouterFactureFour';
+import ManageCommande from './CommandeFour/ManageCommande';
+import ModefierBonLivraisonFour from './CommandeFour/ModefieBonLivraisonFour';
+import ModefieFactureFour from './CommandeFour/ModefierFactureFour';
 /*<Header/>
 <div className="wrapper">
         <Menu/>
@@ -33,19 +47,34 @@ function App() {
         <Menu />
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/AjouterProduit" element={<AjouterProduit/>}/>
-          <Route path="/ListProduit" element={<ListProduit/>}/>
-          <Route path="/AjouterCategorie" element={<AjouterCategorie/>}/>
-          <Route path="/ListCategorie" element={<ListCategorie/>}/>
-          <Route path="/AjouterClient" element={<AjouterClient/>}/>
-          <Route path="/ListClients" element={<ListeClients/>}/>
-          <Route path="/AddCmd" element={<AddCmd/>}/>
-          <Route path="/ListCommande" element={<ListCommande/>}/>
-          <Route path="/ModefieProduit" element={<ModefieProduit />} />
+          <Route path="/AjouterProduit"      element={<AjouterProduit/>}/>
+          <Route path="/ListProduit"         element={<ListProduit/>}/>
+          <Route path="/AjouterCategorie"    element={<AjouterCategorie/>}/>
+          <Route path="/ListCategorie"       element={<ListCategorie/>}/>
+          <Route path="/AjouterClient"       element={<AjouterClient/>}/>
+          <Route path="/ListClients"         element={<ListeClients/>}/>
+          <Route path="/AddCmd"              element={<AddCmd/>}/>
+          <Route path="/ListCommande"        element={<ListCommande/>}/>
+          <Route path="/ModefieProduit"      element={<ModefieProduit />} />
           <Route path="/ModefieCategorie/:idCat" element={<ModefieCategorie/>}/>
-          <Route path="/ModefieClient" element={<ModefieClient/>}/>
-          <Route path="/AjouterCmd" element={<AjouterCmd/>}/>
-          <Route path="/ModefieCmd"  element={<ModefieCmd/>}/>
+          <Route path="/ModefieClient"       element={<ModefieClient/>}/>
+          <Route path="/AjouterCmd"          element={<AjouterCmd/>}/>
+          <Route path="/ModefieCmd"          element={<ModefieCmd/>}/>
+          <Route path="/AjouterFournisseur"  element={<AjouterFournisseur/>}/>
+          <Route path="/ListFournisseur"     element={<ListFournisseur/>}/>
+          <Route path='/ModefierFournisseur' element={<ModefierFournisseur/>}/>
+          <Route path='/MoreDetails'         element={<MoreDetails/>}/>
+          <Route path="/CommandeFournisseur" element={<CommandeFournisseur/>}/>
+          <Route path="/BonCmdDocument"      element={<BonCmdDocument/>}></Route>
+          <Route path='/CreateEmail'         element={<CreateEmail/>}/>
+          <Route path='/ListCmdFour'         element={<ListCmdFour/>}/>
+          <Route path='/DetailsCommande'     element={<DetailsCommande/>}/>
+          <Route path='/AjouterBonLivraison' element={<AjouterBonLivraison/>}/>
+          <Route path='/ModefierBonLivraisonFour' element={<ModefierBonLivraisonFour/>}/>
+          <Route path='/AjouterFactureFour'  element={<AjouterFactureFour/>}/>
+          <Route path='/AjouterFactureFour'  element={<ModefieFactureFour/>}/>
+          <Route path='/ModefierFactureFour' element={<ModefieFactureFour/>}/>
+          <Route path='/ManageCommande'      element={<ManageCommande/>} />   
         </Routes>
         <Footer />      
     </BrowserRouter>

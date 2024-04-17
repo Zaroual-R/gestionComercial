@@ -10,14 +10,15 @@ const ModefieProduit = () => {
     const prixProduit1=useRef();
     const details1=useRef();
     const categorieProduit1=useRef();
+    const tva1=useRef();
     const [errors,setErrors]=useState({});
     const [alertMessage,setAlertMessage]=useState("");
     let isValide=true;
     const [categories,setCategories]=useState([]);
     const location=useLocation();
     const {state}=location;
-    const {idP,refP,nomP,prixP,categorieP,detailsP}=state || {};
-    const [produit ,setProduit]=useState({ refProd:refP,nomProd:nomP,prixUnitaireHT:prixP,details:detailsP,category:categorieP})
+    const {idP,refP,nomP,prixP,categorieP,detailsP,tva}=state || {};
+    const [produit ,setProduit]=useState({ refProd:refP,nomProd:nomP,prixUnitaireHT:prixP,details:detailsP,category:categorieP,tva:tva})
     
     useEffect(()=>{
         CategorieService.getAllCategorie()
@@ -38,6 +39,7 @@ const ModefieProduit = () => {
         prixProduit1.current.value=prixP;
         details1.current.value=detailsP;
         categorieProduit1.current.value=categorieP;
+        tva1.current.value=tva;
     }
 
     /*start handle reset produit*/
@@ -48,12 +50,14 @@ const ModefieProduit = () => {
         prixProduit1.current.value='';
         details1.current.value='';
         categorieProduit1.current.value='';
+        tva1.current.value='';
      }
      const handleReset2 = ()=>{
         nomProduit1.current.value='';
         prixProduit1.current.value='';
         details1.current.value='';
         categorieProduit1.current.value='';
+        tva1.current.value='';
       }
     /*end handle reset produit*/
 
@@ -66,6 +70,7 @@ const ModefieProduit = () => {
         const prixValue=prixProduit1.current.value;
         const detailsValue=details1.current.value;
         const categorieValue=categorieProduit1.current.value;
+        const tvaValue=tva1.current.value;
 
         if(refValue.trim()==''){
             setErrors(prevState =>  {
@@ -94,6 +99,12 @@ const ModefieProduit = () => {
         if(categorieValue.trim()==''){
             setErrors(prevState =>  {
                 return {...prevState,... {categorieProduit1:"categorie required"}};
+            });
+            isValide=false;
+        }
+        if(tvaValue <0 || tvaValue>100){
+            setErrors(prevState =>  {
+                return {...prevState,... {tva1:"la tva doit étre compris entre 0 et 100 poucent"}};
             });
             isValide=false;
         }
@@ -153,7 +164,8 @@ const ModefieProduit = () => {
                         nomProd: '',
                         prixUnitaireHT: 0,
                         details: '',
-                        category:0
+                        category:0,
+                        tva:0
                     });
                     handleReset2();
                     setAlertMessage("success");
@@ -221,6 +233,11 @@ const ModefieProduit = () => {
               <label htmlFor="details">Details produit :</label>
               <textarea id="details1" name="details" className="form-control" placeholder='saisir les details de produit' ref={details1} onChange={handleChange} />
               {displayErr("details1")}
+          </div>
+          <div className="form-outline mb-4">
+              <label htmlFor="tva1">Details produit :</label>
+              <textarea id="tva1" name="tva" className="form-control" placeholder='saisir la tva de produit' ref={tva1} onChange={handleChange} />
+              {displayErr("tva1")}
           </div>
           <div className="form-outline mb-4">
               <label htmlFor="categorieProduit1">Categorie :</label>

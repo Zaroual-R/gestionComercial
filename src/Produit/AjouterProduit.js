@@ -8,9 +8,10 @@ const AjouterProduit = () => {
     const prixProduit=useRef();
     const details=useRef();
     const categorieProduit=useRef();
+    const tva=useRef();
     const [errors,setErrors]=useState({});
     const [alertMessage,setAlertMessage]=useState("");
-    const [produit ,setProduit]=useState({refProd:'',nomProd:'',prixUnitaireHT:0,details:'',category:0,})
+    const [produit ,setProduit]=useState({refProd:'',nomProd:'',prixUnitaireHT:0,details:'',category:0,tva:0})
     let isValide=true;
     const [categories,setCategories]=useState([]);
 
@@ -34,6 +35,7 @@ const AjouterProduit = () => {
         prixProduit.current.value='';
         details.current.value='';
         categorieProduit.current.value='';
+        tva.current.value='';
       }
       const handleReset2 = ()=>{
         refProduit.current.value='';
@@ -41,6 +43,7 @@ const AjouterProduit = () => {
         prixProduit.current.value='';
         details.current.value='';
         categorieProduit.current.value='';
+        tva.current.value='';
       }
     /*end handle reset button action*/
 
@@ -52,6 +55,7 @@ const AjouterProduit = () => {
         const prixValue=prixProduit.current.value;
         const detailValue=details.current.value;
         const categorieValue=categorieProduit.current.value;
+        const tvaValue=tva.current.value;
 
         if(refValue.trim()==''){
             setErrors(prevState => {return {...prevState,...{refProduit:"ref required"}}});
@@ -73,6 +77,10 @@ const AjouterProduit = () => {
             setErrors(prevState => {return {... prevState,...{categorieProduit:"categorie required"}}});
             isValide=false;
         }
+        if( tvaValue<0 || tvaValue>100){
+          setErrors(prevState => {return {... prevState,...{tva:"la tva doit etre compris entre 0 et 100"}}});
+          isValide=false;
+      }
         return isValide;
       }
     /*end form validation*/
@@ -90,7 +98,7 @@ const AjouterProduit = () => {
 
     //functio to display error after every invalid input
 
-    const diplayErr =(field) => {
+    const displayErr =(field) => {
        const element=document.querySelector(`#${field}`);
        if(hasError(field)){
           element.style.border="1px solid red";
@@ -133,7 +141,8 @@ const AjouterProduit = () => {
                         nomProd: '',
                         prixUnitaireHT: 0,
                         details: '',
-                        category:0.0
+                        category:0.0,
+                        tva:0
                     });
                     handleReset2();
                     setAlertMessage("success");
@@ -176,50 +185,63 @@ const AjouterProduit = () => {
      /*end function handle submit*/
      
     return (
-        <div className="container ajouter-produit" >
-          <div className='row '>
-            <div className='col-8'>
-            <form onSubmit={handleSubmit} >
-                <h2>Nouveau produit</h2>
+        <div className="container ajouter-produit">
+        <div className="row">
+          <div className="col-12">
+            <div className="card">
+              <div className="card-header bg-dark text-white">
+               <h3>Nouveau Produit</h3> 
                 {alert(alertMessage)}
-                <hr></hr>
-                <div className="form-outline mb-4">
-                    <label className="form-label" htmlFor="refProduit">Référece produit :</label>
-                    <input type="text" name="refProd" id="refProduit" className="form-control" placeholder='ref produit' ref={refProduit} onChange={handleChange}/>
-                    {diplayErr("refProduit")}
-                </div>
-                <div className="form-outline mb-4">
+              </div>
+              <div className="card-body">
+                <form onSubmit={handleSubmit}>
+                  <div className="form-outline mb-4">
+                    <label className="form-label" htmlFor="refProduit">Référence produit :</label>
+                    <input type="text" name="refProd" id="refProduit" className="form-control" placeholder="ref produit" ref={refProduit} onChange={handleChange}/>
+                    {displayErr("refProduit")}
+                  </div>
+                  <div className="form-outline mb-4">
                     <label className="form-label" htmlFor="nomProduit">Nom produit :</label>
-                    <input type="text" name='nomProd' id="nomProduit" className="form-control" placeholder='nom produit' ref={nomProduit} onChange={handleChange}/>
-                    {diplayErr("nomProduit")}
-                </div>
-                <div className="form-outline mb-4">
+                    <input type="text" name="nomProd" id="nomProduit" className="form-control" placeholder="nom produit" ref={nomProduit} onChange={handleChange}/>
+                    {displayErr("nomProduit")}
+                  </div>
+                  <div className="form-outline mb-4">
                     <label className="form-label" htmlFor="prixProduit">Prix produit :</label>
-                    <input  type="number" name='prixUnitaireHT' id="prixProduit" className="form-control" placeholder='prix unitaire' ref={prixProduit} onChange={handleChange}/>
-                    {diplayErr("prixProduit")}
-                </div>
-                <div className="form-outline mb-4">
-                    <label htmlFor="details">Details produit :</label>
-                    <textarea id="details" name='details' className="form-control" placeholder='saisir les details de produit' ref={details} onChange={handleChange} />
-                    {diplayErr("details")}
-                </div>
-                <div className="form-outline mb-4">
-                    <label htmlFor="categorieProduit">Categorie :</label>
-                    <select className="form-control" name='category' id="categorieProduit" ref={categorieProduit} onChange={handleChange}>
-                        <option value=''>select categorie</option>
-                         {categories.map(categorie =>( <option key={categorie.idCategorie} value={categorie.idCategorie} >{categorie.nomCategorie}</option>))}
+                    <input type="number" name="prixUnitaireHT" id="prixProduit" className="form-control" placeholder="prix unitaire" ref={prixProduit} onChange={handleChange}/>
+                    {displayErr("prixProduit")}
+                  </div>
+                  <div className="form-outline mb-4">
+                    <label htmlFor="details">Détails produit :</label>
+                    <textarea id="details" name="details" className="form-control" placeholder="saisir les détails du produit" ref={details} onChange={handleChange} />
+                    {displayErr("details")}
+                  </div>
+                  <div className="form-outline mb-4">
+                    <label htmlFor="tva">TVA :</label>
+                    <input typee="number" id="tva" name="tva" className="form-control" placeholder="saisir la TVA du produit" ref={tva} onChange={handleChange} />
+                    {displayErr("tva")}
+                  </div>
+                  <div className="form-outline mb-4">
+                    <label htmlFor="categorieProduit">Catégorie :</label>
+                    <select className="form-control" name="category" id="categorieProduit" ref={categorieProduit} onChange={handleChange}>
+                      <option value="">Sélectionner catégorie</option>
+                      {categories.map(categorie => (
+                        <option key={categorie.idCategorie} value={categorie.idCategorie}>{categorie.nomCategorie}</option>
+                      ))}
                     </select>
-                    {diplayErr("categorieProduit")}
-                </div>
-                <div>
-                    <input type="submit" value="Ajouter" className='btn btn-primary'></input>
-                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="reset" value="Reset" className='btn btn-danger' onClick={handleReset}></input>
-                </div>
-            </form>
+                    {displayErr("categorieProduit")}
+                  </div>
+                  <div>
+                    <input type="submit" value="Ajouter" className="btn btn-primary" />
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="reset" value="Reset" className="btn btn-danger" onClick={handleReset} />
+                  </div>
+                </form>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
+      </div>
+      
 
     );
 }
