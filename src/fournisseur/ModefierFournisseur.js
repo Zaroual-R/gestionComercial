@@ -21,7 +21,7 @@ const ModefierFournisseur = () => {
         raisonSocial: oldFournisseur.raisonSocial,
         address: oldFournisseur.address,
         tel:oldFournisseur.tel,
-        responsable: oldFournisseur.responsable,
+        responsable: oldFournisseur.resposable,
         emailResponsable:oldFournisseur.emailResponsable,
         rc: oldFournisseur.rc,
         cnss: oldFournisseur.cnss
@@ -36,11 +36,12 @@ const ModefierFournisseur = () => {
     
     //function to initialise form 
     const initializeFrom = () =>{
+        console.log(oldFournisseur);
         codeComptable1.current.value=oldFournisseur.codeComptable;
         raisonSocial1.current.value=oldFournisseur.raisonSocial;
         address1.current.value= oldFournisseur.address;
         tel1.current.value= oldFournisseur.tel;
-        responsable1.current.value= oldFournisseur.responsable;
+        responsable1.current.value= oldFournisseur.resposable;
         emailResponsable1.current.value=  oldFournisseur.emailResponsable;
         rc1.current.value= oldFournisseur.rc;
         cnss1.current.value= oldFournisseur.cnss;
@@ -49,7 +50,7 @@ const ModefierFournisseur = () => {
         e.preventDefault();
         codeComptable1.current.value='';
         raisonSocial1.current.value='';
-        address1.current1.value='';
+        address1.current.value='';
         tel1.current.value='';
         responsable1.current.value='';
         emailResponsable1.current.value='';

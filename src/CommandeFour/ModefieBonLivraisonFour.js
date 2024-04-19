@@ -6,36 +6,40 @@ import BonLivFourService from '../backEndService/BonLivFourService';
 import CommandeFourService from '../backEndService/CommandeFourService';
 
 const ModefierBonLivraisonFour = () => {
-  const dateBonLivraison=useRef();
-  const qualiteLivraison =useRef();
-  const cache=useRef();
+  const dateLivraison = useRef();
+  const qualiteLivraison = useRef();
+  const cache = useRef();
+  const file=useRef();
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(true);
-  const navigate=useNavigate();
-  const location =useLocation();
-  const {state} =location || {} ;
-  const oldBon=state.bon ;
-  const idCmd=state.idCmd
-  const [bonLivFourDto,setBonLivFourDto]=useState({"idCommandeFour":idCmd ,
-                                                   "dateLivraison":oldBon.dateLivraison,
-                                                    "cache":oldBon.cache,
-                                                     "qualiteLivraison":oldBon.qualiteLivraison});
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = location || {};
+  const oldBon = state.bon;
+  const idCmd = state.idCmd
+  const [bonLivFourDto, setBonLivFourDto] = useState({
+    "idCommandeFour": idCmd,
+    "dateLivraison": oldBon.dateLivraison,
+    "cache": oldBon.cache,
+    "qualiteLivraison": oldBon.qualiteLivraison
+  });
+  const [selectedFile,setSelectedFile] =useState(null);
 
-  useEffect(() =>{
-      if(oldBon){
-        initForm();
-      }
-  },[])
+  useEffect(() => {
+    if (oldBon) {
+      initForm();
+    }
+  }, [])
 
 
   const closeAlert = () => {
     setShowAlert(false);
   };
 
-  const initForm = () =>{
-    dateBonLivraison.current.value=formatDate(oldBon.dateLivraison);
-    qualiteLivraison.current.value=oldBon.qualiteLivraison;
-    cache.current.checked=oldBon.cache;
+  const initForm = () => {
+    dateLivraison.current.value = formatDate(oldBon.dateLivraison);
+    qualiteLivraison.current.value = oldBon.qualiteLivraison;
+    cache.current.checked = oldBon.cache;
 
     const bonlivraisonDto = {
       "idCommandeFour": idCmd,
@@ -44,15 +48,15 @@ const ModefierBonLivraisonFour = () => {
       "qualiteLivraison": oldBon.qualiteLivraison
     };
     setBonLivFourDto(bonlivraisonDto);
-    console.log("bonLivFourDto",bonLivFourDto);
+    console.log("bonLivFourDto", bonLivFourDto);
   }
 
   //format date:
   const formatDate = (date) => {
-    if(!date){
+    if (!date) {
       return '';
     }
-    else{
+    else {
       const formattedDate = new Date(date);
       const year = formattedDate.getFullYear();
       const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
@@ -62,26 +66,33 @@ const ModefierBonLivraisonFour = () => {
   };
 
   //function to reset form
-  const resetForm = () =>{
-    dateBonLivraison.current.value='';
-    qualiteLivraison.current.value='';
-    cache.current.value='';
+  const resetForm = () => {
+    dateLivraison.current.value = '';
+    qualiteLivraison.current.value = '';
+    cache.current.value = '';
   }
 
   const handleInputChange = (event) => {
     event.preventDefault();
-    const {name ,value ,type,checked} =event.target;
-    if (type ==='checkbox'){
-       setBonLivFourDto(prevState =>(
-        {...prevState,
-             [name]:checked}
-       ));
+    const { name, value, type, checked } = event.target;
+    if (type === 'checkbox') {
+      setBonLivFourDto(prevState => (
+        {
+          ...prevState,
+          [name]: checked
+        }
+      ));
     }
-    else{
-      setBonLivFourDto(prevState =>(
-        {...prevState,
-             [name]:value}
-       ));
+    else if(type ==='file'){
+      setSelectedFile(event.target.files[0]);
+    }
+    else {
+      setBonLivFourDto(prevState => (
+        {
+          ...prevState,
+          [name]: value
+        }
+      ));
     }
     console.log(bonLivFourDto);
   };
@@ -119,21 +130,28 @@ const ModefierBonLivraisonFour = () => {
     }
   }
 
-  const navigatToDetails = (idCmd) =>{
-    navigate("/DetailsCommande",{state:{idCmd}})
+  const navigatToDetails = (idCmd) => {
+    navigate("/DetailsCommande", { state: { idCmd } })
   }
-  
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    BonLivFourService.updateBonLivFour(bonLivFourDto,oldBon.idbonLivraison)
-      .then(response =>{
-        console.log("bon livraison was updated",response.data);
+    console.log(bonLivFourDto)
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("idCommande",idCmd );
+    formData.append("dateLivraison", bonLivFourDto.dateLivraison);
+    formData.append("cache",bonLivFourDto.cache );
+    formData.append("qualiteLivraison",bonLivFourDto.qualiteLivraison );
+    BonLivFourService.updateBonLivFour(oldBon.idbonLivraison,formData)
+      .then(response => {
+        console.log("bon livraison was updated", response.data);
         resetForm();
         navigatToDetails(idCmd);
       })
-      .catch(error =>{
-        console.error("error to update bon livraison ",error);
+      .catch(error => {
+        console.error("error to update bon livraison ", error);
         setAlertMessage('error');
       })
 
@@ -153,27 +171,36 @@ const ModefierBonLivraisonFour = () => {
                 <div className="form-row">
                   <div className="form-group col-md-6">
                     <label htmlFor="dateBonLivraison">Date de livraison</label>
-                    <input type="date" className="form-control" name="dateBonLivraison" id="dateBonLivraison" ref={dateBonLivraison}  onChange={handleInputChange} placeholder="date bon livraison" required />
+                    <input type="date" className="form-control" name="dateLivraison" id="dateLivraison" ref={dateLivraison} onChange={handleInputChange} placeholder="date bon livraison" required />
+                  </div>
+                  <div className="form-group col-md-6">
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group col-md-6 position-relative" >
+                    <label htmlFor="qualiteLivraison">Qualite de livraison</label>
+                    <select className="form-control" name="qualiteLivraison" id="qualiteLivraison" ref={qualiteLivraison} onChange={handleInputChange} required>
+                      <option value=''>Select qualite de livraison </option>
+                      <option value='BON'>bon</option>
+                      <option value='MOYENNE'>moyenne</option>
+                      <option value='MOUVAIS'>mauvais</option>
+                    </select>
+                    <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '70%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                   </div>
                   <div className="form-group col-md-6">
                   </div>
                 </div>
                 <div className="form-row">
                   <div className="form-group col-md-6">
-                    <label htmlFor="qualiteLivraison">Qualite de livraison</label>
-                    <select className="form-control" name="qualiteLivraison" id="qualiteLivraison" ref={qualiteLivraison}  onChange={handleInputChange} required>
-                      <option value=''>Select qualite de livraison </option>
-                      <option value='BON'>bon</option>
-                      <option value='MOYENNE'>moyenne</option>
-                      <option value='MOUVAIS'>mauvais</option>
-                    </select>
+                    <label htmlFor="dateBonLivraison">Document:(vuillez entrer un document scanné de bon livraison)</label>
+                    <input type="file" className="form-control" name="file" id="file" ref={file} onChange={handleInputChange} placeholder="date bon livraison"  />
                   </div>
                   <div className="form-group col-md-6">
                   </div>
                 </div>
                 <div className='form-row'>
                   <div className='form-group com-md-6'>
-                    &nbsp; &nbsp;<span style={{ fontWeight: 'bolder' }}>Caché :</span> &nbsp; &nbsp; &nbsp;<input className="form-check-input" type="checkbox" name='cache' id="cache" ref={cache}  onChange={handleInputChange} />
+                    &nbsp; &nbsp;<span style={{ fontWeight: 'bolder' }}>Caché :</span> &nbsp; &nbsp; &nbsp;<input className="form-check-input" type="checkbox" name='cache' id="cache" ref={cache} onChange={handleInputChange} />
                   </div>
                 </div>
                 <button type="submit" className="btn btn-primary"> Modefier</button>

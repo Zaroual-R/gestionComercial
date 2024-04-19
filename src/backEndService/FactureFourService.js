@@ -7,8 +7,8 @@ class FactureFourService{
         return axios.post(`${API_URL}/create`,formData);
     }
 
-    updateFacture(facturDto,id){
-        return axios.put(`${API_URL}/update/${id}`,facturDto);
+    updateFacture(formatData,id){
+        return axios.put(`${API_URL}/update/${id}`,formatData);
     }
 
     getFacture(id){

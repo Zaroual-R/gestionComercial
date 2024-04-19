@@ -58,7 +58,7 @@ const ListFournisseur = () => {
     const datashow = currentFournisseur.map((item, key) => <LignFournisseur key={item.idFournisseur} fournisseur={item} onDelete={getAllFournisseur}/>)
     return (
         <div className='container mt-2 list-fournisseur'>
-            <div className='card ' style={{ maxHeight: 'calc(100vh - 100px)', width: "800" }}>
+            <div className='card ' style={{ maxHeight: 'calc(100vh - 90px)', width: "800" }}>
                 <div className="card-header bg-dark"> <h3>Consulter les fournisseur</h3></div>
                 <div className='card-body ' >
                     <form method="get" >

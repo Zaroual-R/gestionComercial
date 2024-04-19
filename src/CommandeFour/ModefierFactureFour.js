@@ -33,7 +33,7 @@ const ModefierFactureFour = () => {
     "moyenneReglement": facture.moyenneReglement,
     "valide": facture.valide
   })
-  const [selectedFile,setSelectedFile] =useState(facture.fileData)
+  const [selectedFile,setSelectedFile] =useState(null);
 
   useEffect( () =>{
     if(facture){
@@ -60,7 +60,6 @@ const ModefierFactureFour = () => {
     moyenneReglement.current.value=facture.moyenneReglement;
     statusPaiement.current.value=facture.statusPaiement;
     valide.current.checked=facture.valide;
-    file.current.value=facture.fileData;
   }
 
 
@@ -73,6 +72,9 @@ const ModefierFactureFour = () => {
         [name]: checked
       }))
     }
+    else if (type === 'file') {
+      setSelectedFile(event.target.files[0]);
+    }
     else {
       setFactureDto(prevState => ({
         ...prevState,
@@ -80,15 +82,16 @@ const ModefierFactureFour = () => {
       }))
     }
     console.log(factureDto);
+    console.log("file:", selectedFile);
 
-  };
+  }
 
   //function de gestion des alerts
 
   const alertOfError = () => {
     return (
       <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
-        <span >error dans l'ajoute de facture </span>
+        <span >error dans la modefication de facture </span>
         <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
           <span aria-hidden="true">&times;</span>
         </button>
@@ -98,7 +101,7 @@ const ModefierFactureFour = () => {
   const alertSuccess = () => {
     return (
       <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
-        <span >la facture à été ajouté avec succés </span>
+        <span >la facture à été modifié avec succés </span>
         <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
           <span aria-hidden="true">&times;</span>
         </button>
@@ -123,8 +126,16 @@ const ModefierFactureFour = () => {
   //functio to navigate to detail commande
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(facture.idFacture);
+    const formData= new FormData();
+    formData.append("file", selectedFile);
+    formData.append("idCommande", factureDto.idCommande);
+    formData.append("dateFacture", factureDto.dateFacture);
+    formData.append("statusPaiement", factureDto.statusPaiement);
+    formData.append("moyenneReglement", factureDto.moyenneReglement);
+    formData.append("valide", factureDto.valide);
     console.log(factureDto);
-    FactureFourService.updateFacture(factureDto,facture.idFacture)
+    FactureFourService.updateFacture(formData,facture.idFacture)
       .then(response => {
         console.log("update facture was succed")
         resetForm();
@@ -145,7 +156,7 @@ const ModefierFactureFour = () => {
         <div className='col-12'>
           <div className='card' style={{ maxHeight: 'calc(100vh - 100px)', width: "800" }}>
             <div className='card-header bg-dark '>
-              <h3>Ajouter Facture</h3>
+              <h3>Modefier Facture</h3>
               {alert(alertMessage)}
             </div>
             <div className='card-body'>
@@ -157,7 +168,7 @@ const ModefierFactureFour = () => {
                   </div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group col-md-6">
+                  <div className="form-group col-md-6 position-relative">
                     <label htmlFor="moyenneReglement">Mode de réglement</label>
                     <select className="form-control" name="moyenneReglement" id="moyenneReglement" ref={moyenneReglement} onChange={handleInputChange} required>
                       <option value=''>Select mode de reglement </option>
@@ -166,10 +177,12 @@ const ModefierFactureFour = () => {
                       <option value='VAIREMENTBANCAIRE'>vairement bancaire</option>
                       <option value='TRAITEBANCAIRE'>traite bancaire</option>
                     </select>
+                    <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '70%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
+
                   </div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group col-md-6">
+                  <div className="form-group col-md-6 position-relative">
                     <label htmlFor="statusPaiement">Status Paiement</label>
                     <select className="form-control" name="statusPaiement" id="statusPaiement" ref={statusPaiement} onChange={handleInputChange} required>
                       <option value=''>Select status de paiement </option>
@@ -178,11 +191,13 @@ const ModefierFactureFour = () => {
                       <option value='PARIELLEMENT_PAYEE'>partiellement payée</option>
                       <option value='EN_RETARD'>en retard</option>
                     </select>
+                    <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '70%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
+
                   </div>
                 </div>
                 <div className="form-group col-md-6">
-                   <label htmlFor="file">Date du facture</label>
-                   <input type="file" className="form-control" name="file" id="file" ref={file} onChange={handleInputChange} placeholder=" facture document " required />
+                   <label htmlFor="file">Document :(veuillez entrer un document scanné de cette facture)</label>
+                   <input type="file" className="form-control" name="file" id="file" ref={file} onChange={handleInputChange} placeholder=" facture document "  />
                 </div>
                 <div className='form-row'>
                   <div className='form-group com-md-6'>

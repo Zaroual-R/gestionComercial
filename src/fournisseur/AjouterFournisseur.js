@@ -8,8 +8,8 @@ const AjouterFournisseur = () => {
     const tel=useRef();
     const responsable=useRef();
     const emailResponsable=useRef();
-    const RC =useRef();
-    const CNSS=useRef();
+    const rc =useRef();
+    const cnss=useRef();
 
     const [fournisseur, setFournisseur] = useState({
         codeComptable: '',
@@ -18,8 +18,8 @@ const AjouterFournisseur = () => {
         tel: '',
         responsable: '',
         emailResponsable: '',
-        RC: '',
-        CNSS: ''
+        rc: '',
+        cnss: ''
     });
     const [alertMessage,setAlertMessage]=useState("");
     const [errors,setErrors]=useState({});
@@ -34,8 +34,8 @@ const AjouterFournisseur = () => {
         tel.current.value='';
         responsable.current.value='';
         emailResponsable.current.value='';
-        RC.current.value='';
-        CNSS.current.value='';
+        rc.current.value='';
+        cnss.current.value='';
     };
 
     const handleReset2 =() =>{
@@ -45,8 +45,8 @@ const AjouterFournisseur = () => {
         tel.current.value='';
         responsable.current.value='';
         emailResponsable.current.value='';
-        RC.current.value='';
-        CNSS.current.value='';
+        rc.current.value='';
+        cnss.current.value='';
     }
 
     const formValidate =()=>{
@@ -57,8 +57,8 @@ const AjouterFournisseur = () => {
         const respoValue=responsable.current.value;
         const telValue=tel.current.value;
         const emailValue=emailResponsable.current.value;
-        const RcValue=RC.current.value;
-        const cnssValue=CNSS.current.value;
+        const RcValue=rc.current.value;
+        const cnssValue=cnss.current.value;
 
         if(codeValue.trim()==''){
             setErrors(prevState =>{ return {...prevState,codeComptable:"ce champe est oblegatoire"}});
@@ -223,9 +223,9 @@ const AjouterFournisseur = () => {
                                         {displayErr("emailResponsable")}
                                     </div>
                                     <div className="form-group col-md-6">
-                                        <label htmlFor="RC">Registre du Commerce</label>
-                                        <input type="text" className="form-control" name='RC' id="RC" ref={RC} placeholder="Registre du Commerce" onChange={handleChange} required />
-                                        {displayErr("RC")}
+                                        <label htmlFor="rc">Registre du Commerce</label>
+                                        <input type="text" className="form-control" name='rc' id="rc" ref={rc} placeholder="Registre du Commerce" onChange={handleChange} required />
+                                        {displayErr("rc")}
                                     </div>
                                 </div>
                                 <div className="form-row">
@@ -235,9 +235,9 @@ const AjouterFournisseur = () => {
                                         {displayErr("address")}
                                     </div>
                                     <div className="form-group col-md-6">
-                                        <label htmlFor="CNSS">Immatriculation CNSS</label>
-                                        <input type="text" className="form-control" name="CNSS" id="CNSS" ref={CNSS} placeholder="Immatriculation CNSS" onChange={handleChange} required />
-                                        {displayErr("CNSS")}
+                                        <label htmlFor="cnss">Immatriculation CNSS</label>
+                                        <input type="text" className="form-control" name="cnss" id="cnss" ref={cnss} placeholder="Immatriculation CNSS" onChange={handleChange} required />
+                                        {displayErr("cnss")}
                                     </div>
                                 </div>
                                 <button type="submit" className="btn btn-primary">Soumettre</button>

@@ -4,6 +4,7 @@ import LignCmdFourAjout from '../fournisseur/LignCmdFourAjout';
 import FournisseurService from '../backEndService/FournisseurService';
 import CommandeFourService from '../backEndService/CommandeFourService';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { ThreeDots } from 'react-loader-spinner';
 
 const ManageCommande = () => {
     const navigate = useNavigate();
@@ -30,11 +31,10 @@ const ManageCommande = () => {
     const [montantTotalTTC, setMontantTotalTTC] = useState(0);
     const [showAlert, setShowAlert] = useState(true);
     const [oldProducts, setOldProducts] = useState([]);
-
+    const editCmd="editCmd";
     const location = useLocation();
-    const { state } = location;
-    const updateCommande = state.cmd;
-
+    const { state } = location || {};
+    const updateCommande=state.commande;
 
     const [commande, setCommande] = useState({
         "idCommande": updateCommande.idCommande,
@@ -52,6 +52,7 @@ const ManageCommande = () => {
 
     })
 
+    
     const closeAlert = () => {
         setShowAlert(false);
     };
@@ -140,10 +141,10 @@ const ManageCommande = () => {
     }, [lignCommandeAfficher])
 
     useEffect(() => {
-        initForm();
-        getOldProducts();
-        getAllFournisseur();
-        getAllProduct();
+            initForm();
+            getOldProducts();
+            getAllFournisseur();
+            getAllProduct();
     }, [])
 
     useEffect(() =>{
@@ -173,7 +174,6 @@ const ManageCommande = () => {
                 console.error("error to get list fournisseur", error);
             })
     }
-
 
     //function to validate form 
     const validatForm = () => {
@@ -213,6 +213,7 @@ const ManageCommande = () => {
         }
         return isValid;
     }
+
     const getError = (field) => {
         return errors[field];
     }
@@ -319,8 +320,8 @@ const ManageCommande = () => {
         setLignCommandeEnvoyer(prevState => prevState.filter(item => item.idProduit !== id));
     }
     //function confirmatio to forward to pdf 
-    const forwardSuccessPage = (idCommande, idFournisseur) => {
-        navigate("/CreateEmail", { state: { idCommande, idFournisseur } });
+    const forwardSuccessPage = (idCommande, idFournisseur,msg) => {
+        navigate("/CreateEmail", { state: { idCommande, idFournisseur,msg } });
     }
 
     //function to handle submit
@@ -330,26 +331,26 @@ const ManageCommande = () => {
             if (lignCommandeEnvoyer.length > 0) {
                 const commandeFourDto = {
                     "idFournisseur": commande.idFournisseur,
-                    "dateCommande": commande.dateCommande,
-                    "datePrevue": commande.datePrevue,
-                    "dateSortie": "",
+                    "dateCommande": formatDate(commande.dateCommande),
+                    "datePrevue": formatDate(commande.datePrevue),
+                    "dateSortie": commande.dateSortie,
                     "conditionReglement": commande.conditionReglement,
                     "moyenneReglement": commande.moyenneReglement,
-                    "etat": "EN_ATTENT",
+                    "etat": commande.etat,
                     "montantTotalHT": montantTotalHT,
                     "montantTotalTTC": montantTotalTTC,
-                    "dateDevis": commande.dateDevis,
+                    "dateDevis":formatDate( commande.dateDevis),
                     "ligneCmdFourDtos": lignCommandeEnvoyer,
                 }
                 console.log("four dto", commandeFourDto);
-                CommandeFourService.createCommandeFour(commandeFourDto)
+                CommandeFourService.updateCommandeFour(updateCommande.idCommande,commandeFourDto)
                     .then(response => {
-                        console.log("la commande a été ajoutée avec succès", response.data);
-                        forwardSuccessPage(response.data.idCommande, commande.idFournisseur);
+                        console.log("la commande a été modefie avec succès", response.data);
+                        forwardSuccessPage(response.data.idCommande, commande.idFournisseur,editCmd );
                     })
                     .catch(error => {
                         setAlertMessage("error");
-                        console.error("error to add four commande", error);
+                        console.error("error to update commande", error);
                     })
             }
             else {
@@ -368,6 +369,7 @@ const ManageCommande = () => {
             </div>
         )
     }
+    
     const alertOfErrorProduit = () => {
         return (
             <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif' }}>
@@ -378,6 +380,7 @@ const ManageCommande = () => {
             </div>
         )
     }
+
     const alert = (alertMessage) => {
         switch (alertMessage) {
             case "errorProduit":
@@ -388,11 +391,12 @@ const ManageCommande = () => {
                 return null;
         }
     }
-
-
+    
     const datashow = lignCommandeAfficher.map((item, key) => (
         <LignCmdFourAjout key={`${item.idProduit}-${key}`} idProduit={item.idProduit} refProduit={item.refProduit} nomProduit={item.nomProduit} prix={item.prix} quantite={item.quantite} totalHT={item.totalHT} tva={item.tva} totalTTC={item.totalTTC} onDelete={handleDelete} />
     ));
+
+
     return (
         <div className="container ajouter-cmd-four Myfont">
             <div className="row">
@@ -409,12 +413,13 @@ const ManageCommande = () => {
                                         <label htmlFor="dateCommande">Date commande</label>
                                         <input type="text" className="form-control" name="dateCommande" id="dateCommande" ref={dateCommande} placeholder="date dommande" onChange={handleChange} required readOnly />
                                     </div>
-                                    <div className="form-group col-md-6">
+                                    <div className="form-group col-md-6 position-relative">
                                         <label htmlFor="idFournisseur">Fournisseur</label>
                                         <select className="form-control" name="idFournisseur" id="idFournisseur" ref={idFournisseur} onChange={handleChange} >
                                             <option value=''>Select Raison Social </option>
                                             {listFournisseur.map((item, key) => <option key={item.key} value={item.idFournisseur}>{item.raisonSocial}</option>)}
                                         </select>
+                                        <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '74%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                                         {dispalyErr("idFournisseur")}
                                     </div>
                                 </div>
@@ -435,7 +440,7 @@ const ManageCommande = () => {
                                         <label htmlFor="dateSortie">date sortie</label>
                                         <input type="date" className="form-control" name='dateSortie' id="dateSortie" ref={dateSortie} placeholder="etat de commande" onChange={handleChange}  />
                                     </div>
-                                    <div className="form-group col-md-6">
+                                    <div className="form-group col-md-6 position-relative">
                                         <label htmlFor="etat">etat de commande</label>
                                         <select className="form-control moyReg" name="etat" id="etat" ref={etat} onChange={handleChange}  >
                                             <option value=''>Choisir l'état de commande</option>
@@ -444,6 +449,7 @@ const ManageCommande = () => {
                                             <option value='LIVREE'>Livré</option>
                                             <option value='ANNULE'>annulé</option>
                                         </select>
+                                        <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '56%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                                     </div>
                                 </div>
                                 {/* Répétez les lignes ci-dessus pour les autres champs de votre classe Fournisseur */}

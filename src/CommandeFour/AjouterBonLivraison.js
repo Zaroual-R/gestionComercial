@@ -5,51 +5,61 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import BonLivFourService from '../backEndService/BonLivFourService';
 
 const AjouterBonLivraison = () => {
-  const dateBonLivraison=useRef();
-  const qualiteLivraison1 =useRef();
-  const cache1=useRef();
+  const dateLivraison = useRef();
+  const qualiteLivraison = useRef();
+  const cache = useRef();
+  const file = useRef();
   const location = useLocation();
   const { state } = location;
   const idCmd = state.idCmd;
-  const [dateLivraison, setDateLivraison] = useState('');
-  const [qualiteLivraison, setQualiteLivraison] = useState('');
-  const [cache, setCache] = useState(false);
-  const [bonLivFourDto,setBonLivFourDto]=useState({});
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(true);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const [bonLivFourDto, setBonLivFourDto] = useState(
+    {
+      "idCommandeFour": idCmd,
+      "dateLivraison": "",
+      "cache": false,
+      "qualiteLivraison": ""
+    }
+  )
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const closeAlert = () => {
     setShowAlert(false);
   };
 
   //function to reset form
-  const resetForm = () =>{
-    dateBonLivraison.current.value='';
-    qualiteLivraison1.current.value='';
-    cache1.current.value='';
+  const resetForm = () => {
+    dateLivraison.current.value = '';
+    qualiteLivraison.current.value = '';
+    cache.current.value = '';
+    file.current.value = null;
   }
 
   const handleInputChange = (event) => {
     setAlertMessage('');
     const { name, value, type, checked } = event.target;
     if (type === 'checkbox') {
-      setCache(checked);
-    } else {
-      if (name === 'dateBonLivraison') {
-        setDateLivraison(value);
-      } else if (name === 'qualiteLivraison') {
-        setQualiteLivraison(value);
-      }
+      setBonLivFourDto(prevState => (
+        {
+          ...prevState,
+          [name]: checked
+        }
+      ))
     }
-    const bonlivraisonDto = {
-      "idCommandeFour": idCmd,
-      "dateLivraison": dateLivraison,
-      "cache": cache,
-      "qualiteLivraison": qualiteLivraison
-    };
-    setBonLivFourDto(bonlivraisonDto);
+    else if (type === 'file') {
+      setSelectedFile(event.target.files[0])
+    }
+    else {
+      setBonLivFourDto(prevState => (
+        {
+          ...prevState,
+          [name]: value
+        }));
+    }
     console.log(bonLivFourDto);
+    console.log(selectedFile);
   };
 
   //function de gestion des alerts
@@ -84,21 +94,29 @@ const AjouterBonLivraison = () => {
         return null;
     }
   }
-  
-  const navigateToDetails =(idCmd)=>{
-    navigate("/DetailsCommande",{state:{idCmd}})
-}
+
+  const navigateToDetails = (idCmd) => {
+    navigate("/DetailsCommande", { state: { idCmd } })
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    BonLivFourService.createBonLivFour(bonLivFourDto)
-      .then(response =>{
+    console.log(bonLivFourDto)
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("idCommande",idCmd );
+    formData.append("dateLivraison", bonLivFourDto.dateLivraison);
+    formData.append("cache",bonLivFourDto.cache );
+    formData.append("qualiteLivraison",bonLivFourDto.qualiteLivraison );
+
+    BonLivFourService.createBonLivFour(formData)
+      .then(response => {
         setAlertMessage("success");
         resetForm();
         navigateToDetails(idCmd);
       })
-      .catch(error =>{
-        console.error("error to create bon livraison ",error);
+      .catch(error => {
+        console.error("error to create bon livraison ", error);
         setAlertMessage('error');
       })
 
@@ -118,27 +136,30 @@ const AjouterBonLivraison = () => {
                 <div className="form-row">
                   <div className="form-group col-md-6">
                     <label htmlFor="dateBonLivraison">Date de livraison</label>
-                    <input type="date" className="form-control" name="dateBonLivraison" id="dateBonLivraison" ref={dateBonLivraison} value={dateLivraison} onChange={handleInputChange} placeholder="date bon livraison" required />
+                    <input type="date" className="form-control" name="dateLivraison" id="dateLivraison" ref={dateLivraison}  onChange={handleInputChange} placeholder="date bon livraison" required />
                   </div>
                   <div className="form-group col-md-6">
                   </div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group col-md-6">
+                  <div className="form-group col-md-6 position-relative">
                     <label htmlFor="qualiteLivraison">Qualite de livraison</label>
-                    <select className="form-control" name="qualiteLivraison" id="qualiteLivraison1" ref={qualiteLivraison1} value={qualiteLivraison} onChange={handleInputChange} required>
+                    <select className="form-control" name="qualiteLivraison" id="qualiteLivraison" ref={qualiteLivraison} onChange={handleInputChange} required>
                       <option value=''>Select qualite de livraison </option>
                       <option value='BON'>bon</option>
                       <option value='MOYENNE'>moyenne</option>
                       <option value='MOUVAIS'>mauvais</option>
                     </select>
+                    <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '70%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                   </div>
-                  <div className="form-group col-md-6">
-                  </div>
+                </div>
+                <div className="form-group col-md-6">
+                  <label htmlFor="file">Document:(vuillez entrer un document scanné de bon livraison)</label>
+                  <input type="file" className="form-control" name="file" id="file" ref={file} onChange={handleInputChange} placeholder="date bon livraison" required />
                 </div>
                 <div className='form-row'>
                   <div className='form-group com-md-6'>
-                    &nbsp; &nbsp;<span style={{ fontWeight: 'bolder' }}>Caché :</span> &nbsp; &nbsp; &nbsp;<input className="form-check-input" type="checkbox" id="cache1" ref={cache1} checked={cache} onChange={handleInputChange} />
+                    &nbsp; &nbsp;<span style={{ fontWeight: 'bolder' }}>Caché :</span> &nbsp; &nbsp; &nbsp;<input className="form-check-input" type="checkbox" name="cache" id="cache" ref={cache} onChange={handleInputChange} />
                   </div>
                 </div>
                 <button type="submit" className="btn btn-primary"><i className='fas fa-plus'></i> Ajouter</button>

@@ -4,12 +4,12 @@ import axios from "axios";
 const API_URL="http://localhost:8088/api/bonLivraisonF";
 
 class BonLivFourService {
-    createBonLivFour(bonlivFourDto){
-        return axios.post(`${API_URL}/create`,bonlivFourDto);
+    createBonLivFour(formData){
+        return axios.post(`${API_URL}/create`,formData);
     }
 
-    updateBonLivFour(bonlivFourDto,id){
-        return axios.put(`${API_URL}/update/${id}`,bonlivFourDto);
+    updateBonLivFour(id,formData){
+        return axios.put(`${API_URL}/update/${id}`,formData);
     }
 
     getBonLivFourDto(id){

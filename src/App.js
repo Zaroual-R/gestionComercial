@@ -33,6 +33,8 @@ import AjouterFactureFour from './CommandeFour/AjouterFactureFour';
 import ManageCommande from './CommandeFour/ManageCommande';
 import ModefierBonLivraisonFour from './CommandeFour/ModefieBonLivraisonFour';
 import ModefieFactureFour from './CommandeFour/ModefierFactureFour';
+import FactureDocument from './CommandeFour/FactureDocument';
+import LivraisonDocument from './CommandeFour/LivraisonDocument';
 /*<Header/>
 <div className="wrapper">
         <Menu/>
@@ -74,7 +76,9 @@ function App() {
           <Route path='/AjouterFactureFour'  element={<AjouterFactureFour/>}/>
           <Route path='/AjouterFactureFour'  element={<ModefieFactureFour/>}/>
           <Route path='/ModefierFactureFour' element={<ModefieFactureFour/>}/>
-          <Route path='/ManageCommande'      element={<ManageCommande/>} />   
+          <Route path='/ManageCommande'      element={<ManageCommande/>} /> 
+          <Route path='/FactureDocument'     element={<FactureDocument/>}/>
+          <Route path='/LivraisonDocument'   element={<LivraisonDocument/>}/>
         </Routes>
         <Footer />      
     </BrowserRouter>

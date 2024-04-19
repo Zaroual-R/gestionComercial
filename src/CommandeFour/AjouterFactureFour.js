@@ -141,7 +141,7 @@ return (
                 </div>
               </div>
               <div className="form-row">
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-6 position-relative">
                   <label htmlFor="moyenneReglement">Mode de réglement</label>
                   <select className="form-control" name="moyenneReglement" id="moyenneReglement" ref={moyenneReglement} onChange={handleInputChange} required>
                     <option value=''>Select mode de reglement </option>
@@ -150,10 +150,11 @@ return (
                     <option value='VAIREMENTBANCAIRE'>vairement bancaire</option>
                     <option value='TRAITEBANCAIRE'>traite bancaire</option>
                   </select>
+                  <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '70%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                 </div>
               </div>
               <div className="form-row">
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-6 position-relative">
                   <label htmlFor="statusPaiement">Status Paiement</label>
                   <select className="form-control" name="statusPaiement" id="statusPaiement" ref={statusPaiement} onChange={handleInputChange} required>
                     <option value=''>Select status de paiement </option>
@@ -162,10 +163,11 @@ return (
                     <option value='PARIELLEMENT_PAYEE'>partiellement payée</option>
                     <option value='EN_RETARD'>en retard</option>
                   </select>
+                  <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '70%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                 </div>
               </div>
               <div className="form-group col-md-6">
-                <label htmlFor="file">Date du facture</label>
+                <label htmlFor="file">Document :(veuillez entrer un document scanné de cette facture)</label>
                 <input type="file" className="form-control" name="file" id="file" ref={file} onChange={handleInputChange} placeholder=" facture document " required />
               </div>
               <div className='form-row'>

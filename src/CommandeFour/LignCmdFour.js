@@ -5,20 +5,32 @@ const LignCmdFour = (props) => {
     const navigate=useNavigate();
     const commande = props.commande;
 
-    const handleEdit = (cmd) =>{
-        navigate("/ManageCommande",{state:{cmd}})
-    }
+    const handleEdit = (commande) => {
+        // Check if the commande's etat is either "EN_TRANSPORT" or "LIVREE"
+        if (commande.etat === "EN_TRANSPORT" || commande.etat === "LIVREE") {
+            // Show confirmation dialog
+            const userConfirmed = window.confirm("Cette commande est en cours de transport ou déjà livrée. Voulez-vous vraiment modifier cette commande?");
+            if (userConfirmed) {
+                navigate("/ManageCommande", { state: { commande } });
+            } else {
+                console.log("Modification cancelled by the user.");
+            }
+        } else {
+            navigate("/ManageCommande", { state: { commande } });
+        }
+    }   
 
     const handlePlus = (idCmd)=>{
        navigate("/DetailsCommande",{state:{idCmd}});
     }
 
-    const handleDelete = (id) => {   
+    const handleDelete = (idCmd) => {   
+        console.log("idCommane",idCmd)
         const isConfirmed = window.confirm("Êtes-vous sûr de vouloir supprimer cette commande ?");  
         
-        if (isConfirmed) {
+        if (isConfirmed ) {
             
-            CommandeFourService.deleteCmdFour(id)
+            CommandeFourService.deleteCmdFour(idCmd)
                 .then(response => {
                     console.log("La commande a été supprimée avec succès");
                     props.onDelete();
@@ -29,18 +41,18 @@ const LignCmdFour = (props) => {
         }
     }
     
-    const handleFacture = (idCmd) =>{
-        
+    const handleFacture = (Fact) =>{
+        navigate("/FactureDocument",{state:{Fact}})
     }
 
-    const handleBonLivraison = (idCmd) =>{
-      
+    const handleDownload = (idCmd) => {
+        navigate("/BonCmdDocument",{state:{idCmd}})
     }
 
-    const handleManage = (cmd) =>{
-        
+    const handleDocBonLivraison=(bonLivraison) =>{
+        navigate("/LivraisonDocument", { state: {bonLivraison} });
     }
-
+  
 
     const formatDate = (date) => {
         const formattedDate = new Date(date);
@@ -71,13 +83,13 @@ const LignCmdFour = (props) => {
                         <button className="dropdown-item" onClick={() => { handleDelete(commande.idCommande) }}>
                             <i className="fas fa-trash"></i> Supprimer
                         </button>
-                        <button className="dropdown-item" onClick={() => { handleFacture(commande.idCommande) }} >
+                        <button className="dropdown-item" onClick={() => { handleFacture(commande.factureCmdFour) }} >
                             <i class="fas fa-file-invoice"></i> Facteur
                         </button>
-                        <button className="dropdown-item" onClick={() => { handleBonLivraison(commande.idCommande) }} >
+                        <button className="dropdown-item" onClick={() => { handleDocBonLivraison(commande.bonLivraisonFour) }} >
                             <i class="fas fa-truck"></i> Bon livraison
                         </button>
-                        <button className="dropdown-item" onClick={() => { handleManage(commande) }} >
+                        <button className="dropdown-item" onClick={() => { handleDownload(commande.idCommande) }} >
                             <i class="fas fa-download"></i> Telecharger
                         </button>
                     </div>

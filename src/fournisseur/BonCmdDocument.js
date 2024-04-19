@@ -72,6 +72,29 @@ const BonCmdDocument = () => {
         })
     }
 
+    //function to get mode de reglement 
+    const getModeReglement = (mode)=>{
+      switch(mode){
+        case "CACH_ON_DELIVRY":
+          return "Paiement à la livraison";
+        case "CHEQUE":
+          return "Paiement par cheque";
+        case "VAIREMENTBANCAIRE":
+          return "Vairment bancaire";
+        case "TRAITEBANCAIRE":
+          return "Traite bancaire"
+      }
+    }
+
+    //function to format the date: 
+    const formatDate = (date) => {
+      const formattedDate = new Date(date);
+      const year = formattedDate.getFullYear();
+      const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
+      const day = String(formattedDate.getDate()).padStart(2, '0');
+      return `${day}/${month}/${year}`;
+  };
+
     const bodyData = lignCommandeAfficher.map(ligne => [
         ligne.refProduit,
         ligne.nomProduit,
@@ -87,15 +110,21 @@ const BonCmdDocument = () => {
     const generatePDF = () => {
        
         const doc = new jsPDF();
+
+        //color left side: 
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const stripeWidth = 5; // width of the stripe in mm
+        doc.setFillColor(0, 0, 255); // RGB value for blue
+        doc.rect(0, 0, stripeWidth, pageHeight, 'F');
     
         // Ajouter le logo
         const logo = '../dist/img/metaMa.png'; // Remplacez par votre logo en Base64
-        doc.addImage(logo, 'JPEG', 0, 0, 50, 50);
+        doc.addImage(logo, 'JPEG', 5, 0, 50, 50);
         doc.setFont('helvetica', 'bold');
         doc.text("Bon de commande", 80 ,25);
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(10);
-        doc.text("Agadir le "+commande.dateCommande+" ",150,10)
+        doc.text("Agadir le "+formatDate(commande.dateCommande)+" ",160,10)
         // Informations de l'entreprise
         doc.setFontSize(10);
         doc.text("Nom de l'entreprise:MetaMa", 14, 56);
@@ -111,20 +140,20 @@ const BonCmdDocument = () => {
     
         // Mode et conditions de règlement
         doc.text("Bon commande N°:"+commande.idCommande,14, 95);
-        doc.text("Mode de règlement:"+commande.moyenneReglement, 14, 103);
-        doc.text("Conditions de règlement:"+commande.conditionReglement, 14, 110);
+        doc.text("Conditions de règlement:"+commande.conditionReglement, 14, 103);
     
         // Tableau des articles
         doc.autoTable({  
-          startY: 115,
+          startY: 110,
           head: [['Referece', 'Nom', 'Prix U', 'Quantite','Total HT','TVA',"Total TTC"]],
           body: bodyData,
         });
-    
+         
         const signatureStartY = doc.lastAutoTable.finalY + 10
+        doc.text("Mode de règlement:"+getModeReglement(commande.moyenneReglement), 14, signatureStartY);
         // Signature et date
         const signature = '../dist/img/signature2.png'; // Remplacez par votre signature en Base64
-        doc.text("signature:", 14, signatureStartY+5);
+        doc.text("signature:", 14, signatureStartY+7);
         doc.addImage(signature, 'JPEG', 10 , signatureStartY+10, 50, 40);
        // doc.text(`Date: ${new Date().toLocaleDateString()}`, 10, doc.lastAutoTable.finalY + 60);
 

@@ -6,7 +6,7 @@ import sendPdfToServer from './SendPdfToServer';
 const CreateEmail = () => {
     const [showForm, setShowForm] = useState(false);
     const [showAlert, setShowAlert] = useState(true);
-    const  [alertMessage,setAlertMessage]=useState("successCmd");
+    const  [alertMessage,setAlertMessage]=useState('successCmd');
     const [email,setEmail]=useState("");
     const destinataire=useRef();
     const sujet=useRef();
@@ -16,11 +16,11 @@ const CreateEmail = () => {
     const obj=state || {};
     const idCommande=obj.idCommande;
     const idFournisseur=obj.idFournisseur;
+    const msg=obj.addCmd;
     const navigate=useNavigate();
 
     useEffect(()=>{
         getFournisseur();
-        //destinataire.current.value=email;
     },[])
     //function to get fournisseur
     const getFournisseur = () =>{
@@ -41,11 +41,10 @@ const CreateEmail = () => {
     };
 
 
-
     const alertOfSuccesCmd = () => {
         return (
             <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ width: '80%' ,textAlign:'center' ,fontFamily:' Arial, sans-serif',textAlign:'center' }}>
-                <span  > la commande à été evoyé avec succés</span> 
+                <span  > la commande à bien traité avec succés</span> 
                 <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
                     <span aria-hidden="true">&times;</span>
                 </button>

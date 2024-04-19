@@ -28,6 +28,10 @@ class ProductService {
         return axios.post(`${API_URL}/recherche`,rechPDto);
     }
 
+    getNbrLignes(id){
+        return axios.get(`${API_URL}/nbrLignes/${id}`);
+    }
+
 }
 
 export default new ProductService();

@@ -20,7 +20,7 @@ class CommandeFournisseur {
     }
 
     deleteCmdFour = (id) => {
-        return axios.delete(`${API_URL}/${id}`);
+        return axios.delete(`${API_URL}/delete/${id}`);
     }
 
     getLignCommande = (id) =>{
@@ -33,6 +33,10 @@ class CommandeFournisseur {
 
     recherche = (searchDto) =>{
         return axios.post(`${API_URL}/recherche`,searchDto);
+    }
+
+    editState = (id,stateDto)=>{
+        return axios.patch(`${API_URL}/editState/${id}`,stateDto);
     }
 }
 export default new CommandeFournisseur();

@@ -27,6 +27,7 @@ const CommandeFournisseur = () => {
     const [montantTotalHT, setMontantTotalHT] = useState(0);
     const [montantTotalTTC, setMontantTotalTTC] = useState(0);
     const [showAlert, setShowAlert] = useState(true);
+    const addCmd="successCmd";
     const [commande, setCommande] = useState({
         "idFournisseur": "",
         "dateCommande": "",
@@ -60,14 +61,6 @@ const CommandeFournisseur = () => {
     }, [lignCommandeAfficher])
 
     useEffect(() => {
-        const today = new Date().toISOString().slice(0, 10);
-        dateCommande.current.value = today;
-        setCommande(prevCommande => (
-            {
-                ...prevCommande,
-                "dateCommande": today
-            }
-        ))
         getAllFournisseur();
         getAllProduct();
     }, [])
@@ -240,8 +233,8 @@ const CommandeFournisseur = () => {
         setLignCommandeEnvoyer(prevState => prevState.filter(item => item.idProduit !== id));
     }
     //function confirmatio to forward to pdf 
-    const forwardSuccessPage = (idCommande, idFournisseur) => {
-        navigate("/CreateEmail", { state: { idCommande, idFournisseur } });
+    const forwardSuccessPage = (idCommande, idFournisseur,msg) => {
+        navigate("/CreateEmail", { state: { idCommande, idFournisseur,msg } });
     }
 
     //function to handle submit
@@ -266,7 +259,7 @@ const CommandeFournisseur = () => {
                 CommandeFourService.createCommandeFour(commandeFourDto)
                     .then(response => {
                         console.log("la commande a été ajoutée avec succès", response.data);
-                        forwardSuccessPage(response.data.idCommande, commande.idFournisseur);
+                        forwardSuccessPage(response.data.idCommande, commande.idFournisseur,addCmd);
                     })
                     .catch(error => {
                         setAlertMessage("error");
@@ -328,14 +321,15 @@ const CommandeFournisseur = () => {
                                 <div className="form-row">
                                     <div className="form-group col-md-6">
                                         <label htmlFor="dateCommande">Date commande</label>
-                                        <input type="text" className="form-control" name="dateCommande" id="dateCommande" ref={dateCommande} placeholder="date dommande" onChange={handleChange} required readOnly />
+                                        <input type="date" className="form-control" name="dateCommande" id="dateCommande" ref={dateCommande} placeholder="date dommande" onChange={handleChange} required  />
                                     </div>
-                                    <div className="form-group col-md-6">
+                                    <div className="form-group col-md-6 position-relative">
                                         <label htmlFor="idFournisseur">Fournisseur</label>
                                         <select className="form-control" name="idFournisseur" id="idFournisseur" ref={idFournisseur} onChange={handleChange} >
                                             <option value=''>Select Raison Social </option>
                                             {listFournisseur.map((item, key) => <option key={item.key} value={item.idFournisseur}>{item.raisonSocial}</option>)}
                                         </select>
+                                        <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '74%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                                         {dispalyErr("idFournisseur")}
                                     </div>
                                 </div>
@@ -353,7 +347,7 @@ const CommandeFournisseur = () => {
                                 </div>
                                 {/* Répétez les lignes ci-dessus pour les autres champs de votre classe Fournisseur */}
                                 <div className="form-row">
-                                    <div className="form-group col-md-6">
+                                    <div className="form-group col-md-6 position relative">
                                         <label htmlFor="moyenneReglement">Moyenne  Règlement</label>
                                         <select className="form-control moyReg" name="moyenneReglement" id="moyenneReglement" ref={moyenneReglement} onChange={handleChange}  >
                                             <option value=''>Choisir mode paiement souhaité</option>
@@ -362,6 +356,7 @@ const CommandeFournisseur = () => {
                                             <option value='VAIREMENTBANCAIRE'>Virement bancaire</option>
                                             <option value='CHEQUE'>Chèque</option>
                                         </select>
+                                        <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '56%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                                         {dispalyErr("moyenneReglement")}
                                     </div>
                                     <div className="form-group col-md-6">
