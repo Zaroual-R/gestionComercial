@@ -3,23 +3,26 @@ import { useRef,useState,useEffect } from 'react'
 import { useLocation } from 'react-router-dom';
 import CategorieService from '../backEndService/CategorieService';
 import ProductService from '../backEndService/ProductService';
+import FournisseurService from '../backEndService/FournisseurService';
 
 const ModefieProduit = () => {
-    const refProduit1=useRef();
-    const nomProduit1=useRef();
-    const prixProduit1=useRef();
-    const details1=useRef();
-    const categorieProduit1=useRef();
-    const tva1=useRef();
+    const refProduit=useRef();
+    const nomProduit=useRef();
+    const prixProduit=useRef();
+    const details=useRef();
+    const categorieProduit=useRef();
+    const tva=useRef();
+    const fournisseur=useRef();
     const [errors,setErrors]=useState({});
     const [alertMessage,setAlertMessage]=useState("");
     let isValide=true;
     const [categories,setCategories]=useState([]);
     const location=useLocation();
     const {state}=location;
-    const {idP,refP,nomP,prixP,categorieP,detailsP,tva}=state || {};
-    const [produit ,setProduit]=useState({ refProd:refP,nomProd:nomP,prixUnitaireHT:prixP,details:detailsP,category:categorieP,tva:tva})
-    
+    const {idP,refP,nomP,prixP,categorieP,detailsP,tvaN,idFour}=state || {};
+    const [produit ,setProduit]=useState({ refProd:refP,nomProd:nomP,prixUnitaireHT:prixP,details:detailsP,category:categorieP,tva:tva ,idFournisseur:idFour})
+    const [fournisseurs,setFournisseurs]=useState([]);
+    const [showAlert, setShowAlert] = useState(true);
     useEffect(()=>{
         CategorieService.getAllCategorie()
             .then(responce =>{
@@ -30,34 +33,47 @@ const ModefieProduit = () => {
                 console.error("error dans le chargement des categorie");
             })
         initFieldValue();
+        getAllFournisseur();
     },[])
+
+    const getAllFournisseur =() =>{
+        FournisseurService.getAllFournisseurs()
+          .then(response =>{
+            setFournisseurs(response.data);
+            console.log("success to get all fournisseur");
+          })
+          .catch(error=>{
+            console.error("error to getall fournisseur");
+          })
+      }
 
     //initialise les champ de formulaire
     const initFieldValue = () =>{
-        refProduit1.current.value=refP;
-        nomProduit1.current.value=nomP;
-        prixProduit1.current.value=prixP;
-        details1.current.value=detailsP;
-        categorieProduit1.current.value=categorieP;
-        tva1.current.value=tva;
+        refProduit.current.value=refP;
+        nomProduit.current.value=nomP;
+        prixProduit.current.value=prixP;
+        details.current.value=detailsP;
+        categorieProduit.current.value=categorieP;
+        tva.current.value=tvaN;
     }
 
     /*start handle reset produit*/
      const handleReset = (e) =>{
         e.preventDefault();
-        refProduit1.current.value='';
-        nomProduit1.current.value='';
-        prixProduit1.current.value='';
-        details1.current.value='';
-        categorieProduit1.current.value='';
-        tva1.current.value='';
+        refProduit.current.value='';
+        nomProduit.current.value='';
+        prixProduit.current.value='';
+        details.current.value='';
+        categorieProduit.current.value='';
+        tva.current.value='';
+        fournisseur.current.value='';
      }
      const handleReset2 = ()=>{
-        nomProduit1.current.value='';
-        prixProduit1.current.value='';
-        details1.current.value='';
-        categorieProduit1.current.value='';
-        tva1.current.value='';
+        nomProduit.current.value='';
+        prixProduit.current.value='';
+        details.current.value='';
+        categorieProduit.current.value='';
+        tva.current.value='';
       }
     /*end handle reset produit*/
 
@@ -65,46 +81,52 @@ const ModefieProduit = () => {
      const validateForm = () =>{
         setErrors({});
 
-        const refValue=refProduit1.current.value;
-        const nomValue=nomProduit1.current.value;
-        const prixValue=prixProduit1.current.value;
-        const detailsValue=details1.current.value;
-        const categorieValue=categorieProduit1.current.value;
-        const tvaValue=tva1.current.value;
-
+        const refValue=refProduit.current.value;
+        const nomValue=nomProduit.current.value;
+        const prixValue=prixProduit.current.value;
+        const detailsValue=details.current.value;
+        const categorieValue=categorieProduit.current.value;
+        const tvaValue=tva.current.value;
+        const fournisseurValue= fournisseur.current.value;
+        if(fournisseurValue.trim()==''){
+            setErrors(prevState =>  {
+                return {...prevState,... {fournisseur:"ref required"}};
+            });
+            isValide=false;
+        }
         if(refValue.trim()==''){
             setErrors(prevState =>  {
-                return {...prevState,... {refProduit1:"ref required"}};
+                return {...prevState,... {refProduit:"ref required"}};
             });
             isValide=false;
         }
         if(nomValue.trim()==''){
             setErrors(prevState =>  {
-                return {...prevState,... {nomProduit1:"nom required"}};
+                return {...prevState,... {nomProduit:"nom required"}};
             });
             isValide=false;
         }
         if(prixValue.trim()==''){
             setErrors(prevState =>  {
-                return {...prevState,... {prixProduit1:"prix required"}};
+                return {...prevState,... {prixProduit:"prix required"}};
             });
             isValide=false;
         }
         if(detailsValue.trim()==''){
             setErrors(prevState =>  {
-                return {...prevState,... {details1:"details required"}};
+                return {...prevState,... {details:"details required"}};
             });
             isValide=false;
         }
         if(categorieValue.trim()==''){
             setErrors(prevState =>  {
-                return {...prevState,... {categorieProduit1:"categorie required"}};
+                return {...prevState,... {categorieProduit:"categorie required"}};
             });
             isValide=false;
         }
         if(tvaValue <0 || tvaValue>100){
             setErrors(prevState =>  {
-                return {...prevState,... {tva1:"la tva doit étre compris entre 0 et 100 poucent"}};
+                return {...prevState,... {tva:"la tva doit étre compris entre 0 et 100 poucent"}};
             });
             isValide=false;
         }
@@ -177,21 +199,30 @@ const ModefieProduit = () => {
 
         }   
     }
-    /*end handleSubmit function*/
-    const alertOfSucces = () =>{
-        return (<div className='alert alert-success ' role="alert">
-            le produit a été ajouté avec succés
-         </div>)
-     }
-     //function to return alert of error
-     //function to return error
-     const alertOfError = () =>{
-         return(
-             <div className='alert alert-danger' role="alert">
-                 error dans l'ajout de produit 
-             </div>
-         )
-     }
+    const closeAlert = () => {
+        setShowAlert(false);
+      };
+      const alertOfSucces = () => {
+        return (
+          <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+          <span >le produit à été Modefié avec succés </span>
+          <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>)
+      }
+      //function to return alert of error
+      //function to return error
+      const alertOfError = () => {
+        return (
+          <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+          <span >error dans la Modefication  de produit </span>
+          <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        )
+      }
  
      //function to return a correspondant alert
      const alert = (message) =>{
@@ -207,55 +238,82 @@ const ModefieProduit = () => {
            
      }
   return (
-    <div className="container modefier-produit">
-    <div className='row '>
-      <div className='col-8'>
-      <form onSubmit={handleSubmit}>
-          <h1>Modefier produit</h1>
-          {alert(alertMessage)}
-          <hr></hr>
-          <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="refProduit">Référece produit :</label>
-              <input type="text" name="refProd" id="refProduit1" className="form-control" placeholder='ref produit' ref={refProduit1} onChange={handleChange}  />
-              {displayErr("refProduit1")}
+    <div className="container ajouter-produit">
+      <div className="row">
+        <div className="col-12">
+          <div className="card">
+            <div className="card-header bg-info text-white">
+              <h3>Modefier Produit</h3>
+              {alert(alertMessage)}
+            </div>
+            <div className="card-body">
+              <form onSubmit={handleSubmit}>
+                <div className='form-row'>
+                  <div className="form-group col-md-6">
+                    <label className="form-label" htmlFor="refProduit">Référence produit :</label>
+                    <input type="text" name="refProd" id="refProduit" className="form-control" placeholder="ref produit" ref={refProduit} onChange={handleChange} />
+                    {displayErr("refProduit")}
+                  </div>
+                  <div className="form-group col-md-6">
+                    <label className="form-label" htmlFor="nomProduit">Nom produit :</label>
+                    <input type="text" name="nomProd" id="nomProduit" className="form-control" placeholder="nom produit" ref={nomProduit} onChange={handleChange} />
+                    {displayErr("nomProduit")}
+                  </div>
+                </div>
+                <div className='form-row'>
+                  <div className="form-group col-md-6">
+                    <label className="form-label" htmlFor="prixProduit">Prix produit :</label>
+                    <input type="number" name="prixUnitaireHT" id="prixProduit" className="form-control" placeholder="prix unitaire" ref={prixProduit} onChange={handleChange} />
+                    {displayErr("prixProduit")}
+                  </div>
+                  <div className="form-group col-md-6 position-relative">
+                    <label htmlFor="categorieProduit">Fournisseur :</label>
+                    <select className="form-control" name="idFournisseur" id="fournisseur" ref={fournisseur} onChange={handleChange}>
+                      <option value="">Sélectionner fournisseur</option>
+                      {fournisseurs.map(fournisseur => (
+                        <option key={fournisseur.idFournisseur} value={fournisseur.idFournisseur}>{fournisseur.raisonSocial}</option>
+                      ))}
+                    </select>
+                    <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '70%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
+                    {displayErr("fournisseur")}
+                  </div>
+                </div>
+                <div className='form-row'>
+                  <div className="form-group col-md-6">
+                    <label htmlFor="tva">TVA :</label>
+                    <input typee="number" id="tva" name="tva" className="form-control" placeholder="saisir la TVA du produit" ref={tva} onChange={handleChange} />
+                    {displayErr("tva")}
+                  </div>
+                  <div className="form-group col-md-6 position-relative">
+                    <label htmlFor="categorieProduit">Catégorie :</label>
+                    <select className="form-control" name="category" id="categorieProduit" ref={categorieProduit} onChange={handleChange}>
+                      <option value="">Sélectionner catégorie</option>
+                      {categories.map(categorie => (
+                        <option key={categorie.idCategorie} value={categorie.idCategorie}>{categorie.nomCategorie}</option>
+                      ))}
+                    </select>
+                    <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '54%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
+                    {displayErr("categorieProduit")}
+                  </div>
+                </div>
+                <div className='form-row'>
+                  <div className="form-group col-md-6">
+                    <label htmlFor="details">Détails produit :</label>
+                    <textarea id="details" name="details" className="form-control" placeholder="saisir les détails du produit" ref={details} onChange={handleChange} />
+                    {displayErr("details")}
+                  </div>
+                </div>
+                <div>
+                  <input type="submit" value="Modefier" className="btn btn-primary" />
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <input type="reset" value="Reset" className="btn btn-danger" onClick={handleReset} />
+                </div>
+              </form>
+            </div>
           </div>
-          <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="nomProduit">Nom produit :</label>
-              <input type="text" name="nomProd" id="nomProduit1" className="form-control" placeholder='nom produit' ref={nomProduit1} onChange={handleChange}  />
-              {displayErr("nomProduit1")}
-          </div>
-          <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="prixProduit">Prix produit :</label>
-              <input type="text" name="prixUnitaireHT" id="prixProduit1" className="form-control" placeholder='prix unitaire' ref={prixProduit1} onChange={handleChange}/>
-              {displayErr("prixProduit1")}
-          </div>
-          <div className="form-outline mb-4">
-              <label htmlFor="details">Details produit :</label>
-              <textarea id="details1" name="details" className="form-control" placeholder='saisir les details de produit' ref={details1} onChange={handleChange} />
-              {displayErr("details1")}
-          </div>
-          <div className="form-outline mb-4">
-              <label htmlFor="tva1">Details produit :</label>
-              <textarea id="tva1" name="tva" className="form-control" placeholder='saisir la tva de produit' ref={tva1} onChange={handleChange} />
-              {displayErr("tva1")}
-          </div>
-          <div className="form-outline mb-4">
-              <label htmlFor="categorieProduit1">Categorie :</label>
-              <select className="form-control" name="category" id="categorieProduit1" ref={categorieProduit1}  onChange={handleChange}>
-                  <option value=''>Select categorie</option>
-                  {categories.map(categorie =>( <option key={categorie.idCategorie} value={categorie.idCategorie} >{categorie.nomCategorie}</option>))}
-              </select>
-              {displayErr("categorieProduit1")}
-          </div>
-          <div>
-              <input type="submit" value="Modefier" className='btn btn-primary'></input>
-               &nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="reset" value="Reset" className='btn btn-danger' onClick={handleReset}></input>
-          </div>
-      </form>
+        </div>
       </div>
-  </div>
-</div>
+    </div>
   )
 }
 

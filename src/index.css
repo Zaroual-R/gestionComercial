@@ -317,3 +317,90 @@ code {
   }
 }
 /*end style of loader*/
+
+/*start of styling the data table */
+.custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: 'Roboto', sans-serif; /* Stylish and modern font */
+  font-size: 14px;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 8px 16px;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-table th:last-child,
+.custom-table td:last-child {
+  border-right: none;
+}
+
+.custom-table th {
+  background-color: #3e5368;
+  color: white;
+  font-weight: 500; /* Slightly bolder for headers */
+  position: relative;
+}
+
+.custom-table th::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  /* Icon path if necessary */
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.custom-table th:hover {
+  background-color: #1f3a21;
+}
+
+.custom-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.custom-table tr:nth-child(odd) {
+  background-color: white;
+}
+
+.custom-table tr:hover {
+  background-color: #ddd;
+}
+
+.custom-table th:first-child,
+.custom-table td:first-child {
+  border-left: none;
+}
+
+.custom-table td {
+  font-weight: 400; /* Lighter font weight for data cells */
+  position: relative;
+}
+
+.custom-table .action-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background-color: #747874;
+  color: white;
+  cursor: pointer;
+}
+
+.custom-table .action-button:hover {
+  background-color: #d0d7d0;
+}
+
+
+
+
+/*end of styling the data table */

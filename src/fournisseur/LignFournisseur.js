@@ -31,22 +31,22 @@ const handlePlus = (objFour) =>{
 }
   return (
 <tr>
-    <td style={{ width: "100px", textAlign: "center" }}>{objFournisseur.idFournisseur}</td>
+    <td style={{ width: "30px", textAlign: "center" ,fontWeight:'bold'}}>#{objFournisseur.idFournisseur}</td>
     <td style={{ width: "100px", textAlign: "center" }}>{objFournisseur.codeComptable}</td>
-    <td style={{ width: "100px", textAlign: "center" }}>{objFournisseur.raisonSocial}</td>
+    <td style={{ width: "100px", textAlign: "center",fontWeight:'bold' }}>{objFournisseur.raisonSocial}</td>
     <td style={{ width: "100px", textAlign: "center" }}>{objFournisseur.resposable}</td>
     <td style={{ width: "100px", textAlign: "center" }}>
-        <button className="btn btn-primary" onClick={() =>{handlePlus(objFournisseur)}}>
+        <button className="btn" style={{backgroundColor:'#59E817'}} onClick={() =>{handlePlus(objFournisseur)}}>
         <i className="fas fa-info"></i> plus
         </button>
     </td>
     <td style={{ width: "100px", textAlign: "center" }}>
-        <div className="dropdown">
+        <div className="dropdown " >
             <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" >
                 Actions
             </button>
-            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button className="dropdown-item" onClick={() =>handleEdit(objFournisseur)}>
+            <div className="dropdown-menu" style ={{backgroundColor:'#F7ED12  ',fontWeight:"bolder"}} aria-labelledby="dropdownMenuButton">
+                <button className="dropdown-item" onClick={() =>handleEdit(objFournisseur)} >
                     <i className="fas fa-edit"></i> Modifier
                 </button>
                 <button className="dropdown-item"  onClick={() =>{handleDelete(objFournisseur.idFournisseur)}}>

@@ -107,7 +107,7 @@ const AjouterCategorie = () => {
             <div className="row">
                 <div className="col-md-8 card-categorie">
                     <div className="card ">
-                        <div className="card-header bg-dark text-white">
+                        <div className="card-header bg-info text-white">
                             <h4>Nouvelle Catégorie</h4>
                             {alert(alertMessage)}
                         </div>
@@ -119,9 +119,7 @@ const AjouterCategorie = () => {
                                     {displayErr("nomCategorieField")}
                                 </div>
                                 <div>
-                                    <input type="submit" value="Ajouter" className="btn btn-primary" />
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input type="reset" value="Reset" className="btn btn-danger" onClick={handleReset} />
+                                    <button type="submit" value="Ajouter" className="btn btn-primary" ><i className='fas fa-plus-circle'/>Ajouter</button>
                                 </div>
                             </form>
                         </div>

@@ -5,18 +5,18 @@ const LignCmdFour = (props) => {
     const navigate=useNavigate();
     const commande = props.commande;
 
-    const handleEdit = (commande) => {
+    const handleEdit = (commande,idCmd) => {
         // Check if the commande's etat is either "EN_TRANSPORT" or "LIVREE"
         if (commande.etat === "EN_TRANSPORT" || commande.etat === "LIVREE") {
             // Show confirmation dialog
             const userConfirmed = window.confirm("Cette commande est en cours de transport ou déjà livrée. Voulez-vous vraiment modifier cette commande?");
             if (userConfirmed) {
-                navigate("/ManageCommande", { state: { commande } });
+                navigate("/ManageCommande", { state: { idCmd } });
             } else {
                 console.log("Modification cancelled by the user.");
             }
         } else {
-            navigate("/ManageCommande", { state: { commande } });
+            navigate("/ManageCommande", { state: { idCmd } });
         }
     }   
 
@@ -42,7 +42,9 @@ const LignCmdFour = (props) => {
     }
     
     const handleFacture = (Fact) =>{
-        navigate("/FactureDocument",{state:{Fact}})
+        if(Fact !=null){
+            navigate("/FactureDocument",{state:{Fact}})
+        }
     }
 
     const handleDownload = (idCmd) => {
@@ -50,7 +52,9 @@ const LignCmdFour = (props) => {
     }
 
     const handleDocBonLivraison=(bonLivraison) =>{
-        navigate("/LivraisonDocument", { state: {bonLivraison} });
+        if(bonLivraison !=null){
+            navigate("/LivraisonDocument", { state: {bonLivraison} });
+        }
     }
   
 
@@ -61,11 +65,17 @@ const LignCmdFour = (props) => {
         const day = String(formattedDate.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
+
+    if (!commande && !commande.fournisseur) {
+        return <div>Loading... Please wait.</div>; // Loading page or indicator
+    }
+
+    const fournisseurRaisonSocial = commande? commande.fournisseur: "Unavailable";
     return (
         <tr>
-            <td style={{ textAlign: "center" }}>{commande.idCommande}</td>
+            <td style={{ textAlign: "center",fontWeight:'bold' }}>#{commande.idCommande}</td>
             <td style={{ textAlign: "center" }}>{formatDate(commande.dateCommande)}</td>
-            <td style={{ textAlign: "center" }}>{commande.fournisseur.raisonSocial}</td>
+            <td style={{ textAlign: "center",fontWeight:'bold'}}>{fournisseurRaisonSocial}</td>
             <td style={{ textAlign: "center" }}>
                 <button className="btn " onClick={() => { handlePlus(commande.idCommande) }} style={{backgroundColor:'#59E817'}}>
                     <i className="fas fa-info"></i> plus
@@ -76,7 +86,7 @@ const LignCmdFour = (props) => {
                     <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" >
                         Actions
                     </button>
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div className="dropdown-menu" style ={{backgroundColor:'#F7ED12  ',fontWeight:"bolder"}}  aria-labelledby="dropdownMenuButton">
                         <button className="dropdown-item" onClick={() => handleEdit(commande)}>
                             <i className="fas fa-edit"></i> Modifier
                         </button>

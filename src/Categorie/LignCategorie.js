@@ -26,12 +26,11 @@ import CategorieService from '../backEndService/CategorieService';
 
   return (
     <tr>
-        <td style={{width:"100px", textAlign:"center"}}>{props.idCategorie}</td>
-        <td style={{width:"100px",textAlign:"center"}}>{props.nomCategorie}</td>
-        <td style={{textAlign:"center" ,width:"200px"}}>
-            <button className='btn btn-primary' onClick={() => handleClickEdit(props.idCategorie)}><i className='fas fa-pencil-alt'/>&nbsp;&nbsp;edit</button>
+        <td style={{width:"70px",textAlign:"center" ,fontWeight:'bold'}}>{props.nomCategorie}</td>
+        <td style={{textAlign:"center" ,width:"100px"}}>
+            <button className='btn btn-primary' onClick={() => handleClickEdit(props.idCategorie)}><i className='fas fa-pencil-alt'/>&nbsp;&nbsp;Editer</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button className='btn btn-danger' onClick={() => handleDelete(props.idCategorie)}><i className='fa fa-trash'/>&nbsp;&nbsp;delete</button>
+            <button className='btn btn-danger' onClick={() => handleDelete(props.idCategorie)}><i className='fa fa-trash'/>&nbsp;&nbsp;Supprimer</button>
         </td>
     </tr>
   )

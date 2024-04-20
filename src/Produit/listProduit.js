@@ -2,17 +2,22 @@ import React, { useEffect, useRef, useState } from 'react'
 import LignProduit from './LignProduit'
 import ProductService from '../backEndService/ProductService';
 import CategorieService from '../backEndService/CategorieService';
+import FournisseurService from '../backEndService/FournisseurService';
+import { useNavigate } from 'react-router-dom';
 
 
 const ListProduit = () => {
     const [listProduit, setListProduit] = useState([]);
     const searchKeyProduct = useRef('');
     const categorieProduct = useRef('');
+    const idFournisseur = useRef('');
     const [ListCategorie, setListCategorie] = useState([]);
     const [showAlert, setShowAlert] = useState(true);
     const [alertMessage, setAlertMessage] = useState('')
+    const [fournisseurs,setFournisseurs]=useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage] = useState(4); // Nombre de produits par page
+    const [rowsPerPage] = useState(5); // Nombre de produits par page
+    const navigate =useNavigate();
     const indexOfLastProduct = currentPage * rowsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - rowsPerPage;
     const currentProducts = listProduit.slice(indexOfFirstProduct, indexOfLastProduct);
@@ -20,15 +25,28 @@ const ListProduit = () => {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    
+    const getAllFournisseur =() =>{
+        FournisseurService.getAllFournisseurs()
+          .then(response =>{
+            setFournisseurs(response.data);
+            console.log("success to get all fournisseur");
+          })
+          .catch(error=>{
+            console.error("error to getall fournisseur");
+          })
+      }
+
 
     const closeAlert = () => {
         setShowAlert(false);
         setAlertMessage('');
-      };    
+    };
 
     useEffect(() => {
         getAllProductLists();
         getAllCategorie();
+        getAllFournisseur();
     }, []);
     //fonction pour chercher tout les categories
     const getAllCategorie = () => {
@@ -69,9 +87,10 @@ const ListProduit = () => {
     const handleChange = (e) => {
         const searchNameValue = searchKeyProduct.current.value;
         const selectCatValue = categorieProduct.current.value;
-        const rechDto = { "idCategorie": selectCatValue, "produitNom": searchNameValue }
+        const idFournisseurValue=idFournisseur.current.value;
+        const rechDto = { "idCategorie": selectCatValue, "produitNom": searchNameValue,"idFournisseur":idFournisseurValue }
         console.log(rechDto);
-        if (searchNameValue == '' && selectCatValue == '') {
+        if (searchNameValue == '' && selectCatValue == ''&& idFournisseurValue == '') {
             getAllProductLists();
         }
         else {
@@ -80,58 +99,73 @@ const ListProduit = () => {
 
     }
 
-    const alertError = (msg) =>{
-        switch(msg){
-          case '':
-            return <div></div>;
-          case "error":
-            return  (
-                <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
-                <span >vous pouvez pas de supprimer ce produite  </span>
-                <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-            )
+    const alertError = (msg) => {
+        switch (msg) {
+            case '':
+                return <div></div>;
+            case "error":
+                return (
+                    <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+                        <span >vous pouvez pas de supprimer ce produite  </span>
+                        <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                )
         }
-      }
+    }
+
+    const ajouterProd = () =>{
+        navigate("/AjouterProduit");
+    }
 
 
-    const datashow = currentProducts.map((item, key) => <LignProduit key={item.idProduit} id={item.idProduit} refProduit={item.refProd} nom={item.nomProd} prix={item.prixUnitaireHT} categorie={item.categoryName} details={item.details} tva={item.tva} onDelete={getAllProductLists} alert={setAlertMessage}/>)
+    const datashow = currentProducts.map((item, key) => <LignProduit key={item.idProduit} id={item.idProduit} refProduit={item.refProd} nom={item.nomProd} prix={item.prixUnitaireHT} categorie={item.categoryName} details={item.details} tvaN={item.tva} idFournisseur={item.idFournisseur} onDelete={getAllProductLists} alert={setAlertMessage} />)
 
     return (
         <div className='container mt-2 list-produit'>
-            <div className='card ' style={{ maxHeight: 'calc(100vh - 70px)', width: "800" }}>
+            <div className='card ' style={{ width: "800" }}>
                 <div className="card-header bg-dark">
-                   <h3>Liste des produits</h3>
-                   {alertError(alertMessage)}
+                    <h3>Liste des produits</h3>
+                    {alertError(alertMessage)}
                 </div>
                 <div className='card-body ' >
                     <form method="get" >
                         <div className="input-group mb-2">
-                            <div className="input-group-prepend">
-                                <div className="input-group-text " style={{ backgroundColor: '#00FF00' }} ><i className='fas fa-search'></i></div>
+                            <div className='col-4'>
+                                <button className='btn btn-primary' onClick={() =>ajouterProd()}><i class="fas fa-plus-circle"/><i class="fas fa-box-open"/>Ajoute</button>
                             </div>
-                            <input type="text" id="searchKeyProduct" ref={searchKeyProduct} className="form-control col-6" style={{ width: "250px" }} placeholder="Chercher par nom produit" onChange={handleChange} />
-                            <div className="input-group-append ">
+                            <div className="input-group-prepend">
+                                <div className="input-group-text " style={{ backgroundColor: '#CDCDC7' }} ><i className='fas fa-search'></i></div>
+                            </div>
+                            <input type="text" id="searchKeyProduct" ref={searchKeyProduct} className="form-control col-2" style={{ width: "200px" }} placeholder=" nom produit" onChange={handleChange} />
+                            <div className="input-group-append position-relative ">
                                 <select className="form-control product-listCategore-serach" id="categorieProduct" ref={categorieProduct} onChange={handleChange}>
                                     <option value="">Toutes les catégories</option>
                                     {ListCategorie.map((item, key) => (<option key={item.idCategorie} value={item.idCategorie}>{item.nomCategorie}</option>))}
                                 </select>
+                                <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                             </div>
-                            <div className='col-5'></div>
+                            <div className="input-group-append position-relative ">
+                                <select className="form-control product-listCategore-serach" id="idFournisseur" ref={idFournisseur} onChange={handleChange}>
+                                    <option value="">Toutes les fournisseur</option>
+                                    {fournisseurs.map(fournisseur => (
+                                        <option key={fournisseur.idFournisseur} value={fournisseur.idFournisseur}>{fournisseur.raisonSocial}</option>
+                                    ))}
+                                </select>
+                                <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
+                            </div>
                         </div>
                     </form>
-                    <table className="table table-striped">
+                    <table className="table custom-table">
                         <thead>
                             <tr>
-                                <th scope="col" style={{ width: "100px", textAlign: "center" }}>#ID</th>
                                 <th scope="col" style={{ width: "100px", textAlign: "center" }}>Référence</th>
                                 <th scope="col" style={{ width: "100px", textAlign: "center" }}>Nom</th>
                                 <th scope="col" style={{ width: "100px", textAlign: "center" }}>Prix</th>
+                                <th scope="col" style={{ width: "100px", textAlign: "center" }}>TVA</th>
                                 <th scope="col" style={{ width: "100px", textAlign: "center" }}>Catégorie</th>
                                 <th scope="col" style={{ width: "100px", textAlign: "center" }}>Détails</th>
-                                <th scope="col" style={{ width: "100px", textAlign: "center" }}>TVA</th>
                                 <th scope="col" style={{ width: "100px", textAlign: "center" }}>Action</th>
                             </tr>
                         </thead>
@@ -139,7 +173,7 @@ const ListProduit = () => {
                             {datashow}
                         </tbody>
                     </table>
-                    <br/>
+                    <br />
                     <nav>
                         <ul className='pagination'>
                             <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>

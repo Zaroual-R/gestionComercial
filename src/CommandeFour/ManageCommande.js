@@ -31,10 +31,12 @@ const ManageCommande = () => {
     const [montantTotalTTC, setMontantTotalTTC] = useState(0);
     const [showAlert, setShowAlert] = useState(true);
     const [oldProducts, setOldProducts] = useState([]);
+    const [isLoad,setLoad] =useState(false);
+    const [idFour,setIdFour]=useState('');
     const editCmd="editCmd";
     const location = useLocation();
     const { state } = location || {};
-    const updateCommande=state.commande;
+    const idCmd=state.idCmd;
 
     const [commande, setCommande] = useState({
         "idCommande": updateCommande.idCommande,
@@ -51,6 +53,20 @@ const ManageCommande = () => {
         "ligneCmdFourDtos": updateCommande.lignCmdFours,
 
     })
+
+    useEffect(()=>{
+        getCommande()
+    },[])
+
+    const getCommande = () =>{
+        CommandeFourService.getCompletCommande(idCmd)
+            .then(res =>{
+                setCommande(res.data);
+            })
+            .catch(error =>{
+                console.error("error to get commande",error);
+            })
+    }
 
     
     const closeAlert = () => {
@@ -144,25 +160,37 @@ const ManageCommande = () => {
             initForm();
             getOldProducts();
             getAllFournisseur();
-            getAllProduct();
     }, [])
 
     useEffect(() =>{
-        initTables();
-    },[oldProducts])
+        if(idFour){
+            getAllProduct(idFour)
+        }
+    },[idFour])
     
+    useEffect(() =>{
+        if(isLoad){
+            setLoad(false)
+        }
+    },[isLoad])
     //function to get all product list 
-    const getAllProduct = () => {
-        ProductService.getAllProducts()
+    const getAllProduct = (id) => {
+       FournisseurService.getProducts(id)
             .then(response => {
                 console.log("get all product to add cmd four is success");
                 setProductList(response.data);
+                setLoad(true);
+                console.log(productList)
             })
             .catch(error => {
                 console.error("error to get product list ");
             })
     }
 
+    useEffect(() =>{
+        initTables();
+    },[oldProducts])
+    
     //function to get all fournisseure
     const getAllFournisseur = () => {
         FournisseurService.getAllFournisseurs()
@@ -251,7 +279,7 @@ const ManageCommande = () => {
             [name]: value
         }));
         console.log(commande);
-
+        setIdFour(idFournisseur.current.value);
         setProductId(produitField.current.value);
         setQuantiteValue(quantite.current.value);
 

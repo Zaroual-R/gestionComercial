@@ -13,8 +13,9 @@ const AjouterProduit = () => {
   const fournisseur=useRef();
   const [errors, setErrors] = useState({});
   const [alertMessage, setAlertMessage] = useState("");
-  const [produit, setProduit] = useState({ refProd: '', nomProd: '', prixUnitaireHT: 0, details: '', category: 0, tva: 0,fournisseur:0 })
+  const [produit, setProduit] = useState({ refProd: '', nomProd: '', prixUnitaireHT: 0, details: '', category: 0, tva: 0,idFournisseur:0 })
   let isValide = true;
+  const [showAlert, setShowAlert] = useState(true);
   const [categories, setCategories] = useState([]);
   const [fournisseurs,setFournisseurs]=useState([]);
   //get all getegories in did mount component 
@@ -175,18 +176,29 @@ const AjouterProduit = () => {
 
     }
   }
+
+  const closeAlert = () => {
+    setShowAlert(false);
+  };
   const alertOfSucces = () => {
-    return (<div className='alert alert-success ' role="alert">
-      le produit a été ajouté avec succés
+    return (
+      <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+      <span >le produit à été ajouté avec succés </span>
+      <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>)
   }
   //function to return alert of error
   //function to return error
   const alertOfError = () => {
     return (
-      <div className='alert alert-danger' role="alert">
-        error dans l'ajout de produit
-      </div>
+      <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+      <span >error dans l'jout de produit </span>
+      <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
     )
   }
 
@@ -210,7 +222,7 @@ const AjouterProduit = () => {
       <div className="row">
         <div className="col-12">
           <div className="card">
-            <div className="card-header bg-dark text-white">
+            <div className="card-header bg-info text-white">
               <h3>Nouveau Produit</h3>
               {alert(alertMessage)}
             </div>
@@ -234,14 +246,15 @@ const AjouterProduit = () => {
                     <input type="number" name="prixUnitaireHT" id="prixProduit" className="form-control" placeholder="prix unitaire" ref={prixProduit} onChange={handleChange} />
                     {displayErr("prixProduit")}
                   </div>
-                  <div className="form-group col-md-6">
+                  <div className="form-group col-md-6 position-relative">
                     <label htmlFor="categorieProduit">Fournisseur :</label>
-                    <select className="form-control" name="fournisseur" id="fournisseur" ref={fournisseur} onChange={handleChange}>
+                    <select className="form-control" name="idFournisseur" id="fournisseur" ref={fournisseur} onChange={handleChange}>
                       <option value="">Sélectionner fournisseur</option>
                       {fournisseurs.map(fournisseur => (
                         <option key={fournisseur.idFournisseur} value={fournisseur.idFournisseur}>{fournisseur.raisonSocial}</option>
                       ))}
                     </select>
+                    <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '74%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                     {displayErr("fournisseur")}
                   </div>
                 </div>
@@ -251,7 +264,7 @@ const AjouterProduit = () => {
                     <input typee="number" id="tva" name="tva" className="form-control" placeholder="saisir la TVA du produit" ref={tva} onChange={handleChange} />
                     {displayErr("tva")}
                   </div>
-                  <div className="form-group col-md-6">
+                  <div className="form-group col-md-6 position-relative">
                     <label htmlFor="categorieProduit">Catégorie :</label>
                     <select className="form-control" name="category" id="categorieProduit" ref={categorieProduit} onChange={handleChange}>
                       <option value="">Sélectionner catégorie</option>
@@ -259,6 +272,7 @@ const AjouterProduit = () => {
                         <option key={categorie.idCategorie} value={categorie.idCategorie}>{categorie.nomCategorie}</option>
                       ))}
                     </select>
+                    <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '74%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                     {displayErr("categorieProduit")}
                   </div>
                 </div>

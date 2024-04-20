@@ -1,6 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import ProductService from '../backEndService/ProductService';
 const Menu = () => {
+  
+  useEffect(()=>{
+    getNbrProduit();
+  })
+  const [nbrProduit,setNbrProduit]=useState(0);
+  const getNbrProduit = () =>{
+    ProductService.getAllProducts()
+      .then(response =>{
+        setNbrProduit(response.data.length);
+      })
+      .catch(error =>{
+        console.log("error to get produits")
+      })
+  }
   return (
     <aside className="main-sidebar sidebar-dark-primary elevation-4 my-aside">
       {/* Brand Logo */}
@@ -48,7 +63,7 @@ const Menu = () => {
                 <p>
                   Produits
                   <i className="fas fa-angle-left right" />
-                  <span className="badge badge-info right">6</span>
+                  <span className="badge badge-info right">{nbrProduit}</span>
                 </p>
               </a>
               <ul className="nav nav-treeview">

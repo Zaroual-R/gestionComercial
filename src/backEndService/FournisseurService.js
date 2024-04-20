@@ -26,5 +26,9 @@ class FournisserService{
         return axios.get(`${API_URL}/chercher/${key}`)
     }
 
+    getProducts(id){
+         return axios.get(`${API_URL}/getProducts/${id}`)
+    }
+
 }
 export default new FournisserService();

@@ -26,7 +26,9 @@ const CommandeFournisseur = () => {
     const [lignCommandeEnvoyer, setLignCommandeEnvoyer] = useState([]);
     const [montantTotalHT, setMontantTotalHT] = useState(0);
     const [montantTotalTTC, setMontantTotalTTC] = useState(0);
+    const [isLoad,setLoad] =useState(false);
     const [showAlert, setShowAlert] = useState(true);
+    const [idFour,setIdFour] =useState('');
     const addCmd="successCmd";
     const [commande, setCommande] = useState({
         "idFournisseur": "",
@@ -62,15 +64,27 @@ const CommandeFournisseur = () => {
 
     useEffect(() => {
         getAllFournisseur();
-        getAllProduct();
-    }, [])
+    }, []);
 
+    useEffect(() =>{
+        if(idFour!=''){
+            getAllProduct(idFour)
+        }
+    },[idFour])
+    
+    useEffect(() =>{
+        if(isLoad){
+            setLoad(false)
+        }
+    },[isLoad])
     //function to get all product list 
-    const getAllProduct = () => {
-        ProductService.getAllProducts()
+    const getAllProduct = (id) => {
+       FournisseurService.getProducts(id)
             .then(response => {
                 console.log("get all product to add cmd four is success");
                 setProductList(response.data);
+                setLoad(true);
+                console.log(productList)
             })
             .catch(error => {
                 console.error("error to get product list ");
@@ -168,6 +182,8 @@ const CommandeFournisseur = () => {
 
         setProductId(produitField.current.value);
         setQuantiteValue(quantite.current.value);
+        console.log(productList)
+        setIdFour(idFournisseur.current.value);
 
     }
 
@@ -350,7 +366,7 @@ const CommandeFournisseur = () => {
                                     <div className="form-group col-md-6 position relative">
                                         <label htmlFor="moyenneReglement">Moyenne  Règlement</label>
                                         <select className="form-control moyReg" name="moyenneReglement" id="moyenneReglement" ref={moyenneReglement} onChange={handleChange}  >
-                                            <option value=''>Choisir mode paiement souhaité</option>
+                                            <option value=''>Choisir le mode paiement souhaité</option>
                                             <option value='CACH_ON_DELIVRY'>Paiement à la livraison</option>
                                             <option value='TRAITEBANCAIRE'>Traite bancaire</option>
                                             <option value='VAIREMENTBANCAIRE'>Virement bancaire</option>

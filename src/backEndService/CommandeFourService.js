@@ -38,5 +38,7 @@ class CommandeFournisseur {
     editState = (id,stateDto)=>{
         return axios.patch(`${API_URL}/editState/${id}`,stateDto);
     }
+
+    
 }
 export default new CommandeFournisseur();
