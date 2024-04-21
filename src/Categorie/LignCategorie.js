@@ -13,14 +13,15 @@ import CategorieService from '../backEndService/CategorieService';
 
   /*start handle delete button of a categorie*/ 
   const  handleDelete = (idCategorie) =>{
-      CategorieService.deleteCategorie(idCategorie)
+      props.onOpen();
+     /* CategorieService.deleteCategorie(idCategorie)
         .then(responce =>{
           console.log("categorie a éte supprime avec succés",responce.data);
           props.onDelete();
         })
         .catch(error =>{
           console.error("error dans supression de categorie")
-        })
+        })*/
   }
   /*end handle delete button of a categorie*/ 
 

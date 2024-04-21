@@ -2,12 +2,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import LignCategorie from './LignCategorie'
 import CategorieService from '../backEndService/CategorieService';
 import { useNavigate } from 'react-router-dom';
+import MyModal from '../components/MyModal';
 
 const ListCategorie = () => {
     const [categories, setCategories] = useState([]);
     const searchKey = useRef('');
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage] = useState(5); // Nombre de produits par page
+    const [show ,setShow]=useState(false);
     const indexOfLastCategorie = currentPage * rowsPerPage;
     const indexOfFirstCategorie = indexOfLastCategorie - rowsPerPage;
     const currentCategories = categories.slice(indexOfFirstCategorie, indexOfLastCategorie);
@@ -52,7 +54,7 @@ const ListCategorie = () => {
         }
     }
 
-    const datashow = currentCategories.map((item, key) => <LignCategorie key={item.idCategorie} idCategorie={item.idCategorie} nomCategorie={item.nomCategorie} onDelete={getAllCategories} />)
+    const datashow = currentCategories.map((item, key) => <LignCategorie key={item.idCategorie} idCategorie={item.idCategorie} nomCategorie={item.nomCategorie} onDelete={getAllCategories} onOpen={()=>setShow(true)} onHide={()=>setShow(false)} />)
 
 
 
@@ -111,6 +113,7 @@ const ListCategorie = () => {
                     </nav>
                 </div>              
             </div>
+            <MyModal show={show} onHide={()=>setShow(false)}/>
         </div>
 
     )

@@ -25,20 +25,7 @@ const LignCmdFour = (props) => {
     }
 
     const handleDelete = (idCmd) => {   
-        console.log("idCommane",idCmd)
-        const isConfirmed = window.confirm("Êtes-vous sûr de vouloir supprimer cette commande ?");  
-        
-        if (isConfirmed ) {
-            
-            CommandeFourService.deleteCmdFour(idCmd)
-                .then(response => {
-                    console.log("La commande a été supprimée avec succès");
-                    props.onDelete();
-                })
-                .catch(error => {
-                    console.error("Erreur lors de la suppression de cette commande", error);
-                });
-        }
+        props.onDelete(idCmd)
     }
     
     const handleFacture = (Fact) =>{

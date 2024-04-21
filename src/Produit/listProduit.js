@@ -4,6 +4,7 @@ import ProductService from '../backEndService/ProductService';
 import CategorieService from '../backEndService/CategorieService';
 import FournisseurService from '../backEndService/FournisseurService';
 import { useNavigate } from 'react-router-dom';
+import MyModal from '../components/MyModal';
 
 
 const ListProduit = () => {
@@ -15,6 +16,8 @@ const ListProduit = () => {
     const [showAlert, setShowAlert] = useState(true);
     const [alertMessage, setAlertMessage] = useState('')
     const [fournisseurs,setFournisseurs]=useState([]);
+    const [showModal ,setShowModal]=useState(false);
+    const [currentId,setCurrentID]=useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage] = useState(5); // Nombre de produits par page
     const navigate =useNavigate();
@@ -25,7 +28,7 @@ const ListProduit = () => {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    
+    //function to get all fournisseur
     const getAllFournisseur =() =>{
         FournisseurService.getAllFournisseurs()
           .then(response =>{
@@ -37,7 +40,7 @@ const ListProduit = () => {
           })
       }
 
-
+    //function to close the alert   
     const closeAlert = () => {
         setShowAlert(false);
         setAlertMessage('');
@@ -60,6 +63,27 @@ const ListProduit = () => {
             })
 
     }
+
+    //function to intiate th current id of product to be deleted ans show modal of confirmation
+    const handleDeleteProduct = (id) =>{
+        setShowModal(true);
+        setCurrentID(id);
+    }
+
+    //function to confirm delete product 
+    const confirmDelete = () => {
+        ProductService.deleteProduct(currentId)
+            .then(response => {
+                setShowModal(false);
+                getAllProductLists(); // Refresh the list after deletion
+                console.log("Le produit a été supprimé avec succès");
+            })
+            .catch(error => {
+                console.error("Error during product deletion", error);
+                setShowModal(false);
+                setAlertMessage("error");
+            });
+    };
 
     //fonction pour chercher tout les produit 
     const getAllProductLists = () => {
@@ -106,7 +130,7 @@ const ListProduit = () => {
             case "error":
                 return (
                     <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
-                        <span >vous pouvez pas de supprimer ce produite  </span>
+                        <span >ce produit est lié à plusieurs commande vous pouvez pas le supprimer  </span>
                         <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -120,7 +144,7 @@ const ListProduit = () => {
     }
 
 
-    const datashow = currentProducts.map((item, key) => <LignProduit key={item.idProduit} id={item.idProduit} refProduit={item.refProd} nom={item.nomProd} prix={item.prixUnitaireHT} categorie={item.categoryName} details={item.details} tvaN={item.tva} idFournisseur={item.idFournisseur} onDelete={getAllProductLists} alert={setAlertMessage} />)
+    const datashow = currentProducts.map((item, key) => <LignProduit key={item.idProduit} id={item.idProduit} refProduit={item.refProd} nom={item.nomProd} prix={item.prixUnitaireHT} categorie={item.categoryName} details={item.details} tvaN={item.tva} idFournisseur={item.idFournisseur} onDelete={handleDeleteProduct} />)
 
     return (
         <div className='container mt-2 list-produit'>
@@ -193,6 +217,7 @@ const ListProduit = () => {
                     </nav>
                 </div>
             </div>
+            <MyModal show={showModal} onHide={()=>setShowModal(false)}  onConfirm={confirmDelete}/>
         </div>
     )
 }

@@ -38,6 +38,8 @@ const ManageCommande = () => {
     const { state } = location || {};
     const idCmd=state.idCmd;
 
+    const [updateCommande,setUpdateCommande]=useState({});
+    
     const [commande, setCommande] = useState({
         "idCommande": updateCommande.idCommande,
         "idFournisseur": updateCommande.idFournisseur,

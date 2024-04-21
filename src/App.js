@@ -35,6 +35,7 @@ import ModefierBonLivraisonFour from './CommandeFour/ModefieBonLivraisonFour';
 import ModefieFactureFour from './CommandeFour/ModefierFactureFour';
 import FactureDocument from './CommandeFour/FactureDocument';
 import LivraisonDocument from './CommandeFour/LivraisonDocument';
+import ContacterFournisseur from './fournisseur/ContacterFournisseur';
 /*<Header/>
 <div className="wrapper">
         <Menu/>
@@ -79,6 +80,7 @@ function App() {
           <Route path='/ManageCommande'      element={<ManageCommande/>} /> 
           <Route path='/FactureDocument'     element={<FactureDocument/>}/>
           <Route path='/LivraisonDocument'   element={<LivraisonDocument/>}/>
+          <Route path='/ContacterFournisseur'element={<ContacterFournisseur/>}/>
         </Routes>
         <Footer />      
     </BrowserRouter>

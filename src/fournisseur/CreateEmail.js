@@ -112,10 +112,10 @@ const CreateEmail = () => {
                 <button className="action-button" onClick={toggleForm} style={{ width: '60%', height: '40px' }} >Envoyer bon commade via email</button>
             </div>
             {showForm && (
-                <form className="container mt-4 border rounded p-4 email-form" style={{ width: '80%' }}>
+                <form className="container mt-4 border rounded p-4 emaile-form" style={{ width: '80%' }}>
                     <div className="form-group">
                         <label htmlFor="destinataire">Email de Destination :</label>
-                        <input type="email" id="destinataire" ref={destinataire} name="destinataire" className="form-control" value={email} />
+                        <input type="email" id="destinataire" ref={destinataire} name="destinataire" style={{fontWeight:'bold'}}  className="form-control " value={email} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="sujet">Sujet :</label>
@@ -125,7 +125,7 @@ const CreateEmail = () => {
                         <label htmlFor="message">Message :</label>
                         <textarea id="message" name="message" ref={message} className="form-control" rows="5" placeholder="ajouter un message (if any)"></textarea>
                     </div>
-                    <button type="submit" className="btn btn-primary" onClick={handleSendEmail}>Envoyer</button>
+                    <button type="submit" className="btn btn-dark" onClick={handleSendEmail}>Envoyer</button>
                 </form>
             )}
 

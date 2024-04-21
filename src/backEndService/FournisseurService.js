@@ -30,5 +30,13 @@ class FournisserService{
          return axios.get(`${API_URL}/getProducts/${id}`)
     }
 
+    evluate(id){
+        return axios.get(`${API_URL}/qualiteLivraison/${id}`);
+    }
+
+    evaluatValidte(id){
+        return axios.get(`${API_URL}/validite/${id}`);
+    }
+
 }
 export default new FournisserService();

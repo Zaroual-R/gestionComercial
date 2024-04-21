@@ -144,7 +144,7 @@ code {
   padding-bottom:400px;
 }
 .details{
-  margin-left:17%;
+  margin-left:13%;
   margin-top: 0px;
   padding:10px;
   padding-bottom:300px;
@@ -198,8 +198,8 @@ code {
   background-color: #159B9B; /* Vert */
   color: #fff;
 }
-.email-form{
-  background-color: #f8f9fa;
+.emaile-form{
+  background-color: #e8f0fe;
 }
 .Myfont{
   font-family:' Arial,  sans-serif';
@@ -241,82 +241,46 @@ code {
 /*end facture*/
 
 
-/*style of loader */
-.loader {
-  margin-top: 40px;
-  margin-left: 40%;
-  transform: rotateZ(45deg);
-  perspective: 1000px;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  color: #fff;
-}
-  .loader:before,
-  .loader:after {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: inherit;
-    height: inherit;
-    border-radius: 50%;
-    transform: rotateX(70deg);
-    animation: 1s spin linear infinite;
-  }
-  .loader:after {
-    color: #FF3D00;
-    transform: rotateY(70deg);
-    animation-delay: .4s;
-  }
-
-@keyframes rotate {
-  0% {
-    transform: translate(-50%, -50%) rotateZ(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotateZ(360deg);
-  }
+/*style of contacter four */
+.email-form {
+  width: 80%;
+  padding: 20px;
+  border-radius: 8px;/* Replace 'your-image-url.jpg' with your actual image path */
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  color: #ffffff;
 }
 
-@keyframes rotateccw {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(-360deg);
-  }
+.email-form input, .email-form textarea {
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 10px;
+  border-radius: 4px;
 }
 
-@keyframes spin {
-  0%,
-  100% {
-    box-shadow: .2em 0px 0 0px currentcolor;
-  }
-  12% {
-    box-shadow: .2em .2em 0 0 currentcolor;
-  }
-  25% {
-    box-shadow: 0 .2em 0 0px currentcolor;
-  }
-  37% {
-    box-shadow: -.2em .2em 0 0 currentcolor;
-  }
-  50% {
-    box-shadow: -.2em 0 0 0 currentcolor;
-  }
-  62% {
-    box-shadow: -.2em -.2em 0 0 currentcolor;
-  }
-  75% {
-    box-shadow: 0px -.2em 0 0 currentcolor;
-  }
-  87% {
-    box-shadow: .2em -.2em 0 0 currentcolor;
-  }
+.email-form label {
+  color: #ffffff; /* White color for labels for better visibility */
 }
-/*end style of loader*/
+
+.email-form button {
+  background-color: #0f355f; /* Bootstrap primary color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.email-form button:hover {
+  background-color: #0056b3;
+}
+.card-mail{
+  background-image: url('/public/dist/img/email3.webp');
+}
+
+/*end style of contacter four*/
 
 /*start of styling the data table */
 .custom-table {

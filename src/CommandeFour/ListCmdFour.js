@@ -2,13 +2,19 @@ import React, { useEffect, useRef, useState } from 'react'
 import LignCmdFour from './LignCmdFour';
 import FournisseurService from '../backEndService/FournisseurService';
 import CommandeFourService from '../backEndService/CommandeFourService';
-import Loader from '../components/Loader';
+import MyModal from '../components/MyModal';
+import { useNavigate } from 'react-router-dom';
 
 const ListCmdFour = () => {
     const [listFournisseur, setListFournisseur] = useState([]);
     const [listCommandes, setListCommandes] = useState([]);
     const searchKeyCommande = useRef();
     const idFournisseur = useRef();
+    const [alertMessage,setAlertMessage]=useState('');
+    const [showModal,setShowModal]=useState(false);
+    const [currentId,setCurrentId]=useState(null);
+    const [showAlert,setShowAlert]=useState(false);
+    const navigate =useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage] = useState(5);
     const indexOfLastCmdFournisseur = currentPage * rowsPerPage;
@@ -24,6 +30,34 @@ const ListCmdFour = () => {
         getAllFournisseur();
         getAllCommande();
     }, [])
+
+    const closeAlert = () => {
+        setShowAlert(false);
+        setAlertMessage('');
+    };
+
+    //function to handle delete commande
+    const handleDeleteCommande = (id) =>{
+        setShowModal(true);
+        setCurrentId(id);
+    }
+
+    //function to confirm deletion 
+    const confirmDelete = () =>{
+        CommandeFourService.deleteCmdFour(currentId)
+        .then(response => {
+            setShowModal(false);
+            getAllCommande();
+            setAlertMessage("success");
+            console.log("La commande a été supprimée avec succès");
+
+        })
+        .catch(error => {
+            setShowModal(false);
+            setAlertMessage("error");
+            console.error("Erreur lors de la suppression de cette commande", error);
+        });
+    }
 
     const getAllFournisseur = () => {
         FournisseurService.getAllFournisseurs()
@@ -47,7 +81,31 @@ const ListCmdFour = () => {
             })
     }
 
-    //function to get all Commandes 
+    //function to handle alert message
+    const alertMsg = (msg) => {
+        switch (msg) {
+            case '':
+                return <div></div>;
+            case "error":
+                return (
+                    <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+                        <span >Error dans la suppression de commande  </span>
+                        <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                )
+            case "success":
+                return (
+                    <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+                    <span >La commande a été supprimé avec succés </span>
+                    <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div> 
+                )
+        }
+    }
 
     const getAllCommande = () => {
         CommandeFourService.getAllCommande()
@@ -78,37 +136,20 @@ const ListCmdFour = () => {
     }
 
     const ajouterCommande =() =>{
-        Navigate("/CommandeFournisseur");
+        navigate("/CommandeFournisseur");
     }
-    /*
-                                    <div className="form-group mb-2">
-                                    <div className='col-4'></div>
-                                    <div className="input-group-prepend ">
-                                        <div className="input-group-text " style={{ backgroundColor: '#00FF00'}} ><i className='fas fa-search' ></i></div>
-                                    </div>
-                                    <input type="text" id="searchKeyCommande" ref={searchKeyCommande} className="form-control" style={{width: "200px" }} placeholder="chercher par reference" onChange={handleChange} />
-                                    <div className="input-group-append">
-                                        <select className="form-control product-listCategore-serach" idFournisseur="idFournisseur" ref={idFournisseur} onChange={handleChange}>
-                                            <option value="">Toutes les fournisseur</option>
-                                            {listFournisseur.map((item, key) => (<option key={item.idFournisseur} value={item.idFournisseur}>{item.raisonSocial}</option>))}
-                                        </select>
-                                    </div>
-                                </div>
 
 
-
-
-
-
-    */
-
-    const datashow = currentCmdFournisseur.map((item, key) => <LignCmdFour key={item.idCommande} commande={item} onDelete={getAllCommande} />)
+    const datashow = currentCmdFournisseur.map((item, key) => <LignCmdFour key={item.idCommande} commande={item} onDelete={handleDeleteCommande} />)
     return (
         <div>
             {!loader ? <div>...loading</div> :
                 <div className='container mt-2 list-produit'>
                     <div className='card ' style={{ maxHeight: 'calc(100vh - 100px)', width: "800" }}>
-                        <div className="card-header bg-dark"> <h3>List commandes fournisseur </h3></div>
+                        <div className="card-header bg-dark">
+                            <h3>List commandes fournisseur </h3>
+                            {alertMsg(alertMessage)}
+                         </div>
                         <div className='card-body ' >
                             <form method="get"  >
                                 <div className='input-group mb-2'>
@@ -166,7 +207,9 @@ const ListCmdFour = () => {
                             </nav>
                         </div>
                     </div>
-                </div>}
+                    <MyModal  show={showModal} onHide={()=>setShowModal(false)} onConfirm={confirmDelete}/>
+                </div>
+                }
         </div>
     )
 }

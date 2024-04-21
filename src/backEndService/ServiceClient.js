@@ -26,5 +26,9 @@ class ServiceClient{
   rechercheClients(searchClient){
     return axios.post(`${API_URL}/recherche`,searchClient);
   }
+
+  getNbrClient (){
+    return axios.get(`${API_URL}/nbrClient`);
+  }
 }
 export default new ServiceClient();

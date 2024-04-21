@@ -28,7 +28,7 @@ const Menu = () => {
         {/* Sidebar user panel (optional) */}
         <div className="user-panel mt-3 pb-3 mb-3 d-flex">
           <div className="image">
-            <img src="../dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="UserImage" />
+            <img src="../dist/img/avatar5.png" className="img-circle elevation-2" alt="UserImage" />
           </div>
           <div className="info">
             <a href="#" className="d-block text-md">Rachid Zaroual</a>

@@ -5,6 +5,7 @@ import CommandeFourService from '../backEndService/CommandeFourService';
 import LignCmdFourDetails from './LignCmdFourDetails';
 import BonLivFourService from '../backEndService/BonLivFourService';
 import FactureFourService from '../backEndService/FactureFourService';
+import MyModal from '../components/MyModal';
 const DetailsCommande = () => {
     const [lignCommandeAfficher, setLignCommandeAfficher] = useState([]);
     const navigate = useNavigate();
@@ -16,6 +17,12 @@ const DetailsCommande = () => {
     const [factureDeleted, setFactureDeleted] = useState(false);
     const [stateUpdated,setStatUpdated] =useState(false);
     const [visible, setVisible] = useState(false);
+    const [alertMessage,setAlertMessage]=useState('')
+    const [currentIdFacture,setCurrentIdFacture]=useState(null);
+    const [currentIdBon,setCurrentIdBon]=useState(null);
+    const [showModalFact,setShowModalFact]=useState(false);
+    const [showModalBon,setShowModalBon]=useState(false);
+    const [showAlert,setShowAlert]=useState(false);
     const etat = useRef();
     const dateSortie = useRef();
     const [stateDto, setStateDto] = useState(
@@ -24,6 +31,12 @@ const DetailsCommande = () => {
             "dateSortie": ''
         }
     )
+
+
+    const closeAlert = () => {
+        setShowAlert(false);
+        setAlertMessage('');
+    };
     //function to get commande
     useEffect(() => {
         if (idCmd) {
@@ -73,11 +86,16 @@ const DetailsCommande = () => {
     };
 
     const formatDate = (date) => {
-        const formattedDate = new Date(date);
-        const year = formattedDate.getFullYear();
-        const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
-        const day = String(formattedDate.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        if(!date){
+            return '----'
+        }
+        else{
+            const formattedDate = new Date(date);
+            const year = formattedDate.getFullYear();
+            const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
+            const day = String(formattedDate.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
     };
 
     //function to add bon livraison
@@ -91,20 +109,25 @@ const DetailsCommande = () => {
 
     //function to deleteBonlivraison
     const handleDeleteBonLiv = (idBon) => {
-        if (window.confirm("Êtes-vous sûr de vouloir supprimer ce bon de livraison ?")) {
-            BonLivFourService.deleteBonLivFour(idBon)
-                .then(response => {
-                    console.log("success to delete bon livraison");
-                    setBonLivDeleted(true);  // Indiquer que la suppression a réussi
-                })
-                .catch(error => {
-                    console.error("error to delete bon livraison", error);
-                });
-        } else {
-            console.log("Suppression annulée");
-        }
+        setShowModalBon(true);
+        setCurrentIdBon(idBon);
     }
     
+
+    //functio to confirm delte bon
+    const confirmDeleteBon =() =>{
+        BonLivFourService.deleteBonLivFour(currentIdBon)
+        .then(response => {
+            setBonLivDeleted(true);  
+            setShowModalBon(false);
+            setAlertMessage("successBon");
+        })
+        .catch(error => {
+            setShowModalBon(false);
+            setAlertMessage("errorBon");
+            console.error("error to delete bon livraison", error);
+        });
+    }
     //function to show Document livraison
     const handleDocBonLivraison=(bonLivraison) =>{
         navigate("/LivraisonDocument", { state: {bonLivraison} });
@@ -164,18 +187,27 @@ const DetailsCommande = () => {
         navigate("/ModefierFactureFour", { state: { facture, idCmd } })
     }
 
+    //function to confirm delete facture 
+    const confirmDeleteFact = () =>{
+        FactureFourService.deleteFacture(currentIdFacture)
+        .then(response => {
+            setFactureDeleted(true);
+            setShowModalFact(false);
+            setAlertMessage("successFact");
+        })
+        .catch(error => {
+            setShowModalFact(false);
+            setAlertMessage("errorFact");
+            console.error("error to delete facture");
+
+        })
+    }
+    
+
     //function to delete facture
     const handleDeleteFact = (idFact) => {
-        if (window.confirm("Êtes-vous sûr de vouloir supprimer ce facture ?")) {
-            FactureFourService.deleteFacture(idFact)
-                .then(response => {
-                    console.log("success to delete facture");
-                    setFactureDeleted(true);
-                })
-                .catch(error => {
-                    console.error("error to delete facture");
-                })
-        }
+        setShowModalFact(true);
+        setCurrentIdFacture(idFact);
     }
     //fonction to download and print document of facture
     const handleShowDocument = (Fact) => {
@@ -301,6 +333,63 @@ const DetailsCommande = () => {
         navigate("/BonCmdDocument",{state:{idCmd}});
     }
 
+    //function to handle alet Message 
+    const alertMsg = (msg) => {
+        switch (msg) {
+            case '':
+                return <div></div>;
+            case "errorBon":
+                return (
+                    <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+                        <span >Error dans la suppression de bon livraison  </span>
+                        <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                )
+            case "successBon":
+                return (
+                    <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+                    <span >le Bon livraison à été supprimé avec succés </span>
+                    <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div> 
+                )
+                case "errorFact":
+                    return (
+                        <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+                            <span >Error dans la suppression de la facture  </span>
+                            <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    )
+                case "successFact":
+                    return (
+                        <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+                        <span >la facture à été supprimé avec succés </span>
+                        <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div> 
+                    )
+        }
+    }
+
+    //function to display moyenner reglement 
+    const diplayMoyenneReg = (key) =>{
+        switch(key){
+            case 'CACH_ON_DELIVRY':
+                return 'paiement à la livraison';
+            case 'CHEQUE' :
+                return 'paiement par cheque';
+            case 'VAIREMENTBANCAIRE':
+                return 'vairement bancaire';
+            case 'TRAITEBANCAIRE':
+                return 'traite bancaire';
+        }
+    }
     if (!commande && !commande.fournisseur.raisonSocial) {
         return <div>Loading... Please wait.</div>; // Loading page or indicator
     }
@@ -315,6 +404,7 @@ const DetailsCommande = () => {
             <div className='card'>
                 <div className='card-header bg-dark' style={{ textAlign: 'center' }}>
                     <h3>Details de la commande</h3>
+                    {alertMsg(alertMessage)}
                 </div>
                 <div className='card-body'>
                     <table className='table '>
@@ -339,7 +429,7 @@ const DetailsCommande = () => {
                         </tr>
                         <tr>
                             <td style={{ fontWeight: 'bolder' }}>Moyenne réglement :</td>
-                            <td>{commande.moyenneReglement}</td>
+                            <td>{diplayMoyenneReg(commande.moyenneReglement)}</td>
                             <td style={{ fontWeight: 'bolder' }}>Condition réglement :</td>
                             <td>{commande.conditionReglement}</td>
                         </tr>
@@ -409,7 +499,8 @@ const DetailsCommande = () => {
                     </table>
                 </div>
             </div>
-
+             <MyModal show={showModalFact} onHide={()=>setShowModalFact(false)}  onConfirm={confirmDeleteFact}   /> 
+             <MyModal show ={showModalBon} onHide={() =>setShowModalBon(false)} onConfirm={confirmDeleteBon}  />     
         </div>
     )
 

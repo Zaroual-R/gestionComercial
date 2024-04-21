@@ -7,23 +7,17 @@ const LignFournisseur = (props) => {
 const objFournisseur=props.fournisseur;
 const navigateToEdit =useNavigate();
 const navigiteToDetails =useNavigate();
+const navigate=useNavigate();
 const handleEdit = (objFour) =>{
    navigateToEdit("/ModefierFournisseur",{state:objFour})
 }
 
 const handleDelete =(id) =>{
-    FournisseurService.deleteFournisseur(id)
-        .then(response =>{
-            console.log("fournisseur a éte supprimé avec succés");
-            props.onDelete();
-        })
-        .catch(error =>{
-            console.error("error to delete fournisseur");
-        })
+    props.onDelete(id);
 }
 
 const contacter =(email)=>{
-    window.location.href = `mailto:${email}`;
+    navigate("/ContacterFournisseur",{state:{email}});
 }
 
 const handlePlus = (objFour) =>{

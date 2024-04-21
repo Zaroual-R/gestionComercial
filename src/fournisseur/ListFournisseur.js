@@ -2,11 +2,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import FournisseurService from '../backEndService/FournisseurService';
 import LignFournisseur from './LignFournisseur';
 import { useNavigate } from 'react-router-dom';
+import MyModal from '../components/MyModal';
 
 const ListFournisseur = () => {
     const [listFournisseur, setListFournisseur] = useState([]);
     const navigate = useNavigate();
     const searchKey=useRef();
+    const [alertMessage,setAlertMessage]=useState('');
+    const [showAlert,setShowAlert]=useState(false)
+    const [showModal,setShowModal]=useState(false);
+    const [currentId,setCurrentId]=useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage] = useState(5);
     const indexOfLastFournisseur = currentPage * rowsPerPage;
@@ -16,6 +21,10 @@ const ListFournisseur = () => {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    const closeAlert = () => {
+        setShowAlert(false);
+        setAlertMessage('');
+    };
 
     useEffect(() => {
         getAllFournisseur();
@@ -56,15 +65,66 @@ const ListFournisseur = () => {
         }
     }
 
+    //function to navigate to add fournisseur
     const addFournisseur = () =>{
         navigate("/AjouterFournisseur");
     }
 
-    const datashow = currentFournisseur.map((item, key) => <LignFournisseur key={item.idFournisseur} fournisseur={item} onDelete={getAllFournisseur}/>)
+    //function to handle delete fournisseur
+    const handleDeleteFournisseur = (id) =>{
+        setShowModal(true);
+        setCurrentId(id);
+    }
+
+    const confirmDelete = () =>{
+        FournisseurService.deleteFournisseur(currentId)
+        .then(response =>{
+            setShowModal(false);
+            getAllFournisseur();
+            setAlertMessage('success');
+            console.log("fournisseur a éte supprimé avec succés");
+        })
+        .catch(error =>{
+            setShowModal(false);
+            setAlertMessage('error');
+            console.error("error to delete fournisseur");
+        })
+    }
+
+    //function to handle alert message 
+    const alertMsg = (msg) => {
+        switch (msg) {
+            case '':
+                return <div></div>;
+            case "error":
+                return (
+                    <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+                        <span >ce fournisseur est lié à plusieurs commande vous pouvez pas le supprimer  </span>
+                        <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                )
+            case "success":
+                return (
+                    <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+                    <span >Le fournisseur a été supprimé avec succés </span>
+                    <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div> 
+                )
+        }
+    }
+
+    const datashow = currentFournisseur.map((item, key) => <LignFournisseur key={item.idFournisseur} fournisseur={item} onDelete={handleDeleteFournisseur}/>)
     return (
         <div className='container mt-2 list-fournisseur Myfont'>
             <div className='card ' style={{ maxHeight: 'calc(100vh - 90px)', width: "800" }}>
-                <div className="card-header bg-dark"> <h3>Consulter les fournisseur</h3></div>
+                <div className="card-header bg-dark">
+                   <h3>Consulter les fournisseur</h3>
+                    {alertMsg(alertMessage)}
+                </div>
                 <div className='card-body ' >
                     <form method="get" >
                         <div className='form-row'>
@@ -117,6 +177,7 @@ const ListFournisseur = () => {
                     </nav>
                 </div>
             </div>
+            <MyModal show={showModal} onHide={() =>setShowModal(false)}  onConfirm={confirmDelete}/>
         </div>
     )
 }

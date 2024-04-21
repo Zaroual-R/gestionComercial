@@ -1,6 +1,64 @@
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import { NavLink } from 'react-router-dom'
+import ServiceClient from '../backEndService/ServiceClient';
+import FournisseurService from '../backEndService/FournisseurService';
+import CommandeFourService from '../backEndService/CommandeFourService';
+import ServiceCommande from '../backEndService/ServiceCommande';
 const Dashboard = () => {
+  const [nbrCmdClient, setNbrCmdClient] = useState(0);
+  const [nbrCmdFour, setNbrCmdFour] = useState(0);
+  const [nbrClient, setNbrClient] = useState(0);
+  const [nbrFournisseur, setNbrFournisseur] = useState(0);
+  useEffect(() => {
+    getNbrClient();
+    getNbrCmdClient();
+    getNbrCmdFour();
+    getNbrFournisseur();
+  })
+  const getNbrClient = () => {
+    ServiceClient.getAllClients()
+      .then(res => {
+        setNbrClient(res.data.length);
+        console.log("success to get nbr clients")
+      })
+      .catch(error => {
+        console.error("error to get nbr clients", error);
+      })
+  }
+
+  const getNbrCmdClient = () => {
+    ServiceCommande.getAllCommande()
+      .then(res => {
+        setNbrCmdClient(res.date.length);
+        console.log("succes to get nbr commande ");
+      })
+      .catch(error => {
+        console.error("error to get nbr cmd client");
+      })
+  }
+
+  const getNbrFournisseur = () => {
+    FournisseurService.getAllFournisseurs()
+      .then(res => {
+        setNbrFournisseur(res.data.length)
+        console.log("suceess to get nbr fournisseur")
+      })
+      .catch(error => {
+        console.error("error to get nbr fournisseur", error)
+
+      })
+  }
+
+  const getNbrCmdFour = () => {
+    CommandeFourService.getAllCommande()
+      .then(res => {
+        setNbrCmdFour(res.data.length);
+        console.log("success to get nbr cmdfour")
+      })
+      .catch(error => {
+        console.error("error to get nbr cmdfour");
+      })
+  }
   return (
     <div className="content-wrapper">
       {/* Content Header (Page header) */}
@@ -25,59 +83,60 @@ const Dashboard = () => {
         <div className="container-fluid">
           {/* Small boxes (Stat box) */}
           <div className="row">
+            {/* ./col commandes clients*/}
             <div className="col-lg-3 col-6">
               {/* small box */}
               <div className="small-box bg-info">
                 <div className="inner">
-                  <h3>150</h3>
-                  <p>Commandes</p>
+                  <h3>{nbrCmdClient}</h3>
+                  <p>Commandes Client</p>
                 </div>
                 <div className="icon">
                   <i className="ion ion-bag" />
                 </div>
-                <a href="#" className="small-box-footer">Plus d'info<i className="fas fa-arrow-circle-right" /></a>
+                <NavLink to="/ListCommande" className='small-box-footer'>Plus d'info<i className="fas fa-arrow-circle-right" /></NavLink>
               </div>
             </div>
-            {/* ./col */}
-            <div className="col-lg-3 col-6">
-              {/* small box */}
-              <div className="small-box bg-success">
-                <div className="inner">
-                  <h3>53<sup style={{ fontSize: 20 }}>%</sup></h3>
-                  <p>Stock libre</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-stats-bars" />
-                </div>
-                <a href="#" className="small-box-footer">Plus d'info <i className="fas fa-arrow-circle-right" /></a>
-              </div>
-            </div>
-            {/* ./col */}
+            {/* ./col client  */}
             <div className="col-lg-3 col-6">
               {/* small box */}
               <div className="small-box bg-warning">
                 <div className="inner">
-                  <h3>44</h3>
+                  <h3>{nbrClient}</h3>
                   <p>Clients</p>
                 </div>
                 <div className="icon">
                   <i className="ion ion-person-add" />
                 </div>
-                <a href="#" className="small-box-footer">Plus d'info <i className="fas fa-arrow-circle-right" /></a>
+                <NavLink to="/ListeClients" className="small-box-footer">Plus d'info <i className="fas fa-arrow-circle-right" /></NavLink>
               </div>
             </div>
-            {/* ./col */}
+            {/* ./col fournisseur*/}
+            <div className="col-lg-3 col-6">
+              {/* small box */}
+              <div className="small-box bg-success">
+                <div className="inner">
+                  <h3>{nbrFournisseur}</h3>
+                  <p>Fournisseurs</p>
+                </div>
+                <div className="icon">
+                  <i className="ion ion-person-add" />
+                </div>
+                <NavLink to="/ListFournisseur" className="small-box-footer">Plus d'info <i className="fas fa-arrow-circle-right" /></NavLink>
+              </div>
+            </div>
+            {/* ./col commande fournisseur */}
             <div className="col-lg-3 col-6">
               {/* small box */}
               <div className="small-box bg-danger">
                 <div className="inner">
-                  <h3>65</h3>
-                  <p>les Visitors</p>
+                  <h3>{nbrCmdFour}</h3>
+                  <p>Commandes fournisseur</p>
                 </div>
                 <div className="icon">
-                  <i className="ion ion-pie-graph" />
+                  <i className="fas fa-industry" />
                 </div>
-                <a href="#" className="small-box-footer">Plus d'info <i className="fas fa-arrow-circle-right" /></a>
+                <NavLink to="/ListCmdFour" className="small-box-footer">Plus d'info <i className="fas fa-arrow-circle-right" /></NavLink>
               </div>
             </div>
             {/* ./col */}

@@ -5,52 +5,13 @@ import ProductService from '../backEndService/ProductService';
 //function to handle edit click
 const LignProduit = (props) => {
   const navigate = useNavigate();
-  const [nbrLignCommande, setNbrLignCommande] = useState(0);
   const hadleClickEdit = (idP, refP, nomP, prixP, categorieP, detailsP, tvaN, idFour) => {
     navigate(`/ModefieProduit`, { state: { idP, refP, nomP, prixP, categorieP, detailsP, tvaN, idFour } });
   }
 
-
-  const getNbrLign = async (id) => {
-    try {
-      const response = await ProductService.getNbrLignes(id);
-      if (response) {
-        setNbrLignCommande(response.data);
-        console.log("get nbr ligne success", response.data);
-        // Move the decision logic inside the async function after state update
-        if (response.data > 0) {
-          props.alert('error');
-        } else {
-          // Confirm deletion here
-          const confirm = window.confirm("Voulez-vous vraiment supprimer ce produit?");
-          if (confirm) {
-            deleteProduct(id);
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Error to get nbr ligne", error);
-    }
-  };
-
-  // Separate function for deletion to keep it clean
-  const deleteProduct = (id) => {
-    ProductService.deleteProduct(id)
-      .then(response => {
-        console.log("Le produit a été supprimé avec succès");
-        // Optionally, update the UI to reflect the deletion, like removing the item from a list
-      })
-      .catch(error => {
-        console.error("Error to delete produit", error);
-      });
-  };
-
-  // Adjusted handleDelete function
-  const handleDelete = (id) => {
-    getNbrLign(id);
-  };
-
-
+  const handleDelete =(id) =>{
+    props.onDelete(id);
+  }
   return (
     <tr>
       <td style={{ width: "90px", textAlign: "center", fontWeight: "bold" }}>{props.refProduit}</td>
