@@ -1,10 +1,10 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const LignAddCmd = (props) => {
+const LignAddCommand = (props) => {
     const navigate=useNavigate();
-    const handleClickAddcmd = (idC) =>{
-        navigate("/AjouterCmd",{state:{idC}})
+    const handleClickAddCommand = (idC) =>{
+        navigate("/AjouterCommand",{state:{idC}})
     }
     return (
         <tr>
@@ -16,10 +16,10 @@ const LignAddCmd = (props) => {
             <td style={{ width: "100px", textAlign: "center" }}>{props.ville}</td>
             <td style={{ width: "100px", textAlign: "center" }}>{props.tel}</td>
             <td style={{ width: "300px", textAlign: "center" }}>
-                <button className='btn btn-success' onClick={() =>{handleClickAddcmd(props.id)}}><i className='fa fa-plus'></i>commande</button>
+                <button className='btn btn-success' onClick={() =>{handleClickAddCommand(props.id)}}><i className='fa fa-plus'></i>commande</button>
             </td>
         </tr>
     )
 }
 
-export default LignAddCmd;
+export default LignAddCommand;

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import LignListCommande from './LignListCommand'
-import ServiceCommande from '../backEndService/ServiceCommande';
+import LigneListDevis from './LigneListDevis'
+import ServiceCommande from '../backEndService/ServiceDevis';
 
 
-const ListCommande = () => {
+const ListDevis = () => {
   const [listCommande, setListCommande] = useState([]);
   const searchKeyword=useRef();
 
@@ -36,7 +36,8 @@ const ListCommande = () => {
   }
 
   //functin to get all commandes 
-  const getAllCommande = () => {
+  const getAllCommande = (id) => {
+    setListCommande(prevListCommande => prevListCommande.filter(item => item.idDevis !== id));
     ServiceCommande.getAllCommande()
       .then(response => {
         setListCommande(response.data);
@@ -55,7 +56,7 @@ const ListCommande = () => {
     return `${year}-${month}-${day}`;
   };
  
-  const datashow = listCommande.map((item, key) => <LignListCommande key={item.idCommand} id={item.idCommande} idClient={item.idClient} nomClient={item.nomClient} dateCmd={item.dateCommande} dateReglement={item.dateReglement} montantTotal={item.montantTotal} status={item.status} onDelete={getAllCommande}/>)
+  const datashow = listCommande.map((item, key) => <LigneListDevis idDevis={item.idDevis} idClient={item.idClient} nomClient={item.nomClient} dateDevis={item.dateDevis} dateExpiration={item.dateExpiration} montantTotalHT={item.montantTotalHT} montantTotalTTC={item.montantTotalTTC} status={item.status} onDelete={getAllCommande}/>)
   return (
     <div className='container mt-2 list-commande'>
       <div className='card' style={{ width: '100%', maxHeight: 'calc(100vh - 100px)' }}>
@@ -76,10 +77,12 @@ const ListCommande = () => {
               <tr>
                 <th scope="col" style={{ textAlign: "center" }}>#ID</th>  
                 <th scope="col" style={{ textAlign: "center" }}> Nom client</th>
-                <th scope="col" style={{ textAlign: "center" }}>Date cmd</th>
-                <th scope="col" style={{ textAlign: "center" }}>Date regelement</th>
-                <th scope="col" style={{ textAlign: "center" }}>Montant total</th>
-                <th scope="col" style={{ textAlign: "center" }}>status</th>
+                <th scope="col" style={{ textAlign: "center" }}>Date de devise</th>
+                <th scope="col" style={{ textAlign: "center" }}>Date d'expiration</th>
+                <th scope="col" style={{ textAlign: "center" }}>Montant total HT</th>
+                <th scope="col" style={{ textAlign: "center" }}>Montant total TTC</th>
+                <th scope="col" style={{ textAlign: "center" }}>Montant tva total</th>
+                <th scope="col" style={{ textAlign: "center" }}>status de devise</th>
                 <th scope="col" style={{ textAlign: "center" }} colSpan={2}>Action</th>
               </tr>
             </thead>
@@ -94,4 +97,4 @@ const ListCommande = () => {
   )
 }
 
-export default ListCommande;
+export default ListDevis;

@@ -24,12 +24,12 @@ const Menu = () => {
           <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             {/* Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library */}
-         <li class="nav-item has-treeview menu-open">
+         <li className="nav-item has-treeview menu-open">
             <NavLink to='/' className='nav-link active'>
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i className="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
-                <i class=""></i>
+                <i className=""></i>
               </p>
             </NavLink>
           </li>
@@ -105,24 +105,111 @@ const Menu = () => {
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-edit" />
                 <p>
-                  Commandes
+                  Devis
                   <i className="fas fa-angle-left right" />
                 </p>
               </a>
               <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <NavLink to="/AddCmd" className="nav-link">
+                  <NavLink to="/AddDevis" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>Ajouter commande</p>
+                    <p>Ajouter devis</p>
                   </NavLink>
+
                 </li>
                 <li className="nav-item">
-                  <NavLink to="/ListCommande" className="nav-link">
+                  <NavLink to="/ListDevis" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Listes devis</p>
+                  </NavLink>
+                </li>
+              </ul>
+            </li>
+
+            <li className="nav-item has-treeview">
+              <a href="#" className="nav-link">
+                <i className="nav-icon fas fa-edit" />
+                <p>
+                  Commande
+                  <i className="fas fa-angle-left right" />
+                </p>
+              </a>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <NavLink to="/AddCommand" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>ajouter une commande</p>
+                  </NavLink>
+
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/ListCommand" className="nav-link">
                     <i className="far fa-circle nav-icon" />
                     <p>Listes commandes</p>
                   </NavLink>
                 </li>
               </ul>
+            </li>
+
+            <li className="nav-item has-treeview">
+              <a href="#" className="nav-link">
+                <i className="nav-icon fas fa-edit" />
+                <p>
+                  Facture
+                  <i className="fas fa-angle-left right" />
+                </p>
+              </a>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <NavLink to="/ListFacture" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Listes factures</p>
+                  </NavLink>
+                </li>
+              </ul>
+            </li>
+            <li className="nav-item has-treeview">
+              <a href="#" className="nav-link">
+                <i className="nav-icon fas fa-edit" />
+                <p>
+                  Livraison
+                  <i className="fas fa-angle-left right" />
+                </p>
+              </a>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <NavLink to="/ListLivraison" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Listes de livraisons</p>
+                  </NavLink>
+                </li>
+              </ul>
+            </li>
+
+            <li className="nav-item has-treeview">
+              <a href="#" className="nav-link">
+                <i className="nav-icon fas fa-edit" />
+                <p>
+                  Reglage
+                  <i className="fas fa-angle-left right" />
+                </p>
+              </a>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <NavLink to="/entreprise" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>modifier les informations de l'entreprises</p>
+                  </NavLink>
+
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/remarqueAndCondition" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>remarques et conditions pour les papiers</p>
+                  </NavLink>
+                </li>
+              </ul>
+              
             </li>
             <li className="nav-item has-treeview">
               <a href="#" className="nav-link">

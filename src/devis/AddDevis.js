@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import LignAddCmd from './LignAddCmd'
+import LignAddDevis from './LignAddDevis'
 import ServiceClient from '../backEndService/ServiceClient';
 
 
-const AddCmd = () => {
+const AddDevis = () => {
   const [clients,setClients]=useState();
 
 
@@ -23,7 +23,7 @@ const AddCmd = () => {
             console.error("error to get clients to add commande",error);
         });
   }
-  const datashow = clients?clients.map((item, key) => <LignAddCmd key={key.id} id={item.idClient} nom={item.nomClient} prenom={item.prenomClient} societe={item.societe} pays={item.pays} ville={item.ville} tel={item.tel} />):null;
+  const datashow = clients?clients.map((item, key) => <LignAddDevis key={key.id} id={item.idClient} nom={item.nomClient} prenom={item.prenomClient} societe={item.societe} pays={item.pays} ville={item.ville} tel={item.tel} />):null;
   return (
     <div className='container mt-2 list-addC-client' style={{ width: '100%' }}>
       <div className='card' style={{ width: '100%', maxHeight: 'calc(100vh - 100px)' }}>
@@ -63,4 +63,5 @@ const AddCmd = () => {
   )
 }
 
-export default AddCmd;
+
+export default AddDevis;

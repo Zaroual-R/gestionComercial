@@ -1,56 +1,53 @@
 import React from 'react'
-import LigneProduitAjout from './LigneProduitAjout';
 import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ServiceClient from '../backEndService/ServiceClient';
 import ProductService from '../backEndService/ProductService';
-import ServiceCommande from '../backEndService/ServiceCommande';
-
-const ModefieCmd = () => {
-    const dateCmdField1 = useRef();
-    const dateRegField1 = useRef();
-    const statusCmd1 = useRef();
-    const produitField1 = useRef();
-    const quantiteField1 = useRef();
+import ServiceCommand from '../backEndService/ServiceCommand';
+import LigneProduitAjout from '../devis/LigneProduitAjout';
+const ModefieCommand = () => {
+    const dateCmdField = useRef();
+    const statusCmd = useRef();
+    const produitField = useRef();
+    const quantiteField = useRef();
+    const remiseField = useRef();
     const [errors, setErrors] = useState({});
     let isValid = true;
     const location = useLocation();
-    const { state } = location;
-    const { idC, idClient,dateCommandeC, dateReglementC, montantTotalC, statusC } = state || {};
-    const [commmande, setCommande] = useState({ "idClient": idClient, "montantTotal": montantTotalC, "status":statusC, "dateReglement":dateReglementC, "dateCommande":dateCommandeC , "ligneCommande": [] });
+    const { state } = location.state; 
+    const { idCommande, idClient, dateCommand, status } = location.state || {};
+    const [commmande, setCommande] = 
+    useState({ "idCommande": idCommande, "idClient": idClient, /*"montantTotalHT": 0, "montantTotalTTC": 0,*/ "statusCommande": status, "dateCommande":dateCommand, "ligneCommande": [] });
+
     const [lignCommandeAfficher, setLignCommandeAfficher] = useState([]);
     const [lignCommandeEnvoyer, setLignCommandeEnvoyer] = useState([])
     const [products, setProducts] = useState([]);
     const [productId, setProductId] = useState(0);
     const [quantite, setQuantite] = useState(0);
-    const [montantTotal, setMontantTotal] = useState(montantTotalC);
-    const [alertMessage, setAlertMessage] = useState("");
+    const [remise, setRemise] = useState(0);
+    const [montantTotalHT, setMontantTotalHT] = useState(0);
+    const [montantTotalTTC, setMontantTotalTTC]=useState(0);
+    const [tvaTotal, setTvaTotal] = useState(0);
+    const [alertMessage,setAlertMessage]=useState("");
 
-    //console.log("this is the state",state);
-    // Remplir automatiquement le champ de date de commande avec la date actuelle
     // Remplir automatiquement le champ de date de commande avec la date actuelle
     useEffect(() => {
         initialiseFields();
         getAllProduct();
         getLignesCommande();
     }, []);
-
     useEffect(() => {
         calculMToatal();
     }, [lignCommandeAfficher])
-    //function to formate the date 
-    const formatDate = (date) => {
-        const formattedDate = new Date(date);
-        const year = formattedDate.getFullYear();
-        const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
-        const day = String(formattedDate.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-    
-    
-    //function to get all lignd commande  of commande
+    /*start form validation function*/
+
+    const initialiseFields = () => {
+        console.log("date de commande", dateCommand); // Vérifiez la valeur
+        dateCmdField.current.value = dateCommand;
+        statusCmd.current.value = status;
+    }
     const getLignesCommande = () => {
-        ServiceCommande.getLignesCommande(idC)
+        ServiceCommand.getLignesCommande(idCommande)
             .then(response => {
                 const lignesAfficheTemp = [];
                 const lignesEnvoyerTemp = [];
@@ -62,11 +59,14 @@ const ModefieCmd = () => {
                         "refProduit": item.produit.refProd,
                         "nomProduit": item.produit.nomProd,
                         "prix": item.produit.prixUnitaireHT,
-                        "quantite": item.quantite
+                        "tva":item.produit.tva,
+                        "quantite": item.quantite,
+                        "remise": item.remise
                     }
                     const lignEnvoyer = {
                         "idProduit": item.produit.idProduit,
-                        "quantite": item.quantite
+                        "quantite": item.quantite,
+                        "remise": item.remise
                     }
                     lignesAfficheTemp.push(lignAffiche);
                     lignesEnvoyerTemp.push(lignEnvoyer);
@@ -79,84 +79,77 @@ const ModefieCmd = () => {
                 console.error("error to get lines of order ", error);
             })
     }
-    
-    //function to initialise  the value of fields 
-    const initialiseFields = () => {
-        dateRegField1.current.value = formatDate(dateReglementC);
-        dateCmdField1.current.value = formatDate(dateCommandeC);
-        statusCmd1.current.value = statusC;
-    }
-    
-    //function empty fields 
-    const handleReset2 = () => {
-        dateRegField1.current.value = '';
-        produitField1.current.value = '';
-        statusCmd1.current.value = '';
-        produitField1.current.value = '';
-        quantiteField1.current.value = '';
-    }
 
-    //function to delete item of lign commande given id 
-    const handleDelete = (id) => {
-        setLignCommandeAfficher(prevState => prevState.filter(item => item.idProduit !== id));
-        setLignCommandeEnvoyer(prevState => prevState.filter(item => item.idProduit !== id));
-    }
-
-    /*start form validation function*/
     const validatForm = () => {
         setErrors({});
-        const dateRegValue = dateRegField1.current.value;
-        const produitValue = produitField1.current.value;
-        const quatiteValue = quantiteField1.current.value;
-        const statusValue=statusCmd1.current.value;
-        if (!dateRegValue) { // Vérifier si la chaîne de date est vide
+        const produitValue = produitField.current.value;
+        const quatiteValue = quantiteField.current.value;
+        const statusValue=statusCmd.current.value;
+        const remiseValue = remiseField.current.value;
+        /*if (!dateExpValue) { // Vérifier si la chaîne de date est vide
             setErrors(prevState => ({
                 ...prevState,
-                dateRegField1: "La date de règlement est obligatoire"
+                dateExpField: "La date d'expiration est obligatoire"
             }));
             isValid = false;
         } 
-        if(dateRegValue) {
-            const dateReg = new Date(dateRegValue); // Convertir la chaîne de date en objet Date
+        if(dateExpValue) {
+            const dateReg = new Date(dateExpValue); // Convertir la chaîne de date en objet Date
             const isValidDate = !isNaN(dateReg.getTime()); // Vérifier si la date est valide
             if (!isValidDate) {
                 setErrors(prevState => ({
                     ...prevState,
-                    dateRegField1: "La date de règlement n'est pas valide"
+                    dateExpField: "La date d'expiration n'est pas valide"
                 }));
                 isValid = false;
             }
-        }
+        }*/
         if (statusValue.trim() == '') {
             setErrors(prevState => {
-                return { ...prevState, ...{ statusCmd1: "le champe status est obligatoire" } }
+                return { ...prevState, ...{ statusCmd: "le champe status est obligatoire" } }
             });
             isValid = false;
         }
-        if(lignCommandeEnvoyer.length == 0){
+        if(lignCommandeEnvoyer.length ==0){
             if (produitValue.trim() == '') {
                 setErrors(prevState => {
-                    return { ...prevState, ...{ produitField1: "le champe ref-produit est obligatoire" } }
+                    return { ...prevState, ...{ produitField: "le champe ref-produit est obligatoire" } }
                 });
                 isValid = false;
             }
             if (quatiteValue < 1 || isNaN(quatiteValue)) {
-                setErrors(prevState => ({ ...prevState, quantiteField1: "quantite doit etre superieue a 1" }));
+                setErrors(prevState => ({ ...prevState, quantiteField: "quantite doit etre superieue à 1" }));
+                isValid = false;
+            }
+            if(remiseValue < 0) {
+                setErrors(prevState => ({ ...prevState, remiseField: "remise doit etre nulle ou superiere à 1"}));
                 isValid = false;
             }
         }
         return isValid;
     }
-
+    //function to delete item of lign commande given id 
+    const handleDelete = (id) => {
+        setLignCommandeAfficher(prevState => prevState.filter(item => item.idProduit !== id));
+        setLignCommandeEnvoyer(prevState =>prevState.filter(item => item.idProduit !==id));
+    }
+    
     /*end form validation function*/
 
     //handle reset function 
     const handleReset = (e) => {
         e.preventDefault();
-        dateRegField1.current.value = '';
-        produitField1.current.value = '';
-        quantiteField1.current.value = '';
-        statusCmd1.current.value = '';
+        produitField.current.value = '';
+        quantiteField.current.value = '';
+        remiseField.current.value = '';
+    }
+    const handleReset2 = () =>{
+        produitField.current.value='';
+        quantiteField.current.value='';
+        statusCmd.current.value='';
+        produitField.current.value='';
+        quantiteField.current.value='';
+        remiseField.current.value='';
     }
 
     //start get error of a given field
@@ -191,15 +184,16 @@ const ModefieCmd = () => {
     const handleChange = (event) => {
         validatForm();
         setAlertMessage("");
-        const { name, value } = event.target
-        setCommande(prevCommande => ({
-            ...prevCommande,
-            [name]: value
-        }));
+        const { name, value } = event.target   
+            setCommande(prevCommande => ({
+                ...prevCommande,
+                [name]: value
+            }));
         console.log(commmande);
 
-        setProductId(produitField1.current.value);
-        setQuantite(quantiteField1.current.value);
+        setProductId(produitField.current.value);
+        setQuantite(quantiteField.current.value);
+        setRemise(remiseField.current.value);
     }
 
     //function handle click add product to order
@@ -208,27 +202,31 @@ const ModefieCmd = () => {
             .then(response => {
                 console.log("success to get command of given id", response.data);
                 const lignCmdAfficher = {
-                    "idProduit": response.data.idProduit,
+                    "idProduit":response.data.idProduit,
+                    "tva":response.data.tva,
                     "refProduit": response.data.refProd,
                     "nomProduit": response.data.nomProd,
                     "prix": response.data.prixUnitaireHT,
-                    "quantite": quantite,
+                    "quantite": quantite, 
+                    "remise": remise
                 };
                 const lignCmdEnvoyer = {
                     "idProduit": response.data.idProduit,
                     "quantite": quantite,
-                };
-                console.log("lignaffic cmd ajouter",lignCmdAfficher);
-                console.log("lignenv ajouter",lignCmdEnvoyer)
+                    "remise": remise
+                }
+                console.log(lignCmdAfficher);
+                console.log(lignCmdEnvoyer)
 
                 setLignCommandeAfficher(prevState => ([...prevState, lignCmdAfficher]));
-                setLignCommandeEnvoyer(prevState => ([...prevState, lignCmdEnvoyer]))
+                setLignCommandeEnvoyer(prevState =>( [...prevState, lignCmdEnvoyer]))
             })
             .catch(error => {
                 console.error("error to get product", error);
             });
 
     }
+
 
     //function to get all product 
     const getAllProduct = () => {
@@ -245,150 +243,155 @@ const ModefieCmd = () => {
     //function to calculate montant total of order line
     const calculMToatal = () => {
         let MontantTotl = 0
+        let TvaTotal = 0
         for (const lign of lignCommandeAfficher) {
             const montantLign = lign.prix * lign.quantite;
-            MontantTotl += montantLign;
+            const montantLignApreRemise = montantLign - montantLign*(lign.remise/100);
+            MontantTotl += montantLignApreRemise;
+            TvaTotal += montantLignApreRemise*(lign.tva/100)
         }
-        setMontantTotal(MontantTotl);
+        setMontantTotalHT(MontantTotl);
+        setTvaTotal(TvaTotal);
+        setMontantTotalTTC(MontantTotl+TvaTotal);
     }
 
     //function to return alert of success
-    const alertOfSucces = () => {
-        return (<div className='alert alert-success ' role="alert">
-            la commande a été modifié avec succés
+    const alertOfSucces = () =>{
+       return (<div className='alert alert-success ' role="alert">
+           la commande a été ajouté avec succés
         </div>)
     }
-
     //function to return alert of error
-    const alertOfErrorProduct = () => {
-        return (
+    const alertOfErrorProduct = () =>{
+        return(
             <div className='alert alert-danger' role="alert">
                 veuillez ajouter un ligne de commande
             </div>
         )
     }
-
     //function to return erro 
-    const alertOfError = () => {
-        return (
+    const alertOfError = () =>{
+        return(
             <div className='alert alert-danger' role="alert">
-                error dans la modefication de produit de produit
+                erreur dans l'ajout de commande
             </div>
         )
     }
 
     //function to return a correspondant alert
-    const alert = (message) => {
-        switch (message) {
+    const alert = (message) =>{
+        switch(message){
             case "error":
-                return alertOfError();
+                return  alertOfError();
             case "success":
-                return alertOfSucces();
-            case "errorProduit":
-                return alertOfErrorProduct();
-            default:
+                return  alertOfSucces();
+            case "errorProduit" :
+                return  alertOfErrorProduct();
+            default :
                 return null;
-
+            
         }
-
+          
     }
 
     /*handle submit function */
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (validatForm()) {
-            if (lignCommandeEnvoyer.length > 0) {
+        if (validatForm() ) {
+            if(lignCommandeEnvoyer.length >0){
                 const commandeDto = {
                     "idClient": commmande.idClient,
-                    "montantTotal": montantTotal,
-                    "status": commmande.status,
-                    "dateReglement": formatDate(commmande.dateReglement),
-                    "dateCommande":formatDate( commmande.dateCommande),
+                    "montantTotalHT": montantTotalHT,
+                    "montantTotalTTC": montantTotalTTC,
+                    "statusCommande": commmande.statusCommande,
+                    //"dateExpiration": commmande.dateExpiration,
+                    "dateCommande": commmande.dateCommande,
                     "ligneCommandes": lignCommandeEnvoyer // Utilisez lignCommandeEnvoyer pour les données d'envoi
                 };
-                console.log("commande dto",commandeDto);
-                ServiceCommande.updateCommande(commandeDto,idC)
+                setLignCommandeAfficher([]); 
+                setLignCommandeEnvoyer([]); 
+                console.log(commandeDto);
+                ServiceCommand.ajouterCommande(commandeDto)
                     .then(response => {
                         handleReset2();
                         setAlertMessage("success");
-                        console.log("la commande a été modefié avec succès", response.data);
+                        console.log("la commande a été ajoutée avec succès", response.data);
                         console.log(lignCommandeAfficher);
-                        console.log(montantTotal);
-                        setLignCommandeAfficher([]);
-                        setLignCommandeEnvoyer([]);
+                        console.log(montantTotalHT); 
+                        
                     })
                     .catch(error => {
-                        console.error("erreur dans l'modeficaion de commande", error);
+                        console.error("erreur dans l'ajout de commande", error);
                         setAlertMessage("error");
                     })
             }
-            else {
+            else{
                 setAlertMessage("errorProduit");
             }
         }
     }
 
     const datashow = lignCommandeAfficher.map((item, key) => (
-        <LigneProduitAjout key={`${item.idProduit}-${key}`} idProduit={item.idProduit} refProduit={item.refProduit} nomProduit={item.nomProduit} prix={item.prix} quantite={item.quantite} onDelete={handleDelete} />
+        <LigneProduitAjout key={`${item.idProduit}-${key}`} idProduit={item.idProduit} refProduit={item.refProduit} nomProduit={item.nomProduit} prix={item.prix} tva={item.tva} remise={item.remise} quantite={item.quantite} onDelete={handleDelete}/>
     ));
-    return (
-        <div className="container modefier-cmd">
+        return (
+        <div className="container ajouter-cmd">
             <div className='row '>
                 <div className='col-7 ajouter-cmd-form' style={{ border: '1px solid #ccc', padding: '20px', paddingBottom: '0px' }}>
                     <form onSubmit={handleSubmit}>
-                        <h2>Modefier commande</h2>
-                        {alert(alertMessage)}
+                        <h2>Nouveau commande</h2>
+                            {alert(alertMessage)}                        
                         <hr></hr>
-                        <input type="text" hidden />
                         <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="dateCmdField1">Date commande :</label>
-                            <input type="date" name="dateCommande" id="dateCmdField1" className="form-control" readOnly ref={dateCmdField1} onChange={handleChange} />
-                            {dispalyErr("dateCmdField1")}
+                            <label className="form-label" htmlFor="dateCmdField">Date de commande :</label>
+                            <input type="date" name="dateCommande" id="dateCmdField" className="form-control" ref={dateCmdField} readOnly onChange={handleChange} />
                         </div>
-                        <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="dateRegField1">Date regelement :</label>
-                            <input type="date" name="dateReglement" id="dateRegField1" className="form-control" placeholder='date regelement' ref={dateRegField1} onChange={handleChange} />
-                            {dispalyErr("dateCmdField1")}
-                        </div>
+                    
                         <div className="form-outline mb-4">
                             <label htmlFor="Status">Status commande :</label>
-                            <select className="form-control" name="status" id="statusCmd1" ref={statusCmd1} onchange={handleChange}>
+                            <select className="form-control" name="statusCommande" id="statusCmd" ref={statusCmd} onChange={handleChange}>
                                 <option value=''>select status</option>
-                                <option value='TRAITE'>traité</option>
-                                <option value='ENCOURS'>En cours</option>
-                                <option value='ANNULE'>Annulé</option>
+                                <option value="EN_ATTENTE">en attente</option>
+                                <option value="EN_PREPARATION" >en préparation</option>
+                                <option value="ANNULEE">annulée</option>
                             </select>
-                            {dispalyErr("statusCmd1")}
+                            {dispalyErr("statusCmd")}
                         </div>
                         <div className="form-group">
                             <label htmlFor="produitCommande">Produit :</label>
                             <div className="d-flex align-items-center">
-                                <select className="form-control" id="produitField1" style={{ width: '300px' }}  ref={produitField1} onChange={handleChange} >
+                                <select className="form-control" id="produitField" style={{ width: '220px' }} ref={produitField} onChange={handleChange} >
                                     <option value=''>Select produit-reference</option>
                                     {products.map((item, key) => <option key={item.key} value={item.idProduit}>{item.nomProd}-{item.refProd}</option>)}
                                 </select>
                                 &nbsp; &nbsp;
-                                <input type="text" id="quantiteField1" className="form-control" placeholder="Quantité" style={{ width: '100px' }} ref={quantiteField1} onChange={handleChange} />
+                                <input type="number" id="quantiteField" className="form-control" placeholder="Quantité" style={{ width: '140px' }} ref={quantiteField} onChange={handleChange} />
                                 &nbsp; &nbsp;
-                                <button className='btn btn-info ms-2' type="button" onClick={handleClickAddProduct}>Ajouter</button>
+                                <input type="number" id="remiseField" className="form-control" placeholder="Remise" style={{ width: '140px' }} ref={remiseField} onChange={handleChange} />
+                                &nbsp; &nbsp;
+                                <button type="button" className='btn btn-info ms-2' onClick={handleClickAddProduct}>Ajouter</button>
                             </div>
                             <div>
-                                {dispalyErr("produitField1")}
-                                {dispalyErr("quantiteField1")}
+                                {dispalyErr("produitField")}
+                                {dispalyErr("quantiteField")}
                             </div>
                         </div>
-                        <span className="badge bg-dark mb-4 p-3">Montant total: {montantTotal} &nbsp;&nbsp;MAD</span>
+
+                        <span className="badge bg-dark mb-4 p-3">Montant total HT: {montantTotalHT.toFixed(2)} &nbsp;&nbsp;MAD</span>
+                        <span className="badge bg-dark mb-4 p-3">Montant total TTC: {montantTotalTTC.toFixed(2)} &nbsp;&nbsp;MAD</span>
+                        <span className="badge bg-dark mb-4 p-3">tva total: {tvaTotal.toFixed(2)} &nbsp;&nbsp;MAD</span>
+
                         <div>
-                            <input type="submit" value="Modefier " className='btn btn-primary btn-ajouter-cmd'></input>
+                            <input type="submit" value="Ajouter cmd" className='btn btn-primary btn-ajouter-cmd'></input>
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <input type="reset" value="Reset" className='btn btn-danger btn-reset-cmd' onClick={handleReset} ></input>
+                            <input type="reset" value="Reset" className='btn btn-danger btn-reset-cmd' onClick={handleReset}></input>
                         </div>
                     </form>
                 </div>
                 <div className='col-5'>
                     <div className='container mt-2'>
                         <div className='card' style={{ maxHeight: 'calc(100vh - 90px)' }}>
-                            <div className="card-header bg-dark "> <h4>Listes des produits commandés</h4></div>
+                            <div className="card-header bg-dark"> <h4>Listes des produits </h4></div>
                             <div className='card-body' style={{ overflowY: 'auto' }}>
                                 <table className="table table-dark table-striped">
                                     <thead>
@@ -397,6 +400,8 @@ const ModefieCmd = () => {
                                             <th scope="col">Nom</th>
                                             <th scope="col">prix</th>
                                             <th scope="col">Quantite</th>
+                                            <th scope="col">tva</th>
+                                            <th scope="col">Remise</th>
                                             <th scope="col">Delete</th>
                                         </tr>
                                     </thead>
@@ -411,8 +416,6 @@ const ModefieCmd = () => {
 
             </div>
         </div>
-
-    );
+        );
 }
-
-export default ModefieCmd;
+export default ModefieCommand; 

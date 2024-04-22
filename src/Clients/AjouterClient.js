@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRef, useState } from 'react'
 import ServiceClient from '../backEndService/ServiceClient';
+import { addTokenToHeader } from '../backEndService/AxiosConfig';
 
 const AjouterClient = () => {
     const nomClientField = useRef();
@@ -26,7 +27,9 @@ const AjouterClient = () => {
         })
 
     //function to reset fields of form 
-
+    useEffect (() => {
+        addTokenToHeader();
+    },[])
     /*start form validation function*/
     const validatForm = () => {
         setErrors({});
@@ -140,6 +143,7 @@ const AjouterClient = () => {
             ServiceClient.ajouterClient(client)
                 .then(response =>{
                     console.log("le client a été ajouté avec succes",response.data);
+                    console.log("le token ",localStorage.getItem('token'));
                     setClient(
                         {"nomClient":'',
                         "prenomClient":'',

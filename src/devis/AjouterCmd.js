@@ -4,26 +4,32 @@ import LigneProduitAjout from './LigneProduitAjout';
 import { useLocation } from 'react-router-dom';
 import ServiceClient from '../backEndService/ServiceClient';
 import ProductService from '../backEndService/ProductService';
-import ServiceCommande from '../backEndService/ServiceCommande';
+import ServiceDevis from '../backEndService/ServiceDevis';
 
 const AjouterCmd = () => {
     const dateCmdField = useRef();
-    const dateRegField = useRef();
+    const dateExpField = useRef();
     const statusCmd = useRef();
     const produitField = useRef();
     const quantiteField = useRef();
+    const remiseField = useRef();
     const [errors, setErrors] = useState({});
     let isValid = true;
     const location = useLocation();
     const { state } = location;
     const { idC } = state || {};
-    const [commmande, setCommande] = useState({ "idClient": idC, "montantTotal": 0, "status": '', "dateReglement": '', "dateCommande": '', "ligneCommande": [] });
+    const [commmande, setCommande] = 
+    useState({ "idClient": idC, "montantTotalHT": 0, "montantTotalTTC": 0, "statusDevis": '', "dateExpiration": '', "dateDevis": '', "ligneCommande": [] });
+
     const [lignCommandeAfficher, setLignCommandeAfficher] = useState([]);
     const [lignCommandeEnvoyer, setLignCommandeEnvoyer] = useState([])
     const [products, setProducts] = useState([]);
     const [productId, setProductId] = useState(0);
     const [quantite, setQuantite] = useState(0);
-    const [montantTotal, setMontantTotal] = useState(0);
+    const [remise, setRemise] = useState(0);
+    const [montantTotalHT, setMontantTotalHT] = useState(0);
+    const [montantTotalTTC, setMontantTotalTTC]=useState(0);
+    const [tvaTotal, setTvaTotal] = useState(0);
     const [alertMessage,setAlertMessage]=useState("");
 
     // Remplir automatiquement le champ de date de commande avec la date actuelle
@@ -33,7 +39,7 @@ const AjouterCmd = () => {
         setCommande(prevcmd => (
             {
                 ...prevcmd,
-                "dateCommande": today,
+                "dateDevis": today,
             }
         ))
         getAllProduct();
@@ -44,24 +50,24 @@ const AjouterCmd = () => {
     /*start form validation function*/
     const validatForm = () => {
         setErrors({});
-        const dateRegValue = dateRegField.current.value;
+        const dateExpValue = dateExpField.current.value;
         const produitValue = produitField.current.value;
         const quatiteValue = quantiteField.current.value;
         const statusValue=statusCmd.current.value;
-        if (!dateRegValue) { // Vérifier si la chaîne de date est vide
+        if (!dateExpValue) { // Vérifier si la chaîne de date est vide
             setErrors(prevState => ({
                 ...prevState,
-                dateRegField: "La date de règlement est obligatoire"
+                dateExpField: "La date d'expiration est obligatoire"
             }));
             isValid = false;
         } 
-        if(dateRegValue) {
-            const dateReg = new Date(dateRegValue); // Convertir la chaîne de date en objet Date
+        if(dateExpValue) {
+            const dateReg = new Date(dateExpValue); // Convertir la chaîne de date en objet Date
             const isValidDate = !isNaN(dateReg.getTime()); // Vérifier si la date est valide
             if (!isValidDate) {
                 setErrors(prevState => ({
                     ...prevState,
-                    dateRegField: "La date de règlement n'est pas valide"
+                    dateExpField: "La date d'expiration n'est pas valide"
                 }));
                 isValid = false;
             }
@@ -97,17 +103,19 @@ const AjouterCmd = () => {
     //handle reset function 
     const handleReset = (e) => {
         e.preventDefault();
-        dateRegField.current.value = '';
+        dateExpField.current.value = '';
         produitField.current.value = '';
         quantiteField.current.value = '';
+        remiseField.current.value = '';
     }
     const handleReset2 = () =>{
-        dateRegField.current.value='';
+        dateExpField.current.value='';
         produitField.current.value='';
         quantiteField.current.value='';
         statusCmd.current.value='';
         produitField.current.value='';
         quantiteField.current.value='';
+        remiseField.current.value='';
     }
 
     //start get error of a given field
@@ -151,23 +159,27 @@ const AjouterCmd = () => {
 
         setProductId(produitField.current.value);
         setQuantite(quantiteField.current.value);
+        setRemise(remiseField.current.value);
     }
 
     //function handle click add product to order
     const handleClickAddProduct = () => {
         ProductService.getProduct(productId)
             .then(response => {
-                console.log("success to get command of given id", response.data);
+                console.log("success to get devis of given id", response.data);
                 const lignCmdAfficher = {
                     "idProduit":response.data.idProduit,
+                    "tva":response.data.tva,
                     "refProduit": response.data.refProd,
                     "nomProduit": response.data.nomProd,
                     "prix": response.data.prixUnitaireHT,
-                    "quantite": quantite
+                    "quantite": quantite, 
+                    "remise": remise
                 };
                 const lignCmdEnvoyer = {
                     "idProduit": response.data.idProduit,
                     "quantite": quantite,
+                    "remise": remise
                 }
                 console.log(lignCmdAfficher);
                 console.log(lignCmdEnvoyer)
@@ -197,17 +209,22 @@ const AjouterCmd = () => {
     //function to calculate montant total of order line
     const calculMToatal = () => {
         let MontantTotl = 0
+        let TvaTotal = 0
         for (const lign of lignCommandeAfficher) {
             const montantLign = lign.prix * lign.quantite;
-            MontantTotl += montantLign;
+            const montantLignApreRemise = montantLign - montantLign*(lign.remise/100);
+            MontantTotl += montantLignApreRemise;
+            TvaTotal += montantLignApreRemise*(lign.tva/100)
         }
-        setMontantTotal(MontantTotl);
+        setMontantTotalHT(MontantTotl);
+        setTvaTotal(TvaTotal);
+        setMontantTotalTTC(MontantTotl+TvaTotal);
     }
 
     //function to return alert of success
     const alertOfSucces = () =>{
        return (<div className='alert alert-success ' role="alert">
-           la commande a été ajouté avec succés
+           le devis a été ajouté avec succés
         </div>)
     }
     //function to return alert of error
@@ -222,7 +239,7 @@ const AjouterCmd = () => {
     const alertOfError = () =>{
         return(
             <div className='alert alert-danger' role="alert">
-                error dans l'ajout de produit
+                erreur dans l'ajout de devis
             </div>
         )
     }
@@ -250,26 +267,27 @@ const AjouterCmd = () => {
             if(lignCommandeEnvoyer.length >0){
                 const commandeDto = {
                     "idClient": commmande.idClient,
-                    "montantTotal": montantTotal,
-                    "status": commmande.status,
-                    "dateReglement": commmande.dateReglement,
-                    "dateCommande": commmande.dateCommande,
+                    "montantTotalHT": montantTotalHT,
+                    "montantTotalTTC": montantTotalTTC,
+                    "statusDevis": commmande.statusDevis,
+                    "dateExpiration": commmande.dateExpiration,
+                    "dateDevis": commmande.dateDevis,
                     "ligneCommandes": lignCommandeEnvoyer // Utilisez lignCommandeEnvoyer pour les données d'envoi
                 };
                 setLignCommandeAfficher([]); 
                 setLignCommandeEnvoyer([]); 
                 console.log(commandeDto);
-                ServiceCommande.ajouterCommande(commandeDto)
+                ServiceDevis.ajouterCommande(commandeDto)
                     .then(response => {
                         handleReset2();
                         setAlertMessage("success");
-                        console.log("la commande a été ajoutée avec succès", response.data);
+                        console.log("le devis a été ajoutée avec succès", response.data);
                         console.log(lignCommandeAfficher);
-                        console.log(montantTotal);
+                        console.log(montantTotalHT); 
                         
                     })
                     .catch(error => {
-                        console.error("erreur dans l'ajout de commande", error);
+                        console.error("erreur dans l'ajout de devis", error);
                         setAlertMessage("error");
                     })
             }
@@ -280,31 +298,31 @@ const AjouterCmd = () => {
     }
 
     const datashow = lignCommandeAfficher.map((item, key) => (
-        <LigneProduitAjout key={`${item.idProduit}-${key}`} idProduit={item.idProduit} refProduit={item.refProduit} nomProduit={item.nomProduit} prix={item.prix} quantite={item.quantite} onDelete={handleDelete}/>
+        <LigneProduitAjout key={`${item.idProduit}-${key}`} idProduit={item.idProduit} refProduit={item.refProduit} nomProduit={item.nomProduit} prix={item.prix} tva={item.tva} remise={item.remise} quantite={item.quantite} onDelete={handleDelete}/>
     ));
         return (
         <div className="container ajouter-cmd">
             <div className='row '>
                 <div className='col-7 ajouter-cmd-form' style={{ border: '1px solid #ccc', padding: '20px', paddingBottom: '0px' }}>
                     <form onSubmit={handleSubmit}>
-                        <h2>Nouveau commande</h2>
+                        <h2>Nouveau devis</h2>
                             {alert(alertMessage)}                        
                         <hr></hr>
                         <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="dateCmdField">Date commande :</label>
-                            <input type="date" name="dateCommande" id="dateCmdField" className="form-control" ref={dateCmdField} readOnly onChange={handleChange} />
+                            <label className="form-label" htmlFor="dateCmdField">Date de devise :</label>
+                            <input type="date" name="dateDevis" id="dateCmdField" className="form-control" ref={dateCmdField} readOnly onChange={handleChange} />
                         </div>
                         <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="dateRegField">Date regelement :</label>
-                            <input type="date" name="dateReglement" id="dateRegField" className="form-control" placeholder='date regelement' ref={dateRegField} onChange={handleChange} />
-                            {dispalyErr("dateRegField")}
+                            <label className="form-label" htmlFor="dateExpField">Date d'expiration :</label>
+                            <input type="date" name="dateExpiration" id="dateExpField" className="form-control" ref={dateExpField} onChange={handleChange} />
                         </div>
                         <div className="form-outline mb-4">
-                            <label htmlFor="Status">Status commande :</label>
-                            <select className="form-control" name="status" id="statusCmd" ref={statusCmd} onChange={handleChange}>
+                            <label htmlFor="Status">Status devise :</label>
+                            <select className="form-control" name="statusDevis" id="statusCmd" ref={statusCmd} onChange={handleChange}>
                                 <option value=''>select status</option>
-                                <option value="TRAITE">traité</option>
-                                <option value="ENCOURS" >En cours</option>
+                                <option value="DEVIS_EN_ATTENTE">en attente</option>
+                                <option value="DEVIS_CONFIRMÉ" >confirmé</option>
+                                <option value="DEVIS_ANNULÉ">annulée</option>
                             </select>
                             {dispalyErr("statusCmd")}
                         </div>
@@ -318,6 +336,8 @@ const AjouterCmd = () => {
                                 &nbsp; &nbsp;
                                 <input type="number" id="quantiteField" className="form-control" placeholder="Quantité" style={{ width: '140px' }} ref={quantiteField} onChange={handleChange} />
                                 &nbsp; &nbsp;
+                                <input type="number" id="remiseField" className="form-control" placeholder="Remise" style={{ width: '140px' }} ref={remiseField} onChange={handleChange} />
+                                &nbsp; &nbsp;
                                 <button type="button" className='btn btn-info ms-2' onClick={handleClickAddProduct}>Ajouter</button>
                             </div>
                             <div>
@@ -326,7 +346,9 @@ const AjouterCmd = () => {
                             </div>
                         </div>
 
-                        <span className="badge bg-dark mb-4 p-3">Montant total: {montantTotal} &nbsp;&nbsp;MAD</span>
+                        <span className="badge bg-dark mb-4 p-3">Montant total HT: {montantTotalHT.toFixed(2)} &nbsp;&nbsp;MAD</span>
+                        <span className="badge bg-dark mb-4 p-3">Montant total TTC: {montantTotalTTC.toFixed(2)} &nbsp;&nbsp;MAD</span>
+                        <span className="badge bg-dark mb-4 p-3">tva total: {tvaTotal.toFixed(2)} &nbsp;&nbsp;MAD</span>
 
                         <div>
                             <input type="submit" value="Ajouter cmd" className='btn btn-primary btn-ajouter-cmd'></input>
@@ -338,7 +360,7 @@ const AjouterCmd = () => {
                 <div className='col-5'>
                     <div className='container mt-2'>
                         <div className='card' style={{ maxHeight: 'calc(100vh - 90px)' }}>
-                            <div className="card-header bg-dark"> <h4>Listes des produits commandés</h4></div>
+                            <div className="card-header bg-dark"> <h4>Listes des produits </h4></div>
                             <div className='card-body' style={{ overflowY: 'auto' }}>
                                 <table className="table table-dark table-striped">
                                     <thead>
@@ -347,6 +369,8 @@ const AjouterCmd = () => {
                                             <th scope="col">Nom</th>
                                             <th scope="col">prix</th>
                                             <th scope="col">Quantite</th>
+                                            <th scope="col">tva</th>
+                                            <th scope="col">Remise</th>
                                             <th scope="col">Delete</th>
                                         </tr>
                                     </thead>
@@ -361,6 +385,88 @@ const AjouterCmd = () => {
 
             </div>
         </div>
+
+  /*<div className="container ajouter-devis">
+  <div className='row'>
+    <div className='col-md-7 ajouter-devis-form' style={{ border: '1px solid #ccc', padding: '20px', marginBottom: '20px' }}>
+      <form onSubmit={handleSubmit}>
+        <h2>Ajouter un nouveau devis</h2>
+        {alert(alertMessage)}
+        <hr/>
+        <div className="form-group mb-3">
+          <label className="form-label" htmlFor="dateDevisField">Date du devis :</label>
+          <input type="date" name="dateDevis" id="dateDevisField" className="form-control" ref={dateCmdField} readOnly onChange={handleChange} />
+        </div>
+        <div className="form-group mb-3">
+          <label className="form-label" htmlFor="dateExpField">Date d'expiration :</label>
+          <input type="date" name="dateExpiration" id="dateExpField" className="form-control" ref={dateExpField} onChange={handleChange} />
+          {dispalyErr("dateExpField")}
+          
+        </div>
+        <div className="form-group mb-3">
+          <label htmlFor="statusDevis">Statut du devis :</label>
+          <select className="form-control" name="statusDevis" id="statusDevis" ref={statusCmd} onChange={handleChange}>
+            <option value=''>Sélectionner un statut</option>
+            <option value="DEVIS_EN_ATTENTE">En attente</option>
+            <option value="DEVIS_CONFIRME">Confirmé</option>
+            <option value="DEVIS_ANNULE">Annulé</option>
+          </select>
+          {dispalyErr("statusCmd")}
+        </div>
+        <div className="form-group mb-3">
+          <label htmlFor="produitCommande">Produit :</label>
+          <div className="d-flex align-items-center">
+            <select className="form-control" id="produitField" style={{ maxWidth: '220px' }} ref={produitField} onChange={handleChange} >
+              <option value=''>Sélectionner un produit</option>
+              {products.map((item, key) => <option key={item.idProduit} value={item.idProduit}>{item.nomProd} - {item.refProd}</option>)}
+            </select>
+            <input type="number" id="quantiteField" className="form-control" placeholder="Quantité" style={{ maxWidth: '100px' }} ref={quantiteField} onChange={handleChange} />
+            <input type="number" id="remiseField" className="form-control" placeholder="Remise (%)" style={{ maxWidth: '100px' }} ref={remiseField} onChange={handleChange} />
+            <button type="button" className='btn btn-info ms-2' onClick={handleClickAddProduct}>Ajouter</button>
+          </div>
+          {dispalyErr("produitField")}
+          {dispalyErr("quantiteField")}
+        </div>
+
+        <div className="badge bg-dark mb-4 p-3">Montant total HT: {montantTotalHT.toFixed(2)} MAD</div>
+        <div className="badge bg-dark mb-4 p-3">Montant total TTC: {montantTotalTTC.toFixed(2)} MAD</div>
+        <div className="badge bg-dark mb-4 p-3">TVA totale: {tvaTotal.toFixed(2)} MAD</div>
+
+        <div className="form-actions">
+          <button type="submit" className='btn btn-primary'>Ajouter devis</button>
+          <button type="reset" className='btn btn-secondary ms-2' onClick={handleReset}>Réinitialiser</button>
+        </div>
+      </form>
+    </div>
+    <div className='col-md-5'>
+      <div className='container mt-2'>
+        <div className='card' style={{ maxHeight: 'calc(100vh - 90px)', overflowY: 'auto' }}>
+          <div className="card-header bg-dark"> <h4>Liste des produits ajoutés</h4></div>
+          <div className='card-body'>
+            <table className="table table-dark table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Référence</th>
+                  <th scope="col">Nom</th>
+                  <th scope="col">Prix</th>
+                  <th scope="col">Quantité</th>
+                  <th scope="col">TVA</th>
+                  <th scope="col">Remise</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {datashow}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+*/
+
 
     );
 }
