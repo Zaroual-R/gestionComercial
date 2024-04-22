@@ -144,7 +144,7 @@ const ListProduit = () => {
     }
 
 
-    const datashow = currentProducts.map((item, key) => <LignProduit key={item.idProduit} id={item.idProduit} refProduit={item.refProd} nom={item.nomProd} prix={item.prixUnitaireHT} categorie={item.categoryName} details={item.details} tvaN={item.tva} idFournisseur={item.idFournisseur} onDelete={handleDeleteProduct} />)
+    const datashow = currentProducts.map((item, key) => <LignProduit key={item.idProduit} id={item.idProduit} refProduit={item.refProd} nom={item.nomProd} prix={item.prixUnitaireHT} categorie={item.categoryName} details={item.details} tvaN={item.tva} idFournisseur={item.idFournisseur} prixAchat={item.prixAchatHT} onDelete={handleDeleteProduct} />)
 
     return (
         <div className='container mt-2 list-produit'>

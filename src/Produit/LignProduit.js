@@ -5,8 +5,8 @@ import ProductService from '../backEndService/ProductService';
 //function to handle edit click
 const LignProduit = (props) => {
   const navigate = useNavigate();
-  const hadleClickEdit = (idP, refP, nomP, prixP, categorieP, detailsP, tvaN, idFour) => {
-    navigate(`/ModefieProduit`, { state: { idP, refP, nomP, prixP, categorieP, detailsP, tvaN, idFour } });
+  const hadleClickEdit = (idP, refP, nomP, prixP,prixAchat, categorieP, detailsP, tvaN, idFour) => {
+    navigate(`/ModefieProduit`, { state: { idP, refP, nomP, prixP,prixAchat, categorieP, detailsP, tvaN, idFour } });
   }
 
   const handleDelete =(id) =>{
@@ -28,7 +28,7 @@ const LignProduit = (props) => {
             Actions
           </button>
           <div className="dropdown-menu" style ={{backgroundColor:'#F7ED12  ',fontWeight:"bolder"}}  aria-labelledby="dropdownMenuButton">
-            <button className="dropdown-item" onClick={() => { hadleClickEdit(props.id, props.refProduit, props.nom, props.prix, props.category, props.details, props.tvaN, props.idFournisseur) }}>
+            <button className="dropdown-item" onClick={() => { hadleClickEdit(props.id, props.refProduit, props.nom, props.prix,props.prixAchat, props.category, props.details, props.tvaN, props.idFournisseur) }}>
               <i className='fas fa-pencil-alt'></i> Éditer
             </button>
             <button className="dropdown-item" onClick={() => { handleDelete(props.id) }}>

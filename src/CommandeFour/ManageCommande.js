@@ -295,7 +295,7 @@ const ManageCommande = () => {
                 console.log("success to get command of given id", response.data);
                 const refProduitV = response.data.refProd;
                 const nomProduitV = response.data.nomProd;
-                const prixV = response.data.prixUnitaireHT;
+                const prixV = response.data.prixAchatHT;
                 const quantiteV = quantiteValue;
                 const tva = response.data.tva;
                 const lignCmdAfficher = {
