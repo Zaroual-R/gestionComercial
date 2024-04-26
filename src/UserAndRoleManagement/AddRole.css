@@ -1,0 +1,71 @@
+/* AddRole component styling */
+.container.ajouter-four {
+    max-width: 600px; /* Adjust the width as needed */
+    margin: 50px auto; /* Center the container */
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1); /* Simple shadow for depth */
+    border: none; /* Remove the default border */
+    border-radius: 8px; /* Rounded corners for the card */
+}
+
+.card-header.header-color {
+    background-color: #008080; /* A teal color, replace with your header's hex color */
+    color: white; /* White text for contrast */
+    padding: 15px 20px; /* Spacing inside the header */
+    border-top-left-radius: 8px; /* Continue the border radius from the card */
+    border-top-right-radius: 8px;
+    font-size: 1.5rem; /* Slightly larger text for the title */
+}
+
+.card-body {
+    padding: 20px;
+    background-color: #f5f5f5; /* A light grey background for the card body */
+}
+
+.form-group {
+    margin-bottom: 1rem; /* Spacing between form groups */
+}
+
+.form-control {
+    border: 1px solid #ced4da; /* Standard border color */
+    border-radius: 4px; /* Matching rounded corners */
+    padding: 10px; /* Padding inside inputs for space */
+    font-size: 1rem; /* Standard font size */
+}
+
+.btn-submit, .btn-reset {
+    padding: 10px 15px; /* Sufficient padding for touch targets */
+    border: none; /* Remove borders for a cleaner look */
+    font-size: 1rem; /* Standard font size for buttons */
+    border-radius: 4px; /* Matching rounded corners for buttons */
+    margin-top: 10px; /* Space above the buttons */
+}
+
+.btn-submit {
+    background-color: #00b3b3; /* A lighter teal for the submit button, stands out against the header */
+    color: white;
+}
+
+.btn-reset {
+    background-color: #ff6961; /* A soft red color for the reset/clear button */
+    color: white;
+}
+
+.btn-submit:hover, .btn-reset:hover {
+    opacity: 0.9; /* Slight opacity change on hover for feedback */
+}
+
+/* Style for the Select component */
+.select__control {
+    border-color: #ced4da;
+}
+
+.select__menu {
+    /* You may define styles for the dropdown menu */
+}
+
+.select__option--is-selected {
+    background-color: #00b3b3; /* Matching the submit button color for selected options */
+}

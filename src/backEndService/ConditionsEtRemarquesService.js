@@ -1,14 +1,14 @@
-import axios from "axios";
+import axiosInstance from './axisConfig';
 
 const API_URL='http://localhost:8088/api/termes';
 
 class ConditionsEtRemarquesService{
 
     createConditionsEtCategories(conditions){
-       return  axios.put(`${API_URL}/create`,conditions);
+       return  axiosInstance.put(`${API_URL}/create`,conditions);
     }
     getConditionsEtCategories(type){
-        return axios.get(`${API_URL}/${type}`);
+        return axiosInstance.get(`${API_URL}/${type}`);
     }
 
 }

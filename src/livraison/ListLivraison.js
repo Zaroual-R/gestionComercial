@@ -37,6 +37,22 @@ const ListLivraison = () => {
           console.error("error to get searched commande",error)
         })
     }
+    const updateLivraisonStatus = (idLivraison, newStatus) => {
+      const statusLivraisonDto = {
+        statusLivraison: newStatus
+      }
+      // Appeler le backend pour mettre à jour le statut
+      LivraisonService.updateLivraisonStatus(idLivraison, statusLivraisonDto)
+        .then((response) => {
+          // Mise à jour de l'état local si nécessaire
+          // Peut-être une nouvelle récupération de toutes les livraisons
+          
+          getAllLivraison();
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la mise à jour du statut de la livraison', error);
+        });
+    };
   
     //functin to get all commandes 
     const getAllLivraison = (id) => {
@@ -50,44 +66,50 @@ const ListLivraison = () => {
           console.error("error to get all livraisons", error);
         })
     }
-    const datashow = listLivraison.map((item, key) => <LigneListLivraison idLivraison={item.idLivraison} idClient={item.idClient} nomClient={item.nomClient} dateLivraison={item.dateLaivrison} datePrevue={item.datePrevue} dateReception={item.dateReception} adresseLivraison={item.adresseLivraison} statusLivraison={item.statusLivraison} onDelete={getAllLivraison}/>)
+    const datashow = listLivraison.map((item, key) => <LigneListLivraison idLivraison={item.idLivraison} idClient={item.idClient} nomClient={item.nomClient} dateLivraison={item.dateLaivrison} datePrevue={item.datePrevue} dateReception={item.dateReception} adresseLivraison={item.adresseLivraison} statusLivraison={item.statusLivraison} onDelete={getAllLivraison} onUpdateStatus={updateLivraisonStatus}/>)
 
 
     return (
-        <div className='container mt-2 list-facture'>
-          <div className='card' style={{ width: '100%', maxHeight: 'calc(100vh - 100px)' }}>
-            <div class="card-header bg-dark"> <h3>Listes des livraisons</h3></div>
-            <div className='card-body' style={{ overflowY: 'auto', width: '100%' }}>
-              <form method="get form-list-client">
-                <div className="form-outline mb-4 d-flex align-items-center">
-                  <div className='input-group mb-2'>
-                    <div className="input-group-prepend">
-                      <div className="input-group-text bg-success">Keyword</div>
+<div className='container mt-2 Myfont'>
+    <div className='card ' style={{ maxHeight: 'calc(100vh - 90px)', overflow: 'auto' }}>
+        <div className="card-header bg-dark">
+            <h3 className="text-light">Listes des livraisons</h3>
+        </div>
+        <div className='card-body '>
+            <form method="get">
+                <div className='form-row align-items-center'>
+                    <div className='col'>
+                        <div className="input-group mb-2">
+                            <div className="input-group-prepend">
+                                <div className="input-group-text bg-success"><i className='fas fa-search'></i></div>
+                            </div>
+                            <input type="text" className="form-control" style={{ width: "250px" }} placeholder="Chercher par nom de client" id="searchKeyword" ref={searchKeyword} onChange={handleChange} />
+                        </div>
                     </div>
-                    <input type="text" className="form-control" style={{ width: "250px" }} placeholder="nom client" id="searchKeyword" ref={searchKeyword} onChange={handleChange} />
-                  </div>
                 </div>
-              </form>
-              <table className="table table-striped" style={{ width: '100%', paddingRight: "0px" }}>
-                <thead>
-                  <tr>
-                    <th scope="col" style={{ textAlign: "center" }}>#ID</th>  
-                    <th scope="col" style={{ textAlign: "center" }}> Nom client</th>
-                    <th scope="col" style={{ textAlign: "center" }}>Date de livraison</th>
-                    <th scope="col" style={{ textAlign: "center" }}>Date prévue de reception</th>
-                    <th scope="col" style={{ textAlign: "center" }}>Date réel de réception</th>
-                    <th scope="col" style={{ textAlign: "center" }}>Adresse de livraison</th>
-                    <th scope="col" style={{ textAlign: "center" }}>status de livraison</th>
-                    <th scope="col" style={{ textAlign: "center" }} colSpan={2}>Action</th>
-                  </tr>
+            </form>
+            <table className="table table-bordered table-hover">
+                <thead className="thead-dark">
+                    <tr>
+                        <th style={{ textAlign: "center" }}>#ID</th>  
+                        <th style={{ textAlign: "center" }}>Nom client</th>
+                        <th style={{ textAlign: "center" }}>Date de livraison</th>
+                        <th style={{ textAlign: "center" }}>Date prévue de reception</th>
+                        <th style={{ textAlign: "center" }}>Date réel de réception</th>
+                        <th style={{ textAlign: "center" }}>Adresse de livraison</th>
+                        <th style={{ textAlign: "center" }}>Status de livraison</th>
+                        <th style={{ textAlign: "center" }} colSpan={2}>Action</th>
+                    </tr>
                 </thead>
                 <tbody>
-                  {datashow}
+                    {datashow}
                 </tbody>
-              </table>
-            </div>
-          </div>
+            </table>
+            {/* Pagination can go here */}
         </div>
+    </div>
+</div>
+
     
       )
 }

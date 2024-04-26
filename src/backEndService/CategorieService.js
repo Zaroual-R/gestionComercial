@@ -1,31 +1,31 @@
-import axios from "axios";
+import axiosInstance from './axisConfig';
 
 const API_URL='http://localhost:8088/api/category';
 
 class CategorieService{
 
     createCategorie(categorie){
-       return  axios.post(`${API_URL}/create`,categorie);
+       return  axiosInstance.post(`${API_URL}/create`,categorie);
     }
 
     updateCategorie(categorie){
-        return  axios.put(`${API_URL}/update`, categorie);
+        return  axiosInstance.put(`${API_URL}/update`, categorie);
     }
 
     deleteCategorie(id){
-       return   axios.delete(`${API_URL}/delete/${id}`);
+       return   axiosInstance.delete(`${API_URL}/delete/${id}`);
     }
 
     getCategorie(id){
-       return  axios.get(`${API_URL}/${id}`);
+       return  axiosInstance.get(`${API_URL}/${id}`);
     }
 
     getAllCategorie(){
-       return  axios.get(`${API_URL}/all`);
+       return  axiosInstance.get(`${API_URL}/all`);
     }
 
     searchCategories(key) {
-        return axios.post(`${API_URL}/recherche`, { "nomCategorie": key });
+        return axiosInstance.get(`${API_URL}/recherche/${key}`);
     }
 }
 export default new CategorieService();

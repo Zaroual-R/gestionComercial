@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import FactureService from '../backEndService/FactureService';
+import ServiceCommand from '../backEndService/ServiceCommand';
 
 const CreateFacture = () => {
     const dateFactureField = useRef();
@@ -49,20 +50,23 @@ const CreateFacture = () => {
     }
     const handleFacture = (event)=>{
         event.preventDefault();
-        FactureService.ajouterFacture(formData,idCommand).then(response => console.log(response.data)).catch(error => console.log(error));
+        ServiceCommand.createFacture(formData,idCommand).then(response => console.log(response.data)).catch(error => console.log(error));
     }
 
     return (
-        <div>
-            <div className="container-xxl flex-grow-1 container-p-y ajouter-facture">
-            <div className="card mb-4">
-            
-            <div style={{ background: 'white', padding: '20px', borderRadius: '5px' }}>
-            <div className="card-header mb-4 d-flex justify-content-between border-bottom-1 shadow-sm bg-light align-items-center">
-                <h3 className="mb-0 text-dark font-bold">Créer la Facture</h3>
-            </div>
-            <form>
-                    <div className="mb-3">
+        <div className="container ajouter-cmd-four Myfont">
+        <div className="row">
+            <div className="col-12">
+                <div className="card">
+                    <div className="card-header bg-info text-white">
+                        <h3>Créer la Facture</h3>
+                    </div>
+                    <div className="card-body">
+                        {/* Reste du formulaire */}
+                        <form onSubmit={handleFacture} onReset={handleReset}>
+                            {/* Champs du formulaire */}
+                            {/* ... */}
+                            <div className="mb-3">
                         <label htmlFor="modPayement" className="form-label">Mode de Paiement:</label>
                         <select 
                         name="modPayement"
@@ -130,15 +134,24 @@ const CreateFacture = () => {
                         <option value="EN_RETARD">En retard</option>
                         </select>
                     </div>
-                    <div className="mb-3 text-center">
-                        <button type="submit" className="btn btn-primary me-2" onClick={handleFacture} >Enregistrer</button>
-                        <button type="button" className="btn btn-secondary" onClick={handleReset}>Effacer</button>
+                    
+                            {/* Boutons */}
+                            <div className="form-row">
+                                <div className="col-md-12 text-center">
+                                    <button type="submit" className="btn btn-primary Myfont me-2">
+                                        Enregistrer
+                                    </button>
+                                    <button type="reset" className="btn btn-danger Myfont">
+                                        Effacer
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
-        </div>
-        </div>
+    </div>
     );
 }
 

@@ -39,6 +39,30 @@ import ForgetPassword from './Auth/ForgetPassword';
 import RegisterForm from './Auth/RegisterForm';
 import LoginForm from './Auth/LoginForm';
 import ChangePassword from './Auth/changePass/ChangePassword';
+import AddRole from './UserAndRoleManagement/AddRole';
+import ModefieRole from './UserAndRoleManagement/ModefieRole';
+import RoleTable from './UserAndRoleManagement/RoleTable';
+import AddUser from './UserAndRoleManagement/User/AddUser';
+import UserTable from './UserAndRoleManagement/UserTable';
+import AjouterFournisseur from './fournisseur/AjouterFournisseur';
+import ListFournisseur from './fournisseur/ListFournisseur';
+import ModefierFournisseur from './fournisseur/ModefierFournisseur';
+import MoreDetails from './fournisseur/MoreDetails';
+import CommandeFournisseur from './fournisseur/CommandeFournisseur';
+import BonCmdDocument from './fournisseur/BonCmdDocument';
+import CreateEmail from './fournisseur/CreateEmail';
+import ListCmdFour from './CommandeFour/ListCmdFour';
+import DetailsCommande from './CommandeFour/DetailsCommande';
+import AjouterBonLivraison from './CommandeFour/AjouterBonLivraison'
+import AjouterFactureFour from './CommandeFour/AjouterFactureFour';
+import ManageCommande from './CommandeFour/ManageCommande';
+import ModefierBonLivraisonFour from './CommandeFour/ModefieBonLivraisonFour';
+import ModefieFactureFour from './CommandeFour/ModefierFactureFour';
+import FactureDocument from './CommandeFour/FactureDocument';
+import LivraisonDocument from './CommandeFour/LivraisonDocument';
+import ContacterFournisseur from './fournisseur/ContacterFournisseur';
+import ClientDetails from './Clients/ClientDetails';
+import DetailsCommandVente from './Commands/DetailsCommandVente';
 /*<Header/>
 <div className="wrapper">
 
@@ -60,6 +84,25 @@ function App() {
           <Route path="/resetPassword" element={<ChangePassword/>} />
         </Routes>
         <Routes>
+        <Route path="/AjouterFournisseur" element={<><Header /><Menu /><AjouterFournisseur/></>} />
+        <Route path="/ListFournisseur" element={<><Header /><Menu /><ListFournisseur/></>} />
+        <Route path='/ModefierFournisseur' element={<><Header /><Menu /><ModefierFournisseur/></>} />
+        <Route path='/MoreDetails' element={<><Header /><Menu /><MoreDetails/></>} />
+        <Route path="/CommandeFournisseur" element={<><Header /><Menu /><CommandeFournisseur/></>} />
+        <Route path="/BonCmdDocument" element={<><Header /><Menu /><BonCmdDocument/></>} />
+        <Route path='/CreateEmail' element={<><Header /><Menu /><CreateEmail/></>} />
+        <Route path='/ListCmdFour' element={<><Header /><Menu /><ListCmdFour/></>} />
+        <Route path='/DetailsCommande' element={<><Header /><Menu /><DetailsCommande/></>} />
+        <Route path='/AjouterBonLivraison' element={<><Header /><Menu /><AjouterBonLivraison/></>} />
+        <Route path='/ModefierBonLivraisonFour' element={<><Header /><Menu /><ModefierBonLivraisonFour/></>} />
+        <Route path='/AjouterFactureFour' element={<><Header /><Menu /><AjouterFactureFour/></>} />
+        <Route path='/AjouterFactureFour' element={<><Header /><Menu /><ModefieFactureFour/></>} />
+        <Route path='/ModefierFactureFour' element={<><Header /><Menu /><ModefieFactureFour/></>} />
+        <Route path='/ManageCommande' element={<><Header /><Menu /><ManageCommande/></>} /> 
+        <Route path='/FactureDocument' element={<><Header /><Menu /><FactureDocument/></>} />
+        <Route path='/LivraisonDocument' element={<><Header /><Menu /><LivraisonDocument/></>} />
+        <Route path='/ContacterFournisseur' element={<><Header /><Menu /><ContacterFournisseur/></>} />
+        {/* Les autres routes existantes... */}
           <Route path="/" element={<><Header /><Menu /><Dashboard /></>} />
           <Route path="/AjouterProduit" element={<><Header /><Menu /><AjouterProduit/></>}/>
           <Route path="/ListProduit" element={<><Header /><Menu /><ListProduit/></>}/>
@@ -86,6 +129,15 @@ function App() {
           <Route path="/createFacture" element={<><Header /><Menu /><CreateFacture /></>} />
           <Route path="/ModefieLivraison" element={<><Header /><Menu /><ModefieLivraison /></>} />
           <Route path="/ListLivraison" element={<><Header /><Menu /><ListLivraison /></>} />
+          <Route path="/AddRole" element={<><Header /><Menu /><AddRole /></>}  />
+          <Route path="/ModifierRole" element={<><Header /><Menu /><ModefieRole /></>}  />
+          <Route path="ListRoles" element={<><Header /><Menu /><RoleTable /></>} />
+          <Route path="/AddUser" element={<><Header /><Menu /><AddUser /></>} />
+          <Route path="/UserTable" element={<><Header /><Menu /><UserTable /></>} />
+          <Route path="/CleintDetails" element={<><Header /><Menu /><ClientDetails /></>} />
+          <Route path="/CommandeVenteDetails" element={<><Header /><Menu /><DetailsCommandVente /></>} />
+
+          
         </Routes>
         <Footer />      
 

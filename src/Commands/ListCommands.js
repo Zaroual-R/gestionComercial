@@ -56,30 +56,33 @@ const ListCommands = () =>{
    
     const datashow = listCommande.map((item, key) => <LigneListCommand idCommande={item.idCommande} idClient={item.idClient} nomClient={item.nomClient} dateCommand={item.dateCommand} montantTotalHT={item.montantTotalHT} montantTotalTTC={item.montantTotalTTC} status={item.status} onDelete={getAllCommande}/>)
     return (
-      <div className='container mt-2 list-commande'>
-        <div className='card' style={{ width: '100%', maxHeight: 'calc(100vh - 100px)' }}>
-          <div class="card-header bg-dark"> <h3>Listes des commandes</h3></div>
-          <div className='card-body' style={{ overflowY: 'auto', width: '100%' }}>
-            <form method="get form-list-client">
+      <div className='container mt-2 Myfont'>
+        <div className='card' style={{ width: '100%', maxHeight: 'calc(100vh - 100px)', overflow: 'auto' }}>
+          <div className="card-header bg-dark">
+             <h3 className="text-light">Listes des commandes</h3>
+          </div>
+          <div className='card-body'>
+            <form method="get">
               <div className="form-outline mb-4 d-flex align-items-center">
                 <div className='input-group mb-2'>
                   <div className="input-group-prepend">
                     <div className="input-group-text bg-success">Keyword</div>
                   </div>
-                  <input type="text" className="form-control" style={{ width: "250px" }} placeholder="nom client" id="searchKeyword" ref={searchKeyword} onChange={handleChange} />
+                  <input type="text" className="form-control" style={{ width: "250px" }} placeholder="nom client" id="searchKeyword" /* ref={searchKeyword} */ onChange={handleChange} />
                 </div>
               </div>
             </form>
-            <table className="table table-striped" style={{ width: '100%', paddingRight: "0px" }}>
-              <thead>
+            <table className="table table-bordered table-hover">
+              <thead className="thead-dark">
                 <tr>
                   <th scope="col" style={{ textAlign: "center" }}>#ID</th>  
-                  <th scope="col" style={{ textAlign: "center" }}> Nom client</th>
+                  <th scope="col" style={{ textAlign: "center" }}>Nom client</th>
                   <th scope="col" style={{ textAlign: "center" }}>Date de commande</th>
                   <th scope="col" style={{ textAlign: "center" }}>Montant total HT</th>
                   <th scope="col" style={{ textAlign: "center" }}>Montant total TTC</th>
-                  <th scope="col" style={{ textAlign: "center" }}>Montant tva total</th>
-                  <th scope="col" style={{ textAlign: "center" }}>status de commande</th>
+                  <th scope="col" style={{ textAlign: "center" }}>Montant TVA total</th>
+                  <th scope="col" style={{ textAlign: "center" }}>Statut de la commande</th>
+                  <th scope="col" style={{ textAlign: "center" }}>Savoir plus</th>
                   <th scope="col" style={{ textAlign: "center" }} colSpan={2}>Action</th>
                 </tr>
               </thead>
@@ -90,8 +93,7 @@ const ListCommands = () =>{
           </div>
         </div>
       </div>
-  
-    )
+    );
 }
 
 export default ListCommands;

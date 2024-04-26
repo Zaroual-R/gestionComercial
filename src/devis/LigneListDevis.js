@@ -6,8 +6,16 @@ import DevisViewer from './DevisViewer';
 import PDFViewer from '../components/test/PDFViewer';
 import { useState } from 'react';
 import ActionButtonDevis from './ActionButtonDevis';
+import ServiceDevis from '../backEndService/ServiceDevis';
 
 const LigneListDevis = (props) => {
+
+  const STATUS_OPTIONS = {
+    DEVIS_EN_ATTENTE: "en attente",
+    DEVIS_CONFIRMÉ: "confirmé",
+    DEVIS_ANNULÉ: "annulé",
+  };
+
   const navigate=useNavigate();
 
 
@@ -19,6 +27,11 @@ const LigneListDevis = (props) => {
     const day = String(formattedDate.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 };
+
+const formatCurrency = (value) => {
+  return Number(value).toFixed(2);
+};
+
 
   const hadleClickEdit = (idDevis,idClient,dateDevis,dateExpiration,status) =>{
     navigate("/ModefieDevis", {
@@ -66,6 +79,30 @@ const LigneListDevis = (props) => {
     ServiceCommande.lanceCommand(id).then(response => console.log(response.status))
   }
 
+  const handleStatusChange = (newStatus) => {
+    // Trouver la clé de l'énumération basée sur la valeur sélectionnée
+    const statusDevise = Object.keys(STATUS_OPTIONS).find(key => STATUS_OPTIONS[key] === newStatus);
+    const status = {
+      statusDevise: statusDevise
+    }
+    if (!status) {
+      alert("La valeur sélectionnée n'est pas valide.");
+      return; // Stopper la fonction si la valeur n'est pas valide
+    }
+
+    // Appeler changeStatus de ServiceDevis avec l'ID du devis et la nouvelle clé de statut
+    ServiceDevis.changeStatus(props.idDevis, status)
+      .then(response => {
+        console.log('Status updated successfully:', response);
+        props.onStatusChange(props.idDevis, statusDevise);
+        // Ici, vous pouvez mettre à jour l'état du composant pour refléter le nouveau statut
+        // ou déclencher un rechargement/rafraîchissement des données si nécessaire.
+      })
+      .catch(error => {
+        console.error('Failed to update status:', error);
+      });
+  };
+
   return (
     <>
     <tr>
@@ -73,12 +110,22 @@ const LigneListDevis = (props) => {
         <td style={{textAlign: "center" }}>{props.nomClient}</td>
         <td style={{textAlign: "center" }}>{props.dateDevis}</td>
         <td style={{textAlign: "center" }}>{formatDate(props.dateExpiration)}</td>
-        <td style={{textAlign: "center" }}>{props.montantTotalHT}</td>
-        <td style={{textAlign: "center" }}>{props.montantTotalTTC}</td>
-        <td>{props.montantTotalTTC-props.montantTotalHT}</td>
-        <td style={{textAlign: "center" }} className='text text-success'>{props.status}</td>
-        <td>
+        <td className="align-right">{formatCurrency(props.montantTotalHT)}</td>
+        <td className="align-right">{formatCurrency(props.montantTotalTTC)}</td>
+        <td className="align-right">{formatCurrency(props.montantTotalTTC - props.montantTotalHT)}</td>
         <td style={{ textAlign: "center" }}>
+        <select 
+          value={STATUS_OPTIONS[props.status]}
+          style={{ backgroundColor: '#78e7a2', color: '#333', borderColor: '#f0f0f0', textAlign: 'center' }}
+          onChange={(e) => handleStatusChange(e.target.value)}
+          className="form-control">
+          {Object.values(STATUS_OPTIONS).map(option => (
+            <option key={option} value={option}>{option}</option>
+          ))}
+        </select>
+      </td>
+        <td>
+        <td style={{ border:'none', textAlign: "center" }}>
           <ActionButtonDevis
             onEdit={() => hadleClickEdit(props.idDevis, props.idClient, props.dateDevis, props.dateExpiration, props.status)}
             onDelete={() => handleDelete(props.idDevis)}

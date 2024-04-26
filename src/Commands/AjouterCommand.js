@@ -297,172 +297,95 @@ const AjouterCommand = () => {
     const datashow = lignCommandeAfficher.map((item, key) => (
         <LigneProduitAjout key={`${item.idProduit}-${key}`} idProduit={item.idProduit} refProduit={item.refProduit} nomProduit={item.nomProduit} prix={item.prix} tva={item.tva} remise={item.remise} quantite={item.quantite} onDelete={handleDelete}/>
     ));
-        return (
-        <div className="container ajouter-cmd">
-            <div className='row '>
-                <div className='col-7 ajouter-cmd-form' style={{ border: '1px solid #ccc', padding: '20px', paddingBottom: '0px' }}>
-                    <form onSubmit={handleSubmit}>
-                        <h2>Nouveau commande</h2>
-                            {alert(alertMessage)}                        
-                        <hr></hr>
-                        <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="dateCmdField">Date de commande :</label>
-                            <input type="date" name="dateCommande" id="dateCmdField" className="form-control" ref={dateCmdField} readOnly onChange={handleChange} />
+    return (
+        <div className="container ajouter-cmd-four Myfont">
+            <div className="row">
+                <div className="col-12">
+                    <div className="card">
+                        <div className="card-header bg-info text-white">
+                            <h3>Nouveau commande</h3>
+                            {alert(alertMessage)}
                         </div>
-                    
-                        <div className="form-outline mb-4">
-                            <label htmlFor="Status">Status commande :</label>
-                            <select className="form-control" name="statusCommande" id="statusCmd" ref={statusCmd} onChange={handleChange}>
-                                <option value=''>select status</option>
-                                <option value="EN_ATTENTE">en attente</option>
-                                <option value="EN_PREPARATION" >en préparation</option>
-                                <option value="ANNULEE">annulée</option>
-                            </select>
-                            {dispalyErr("statusCmd")}
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="produitCommande">Produit :</label>
-                            <div className="d-flex align-items-center">
-                                <select className="form-control" id="produitField" style={{ width: '220px' }} ref={produitField} onChange={handleChange} >
-                                    <option value=''>Select produit-reference</option>
-                                    {products.map((item, key) => <option key={item.key} value={item.idProduit}>{item.nomProd}-{item.refProd}</option>)}
-                                </select>
-                                &nbsp; &nbsp;
-                                <input type="number" id="quantiteField" className="form-control" placeholder="Quantité" style={{ width: '140px' }} ref={quantiteField} onChange={handleChange} />
-                                &nbsp; &nbsp;
-                                <input type="number" id="remiseField" className="form-control" placeholder="Remise" style={{ width: '140px' }} ref={remiseField} onChange={handleChange} />
-                                &nbsp; &nbsp;
-                                <button type="button" className='btn btn-info ms-2' onClick={handleClickAddProduct}>Ajouter</button>
-                            </div>
-                            <div>
-                                {dispalyErr("produitField")}
-                                {dispalyErr("quantiteField")}
-                            </div>
-                        </div>
+                        <div className="card-body">
+                            <form onSubmit={handleSubmit}>
+                                <div className="form-row">
+                                    <div className="form-group col-md-6">
+                                        <label className="form-label" htmlFor="dateCmdField">Date de commande</label>
+                                        <input type="date" className="form-control" name="dateCommande" id="dateCmdField" ref={dateCmdField} onChange={handleChange} required readOnly />
+                                    </div>
+                                    <div className="form-group col-md-6 position-relative">
+                                        <label className="form-label" htmlFor="statusCmd">Status commande</label>
+                                        <select className="form-control" name="statusCommande" id="statusCmd" ref={statusCmd} onChange={handleChange}>
+                                            <option value=''>Select status</option>
+                                            <option value="EN_ATTENTE">en attente</option>
+                                            <option value="EN_PREPARATION">en préparation</option>
+                                            <option value="ANNULEE">annulée</option>
+                                            <option value="PREPAREE">préparé</option>
+                                        </select>
+                                        <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '56%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
+                                        {dispalyErr("statusCmd")}
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
 
-                        <span className="badge bg-dark mb-4 p-3">Montant total HT: {montantTotalHT.toFixed(2)} &nbsp;&nbsp;MAD</span>
-                        <span className="badge bg-dark mb-4 p-3">Montant total TTC: {montantTotalTTC.toFixed(2)} &nbsp;&nbsp;MAD</span>
-                        <span className="badge bg-dark mb-4 p-3">tva total: {tvaTotal.toFixed(2)} &nbsp;&nbsp;MAD</span>
-
-                        <div>
-                            <input type="submit" value="Ajouter cmd" className='btn btn-primary btn-ajouter-cmd'></input>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <input type="reset" value="Reset" className='btn btn-danger btn-reset-cmd' onClick={handleReset}></input>
-                        </div>
-                    </form>
-                </div>
-                <div className='col-5'>
-                    <div className='container mt-2'>
-                        <div className='card' style={{ maxHeight: 'calc(100vh - 90px)' }}>
-                            <div className="card-header bg-dark"> <h4>Listes des produits </h4></div>
-                            <div className='card-body' style={{ overflowY: 'auto' }}>
-                                <table className="table table-dark table-striped">
+                                <h4>Liste des produits à commander</h4>
+                                <div className="form-row">
+                                    <div className="form-group col-md-4">
+                                        <label className="form-label" htmlFor="produitField">Produit</label>
+                                        <select className="form-control" id="produitField" ref={produitField} onChange={handleChange}>
+                                            <option value=''>Select produit-reference</option>
+                                            {products.map((item, key) => <option key={key} value={item.idProduit}>{item.nomProd}-{item.refProd}</option>)}
+                                        </select>
+                                    </div>
+                                    <div className="form-group col-md-4">
+                                        <label className="form-label" htmlFor="quantiteField">Quantité</label>
+                                        <input type="number" className="form-control" id="quantiteField" ref={quantiteField} placeholder=" Quantité" onChange={handleChange} />
+                                    </div>
+                                    <div className="form-group col-md-4">
+                                        <label className="form-label" htmlFor="remiseField">Remise</label>
+                                        <input type="number" className="form-control" id="remiseField" ref={remiseField} placeholder=" Quantité" onChange={handleChange} />
+                                    </div>
+                                    <div className="form-group col-md-4 align-self-end">
+                                        <button type="button" className="btn btn-dark" onClick={handleClickAddProduct}><i className='fas fa-plus'></i> Ajouter</button>
+                                    </div>
+                                </div>
+                                <table className="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th scope="col">Reference</th>
                                             <th scope="col">Nom</th>
-                                            <th scope="col">prix</th>
+                                            <th scope="col">Prix</th>
                                             <th scope="col">Quantite</th>
                                             <th scope="col">tva</th>
                                             <th scope="col">Remise</th>
-                                            <th scope="col">Delete</th>
+                                            <th scope="col">Supprimer</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {datashow}
+                                        <tr>
+                                            <td colSpan={5}></td>
+                                            <td>total HT</td>
+                                            <td>{montantTotalHT}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={5}></td>
+                                            <td>total TTC</td>
+                                            <td>{montantTotalTTC}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
-                            </div>
+                                <button type="submit" className="btn btn-primary Myfont me-2"><i className='fas fa-plus'></i> Ajouter commande</button>
+                                <button type="reset" className="btn btn-danger Myfont">effacer</button>
+                            </form>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-
-  /*<div className="container ajouter-devis">
-  <div className='row'>
-    <div className='col-md-7 ajouter-devis-form' style={{ border: '1px solid #ccc', padding: '20px', marginBottom: '20px' }}>
-      <form onSubmit={handleSubmit}>
-        <h2>Ajouter un nouveau devis</h2>
-        {alert(alertMessage)}
-        <hr/>
-        <div className="form-group mb-3">
-          <label className="form-label" htmlFor="dateDevisField">Date du devis :</label>
-          <input type="date" name="dateDevis" id="dateDevisField" className="form-control" ref={dateCmdField} readOnly onChange={handleChange} />
-        </div>
-        <div className="form-group mb-3">
-          <label className="form-label" htmlFor="dateExpField">Date d'expiration :</label>
-          <input type="date" name="dateExpiration" id="dateExpField" className="form-control" ref={dateExpField} onChange={handleChange} />
-          {dispalyErr("dateExpField")}
-          
-        </div>
-        <div className="form-group mb-3">
-          <label htmlFor="statusDevis">Statut du devis :</label>
-          <select className="form-control" name="statusDevis" id="statusDevis" ref={statusCmd} onChange={handleChange}>
-            <option value=''>Sélectionner un statut</option>
-            <option value="DEVIS_EN_ATTENTE">En attente</option>
-            <option value="DEVIS_CONFIRME">Confirmé</option>
-            <option value="DEVIS_ANNULE">Annulé</option>
-          </select>
-          {dispalyErr("statusCmd")}
-        </div>
-        <div className="form-group mb-3">
-          <label htmlFor="produitCommande">Produit :</label>
-          <div className="d-flex align-items-center">
-            <select className="form-control" id="produitField" style={{ maxWidth: '220px' }} ref={produitField} onChange={handleChange} >
-              <option value=''>Sélectionner un produit</option>
-              {products.map((item, key) => <option key={item.idProduit} value={item.idProduit}>{item.nomProd} - {item.refProd}</option>)}
-            </select>
-            <input type="number" id="quantiteField" className="form-control" placeholder="Quantité" style={{ maxWidth: '100px' }} ref={quantiteField} onChange={handleChange} />
-            <input type="number" id="remiseField" className="form-control" placeholder="Remise (%)" style={{ maxWidth: '100px' }} ref={remiseField} onChange={handleChange} />
-            <button type="button" className='btn btn-info ms-2' onClick={handleClickAddProduct}>Ajouter</button>
-          </div>
-          {dispalyErr("produitField")}
-          {dispalyErr("quantiteField")}
-        </div>
-
-        <div className="badge bg-dark mb-4 p-3">Montant total HT: {montantTotalHT.toFixed(2)} MAD</div>
-        <div className="badge bg-dark mb-4 p-3">Montant total TTC: {montantTotalTTC.toFixed(2)} MAD</div>
-        <div className="badge bg-dark mb-4 p-3">TVA totale: {tvaTotal.toFixed(2)} MAD</div>
-
-        <div className="form-actions">
-          <button type="submit" className='btn btn-primary'>Ajouter devis</button>
-          <button type="reset" className='btn btn-secondary ms-2' onClick={handleReset}>Réinitialiser</button>
-        </div>
-      </form>
-    </div>
-    <div className='col-md-5'>
-      <div className='container mt-2'>
-        <div className='card' style={{ maxHeight: 'calc(100vh - 90px)', overflowY: 'auto' }}>
-          <div className="card-header bg-dark"> <h4>Liste des produits ajoutés</h4></div>
-          <div className='card-body'>
-            <table className="table table-dark table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">Référence</th>
-                  <th scope="col">Nom</th>
-                  <th scope="col">Prix</th>
-                  <th scope="col">Quantité</th>
-                  <th scope="col">TVA</th>
-                  <th scope="col">Remise</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {datashow}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-*/
-
-
     );
+    
 }
 
 export default AjouterCommand;

@@ -22,6 +22,9 @@ const LignClient = (props) => {
             })
     }
 
+    const handleDetail = (id) => {
+        navigate("/CleintDetails", { state: { idC: id } });
+    }
     return (
         <tr>
             <td style={{ width: "50px", textAlign: "center" }}>{props.id}</td>
@@ -32,15 +35,41 @@ const LignClient = (props) => {
             <td style={{ width: "100px", textAlign: "center" }}>{props.ville}</td>
             <td style={{ width: "100px", textAlign: "center" }}>{props.tel}</td>
             <td style={{ width: "100px", textAlign: "center" }}>{props.email}</td>
-            <td style={{ width: "90px", textAlign: "center" }}>{props.codePostal}</td>
-            <td style={{ width: "400px", textAlign: "center" }}>
-                <button className='btn btn-primary' onClick={() =>{handleClickEdit(props.id,props.nom,props.prenom,props.societe,props.pays,props.ville,props.tel,props.email,props.codePostal)}} ><i className='fas fa-pencil-alt'></i></button>
-                 &nbsp;&nbsp;
-                <button className='btn btn-danger' onClick={() =>{handleDelete(props.id)}} ><i className='fa fa-trash'></i></button>
-                <br/><br/>
+            <td style={{ width: "100px", textAlign: "center" }}>
+            <button className="btn" style={{backgroundColor:'#59E817'}} onClick={()=>{handleDetail(props.id)}}>
+                <i className="fas fa-info"></i> plus
+            </button>
             </td>
+            <td style={{ width: "400px", textAlign: "center" }}>
+            <div className="dropdown " >
+                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" >
+                    Actions
+                </button>
+                <div className="dropdown-menu" style ={{backgroundColor:'#F7ED12  ',fontWeight:"bolder"}} aria-labelledby="dropdownMenuButton">
+                    <button className="dropdown-item" onClick={()=>{handleClickEdit(props.id)}} >
+                        <i className="fas fa-edit"></i> Modifier
+                    </button>
+                    <button className="dropdown-item"  onClick={() =>{handleDelete(props.id)}}>
+                        <i className="fas fa-trash"></i> Supprimer
+                    </button>
+                    <button className="dropdown-item" /*onClick={()=>{contacter(objFournisseur.emailResponsable)}}*/ >
+                        <i className="fas fa-envelope"></i> Contacter
+                    </button>
+                </div>
+            </div>
+                
+            </td>
+            
         </tr>
     )
-}
+    /*<button className='btn btn-primary' onClick={() =>{handleClickEdit(props.id)}} ><i className='fas fa-pencil-alt'></i></button>
+                 &nbsp;&nbsp;
+                <button className='btn btn-danger' onClick={() =>{handleDelete(props.id)}} ><i className='fa fa-trash'></i></button>
+                <br/><br/>*/
+}    /*<td style={{ width: "100px", textAlign: "center" }}>
+<button className="btn" style={{backgroundColor:'#59E817'}} onClick={() =>{handlePlus(objFournisseur)}}>
+<i className="fas fa-info"></i> plus
+</button>
+</td>*/
 
 export default LignClient

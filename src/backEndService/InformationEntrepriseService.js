@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from './axisConfig';
 
 const API_URL='http://localhost:8088/api/information';
 
@@ -20,10 +20,10 @@ class InformationEntrepriseService{
             }
         };
 
-        return axios.put(`${API_URL}/update`, formData, config);    
+        return axiosInstance.put(`${API_URL}/update`, formData, config);    
     }
     getInformationEntreprise(){
-        return axios.get(`${API_URL}`)
+        return axiosInstance.get(`${API_URL}`)
     }
 
 

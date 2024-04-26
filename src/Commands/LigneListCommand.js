@@ -5,9 +5,18 @@ import ActionButton from '../components/test/ActionButton';
 import { useState } from 'react';
 import CreateFacture from '../facture/CreateFacture';
 
+
 const LigneListCommand = (props) => {
     const navigate=useNavigate();
 
+    const [selectedStatus, setSelectedStatus] = useState(props.statusCommand);
+
+    const statusLabels = {
+        EN_ATTENTE: "En attente",
+        EN_PREPARATION: "En préparation",
+        PREPAREE: "Préparée",
+        ANNULEE: "Annulée"
+    };
     const [formData, setFormData] = useState({
       idCommand: '',
       modPayement: '',
@@ -17,6 +26,19 @@ const LigneListCommand = (props) => {
       statusFacture: null,
     });
 
+
+
+    const handleStatusChange = (event) => {
+      const statusCommand = {
+        statusCommande: selectedStatus
+      }
+      ServiceCommand.updateCommandeStatus(props.idCommande,statusCommand).then(response=>{
+        setSelectedStatus(event.target.value);
+
+      }).catch(error => console.log(error))
+
+      
+  };
 
 
     /*const handleCreateFacture = (idCommand) => {
@@ -65,7 +87,10 @@ const handleCreateFacture = (idCommand) => {
     }
   });
 };
-
+const handleDetail = (idCommande) => {
+  console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh ',idCommande)
+  navigate("/CommandeVenteDetails", { state: { idCommande: idCommande } });
+};
 
 
 
@@ -78,8 +103,23 @@ const handleCreateFacture = (idCommand) => {
           <td style={{textAlign: "center" }}>{props.montantTotalHT}</td>
           <td style={{textAlign: "center" }}>{props.montantTotalTTC}</td>
           <td>{props.montantTotalTTC-props.montantTotalHT}</td>
-          <td style={{textAlign: "center" }} className='text text-success'>{props.status}</td>
           <td style={{ textAlign: "center" }}>
+                <select
+                    value={selectedStatus}
+                    onChange={handleStatusChange}
+                    className="form-control"
+                    style={{ backgroundColor: '#78e7a2', color: '#333', borderColor: '#f0f0f0', textAlign: 'center' }}>
+                    {Object.keys(statusLabels).map((key) => (
+                        <option key={key} value={key}>{statusLabels[key]}</option>
+                    ))}
+                </select>
+            </td>          
+            <td>
+              <button className="btn" style={{backgroundColor:'#59E817'}} onClick={()=>{handleDetail(props.idCommande)}}>
+                  <i className="fas fa-info"></i> plus
+              </button>
+            </td>
+            <td style={{ textAlign: "center" }}>
             <ActionButton
               onEdit={() => hadleClickEdit(props.idCommande, props.idClient, props.dateCommand, props.status)}
               onDelete={() => handleDelete(props.idCommande)}

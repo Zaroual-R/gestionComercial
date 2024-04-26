@@ -48,38 +48,40 @@ const ListCategorie = () => {
 
 
     return (
-        <div className='container mt-2 list-categorie'>
-            <div className='card ' style={{ maxHeight: 'calc(100vh - 100px)' }}>
-                <div class="card-header bg-dark"> <h2>Listes des Categories</h2></div>
-                <div className='card-body ' style={{ overflowY: 'auto' }}>
-                    <form method="get" >
-                        <div className="form-">
-                            <label class="sr-only" for="inlineFormInputGroup">Username</label>
-                            <div class="input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text bg-success">keyword</div>
-                                </div>
-                                <input type="text" id="searchKey" ref={searchKey} className="form-control" style={{ width: "250px" }} placeholder="Chercher par Nom catégorie" onChange={handleChange} />
-                            </div>
-                        </div>
-                    </form>
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col" style={{ width: "100px", textAlign: "center" }}>#ID</th>
-                                <th scope="col" style={{ width: "100px", textAlign: "center" }}>Nom</th>
-                                <th scope="col" style={{ textAlign: "center", width: "200px" }}>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {datashow}
-                        </tbody>
-                    </table>
-                </div>
+        <div className='container mt-2 Myfont'>
+          <div className='card' style={{ width: '100%', maxHeight: 'calc(100vh - 100px)', overflow: 'auto' }}>
+            <div className="card-header bg-dark">
+               <h2 className="text-light">Listes des Catégories</h2>
             </div>
+            <div className='card-body'>
+              <form method="get">
+                <div className="form-">
+                  <label className="sr-only" htmlFor="inlineFormInputGroup">Username</label>
+                  <div className="input-group mb-2">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text bg-success">Keyword</div>
+                    </div>
+                    <input type="text" id="searchKey" /* ref={searchKey} */ className="form-control" style={{ width: "250px" }} placeholder="Chercher par Nom catégorie" onChange={handleChange} />
+                  </div>
+                </div>
+              </form>
+              <table className="table table-bordered table-hover">
+                <thead className="thead-dark">
+                  <tr>
+                    <th scope="col" style={{ textAlign: "center" }}>#ID</th>
+                    <th scope="col" style={{ textAlign: "center" }}>Nom</th>
+                    <th scope="col" style={{ textAlign: "center", width: "200px" }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {datashow}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-
-    )
+      );
+      
 }
 
 export default ListCategorie;

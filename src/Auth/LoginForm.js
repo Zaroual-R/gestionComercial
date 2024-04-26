@@ -27,9 +27,11 @@ const LoginForm = () => {
         setError(""); 
         AppUserService.authenticate(credentials)
             .then(response => {
-                localStorage.setItem("token", response.data.token);
-                console.log("le token est ", response.data.token)
-                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+                localStorage.setItem("accessToken", response.data.accessToken);
+                localStorage.setItem("refreshToken", response.data.refreshToken)
+
+                console.log("le token est ", response.data.accessToken)
+                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.accessToken}`;
 
                 navigate("/");
             })
@@ -40,6 +42,20 @@ const LoginForm = () => {
                 }else {
                     setError("Une erreur de réseau est survenue. Veuillez réessayer.");
                 }
+            });
+    };
+    const handleSubmite = (e) => {
+        e.preventDefault();
+        setError("");
+        AppUserService.authenticate(credentials)
+            .then(response => {
+                const { accessToken, refreshToken } = response.data;
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
+                navigate("/");
+            })
+            .catch(error => {
+                setError(error.response?.data?.message || "Une erreur de réseau est survenue. Veuillez réessayer.");
             });
     };
     return (

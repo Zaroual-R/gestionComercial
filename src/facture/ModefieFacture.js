@@ -47,13 +47,19 @@ const ModefieFacture = ()=>{
 
 
     return (
-        <div className="container-xxl flex-grow-1 container-p-y modifier-facture">
-        <div className="card mb-4">
-            <div className="card-header mb-4 d-flex justify-content-between border-bottom-1 shadow-sm bg-light align-items-center">
-                <h3 className="mb-0 text-dark font-bold">Modifier la Facture</h3>
-            </div>
-                        <form>
-                    <div className="mb-3">
+        <div className="container ajouter-cmd-four Myfont">
+        <div className="row">
+            <div className="col-12">
+                <div className="card">
+                    <div className="card-header bg-info text-white">
+                        <h3>Créer la Facture</h3>
+                    </div>
+                    <div className="card-body">
+                        {/* Reste du formulaire */}
+                        <form onSubmit={handleUpdateFacture} onReset={handleReset}>
+                            {/* Champs du formulaire */}
+                            {/* ... */}
+                            <div className="mb-3">
                         <label htmlFor="modPayement" className="form-label">Mode de Paiement:</label>
                         <select 
                         name="modPayement"
@@ -121,13 +127,24 @@ const ModefieFacture = ()=>{
                         <option value="EN_RETARD">En retard</option>
                         </select>
                     </div>
-                    <div className="mb-3 text-center">
-                        <button type="submit" className="btn btn-primary me-2" onClick={handleUpdateFacture} >Enregistrer</button>
-                        <button type="button" className="btn btn-secondary" onClick={handleReset}>Effacer</button>
+                    
+                            {/* Boutons */}
+                            <div className="form-row">
+                                <div className="col-md-12 text-center">
+                                    <button type="submit" className="btn btn-primary Myfont me-2">
+                                        Enregistrer
+                                    </button>
+                                    <button type="reset" className="btn btn-danger Myfont">
+                                        Effacer
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
-    </div>   
-    </div>         
+                </div>
+            </div>
+        </div>
+    </div>
     );
 }
 export default ModefieFacture;

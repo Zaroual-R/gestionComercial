@@ -103,6 +103,52 @@ const Menu = () => {
             </li>
             <li className="nav-item has-treeview">
               <a href="#" className="nav-link">
+                <i className="nav-icon fas fa-warehouse" />
+                <p>
+                  Gestion Fournisseur
+                  <i className="fas fa-angle-left right" />
+                </p>
+              </a>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <NavLink to="/AjouterFournisseur" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Nouveau Fournisseur</p>
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/ListFournisseur" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Consulter fournisseurs</p>
+                  </NavLink>
+                </li>
+              </ul>
+            </li>
+            <li className="nav-item has-treeview">
+              <a href="#" className="nav-link">
+                <i className="nav-icon fas fa-file-invoice" />
+                <p>
+                  Achat
+                  <i className="fas fa-angle-left right" />
+                </p>
+              </a>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <NavLink to="/CommandeFournisseur" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Nouveau commande</p>
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/ListCmdFour" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>list commande</p>
+                  </NavLink>
+                </li>
+              </ul>
+            </li>
+            <li className="nav-item has-treeview">
+              <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-edit" />
                 <p>
                   Devis
@@ -121,6 +167,31 @@ const Menu = () => {
                   <NavLink to="/ListDevis" className="nav-link">
                     <i className="far fa-circle nav-icon" />
                     <p>Listes devis</p>
+                  </NavLink>
+                </li>
+              </ul>
+            </li>
+
+            <li className="nav-item has-treeview">
+              <a href="#" className="nav-link">
+                <i className="nav-icon fas fa-edit" />
+                <p>
+                  Commande
+                  <i className="fas fa-angle-left right" />
+                </p>
+              </a>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <NavLink to="/AddCommand" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>ajouter une commande</p>
+                  </NavLink>
+
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/ListCommand" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Listes commandes</p>
                   </NavLink>
                 </li>
               </ul>
@@ -186,6 +257,7 @@ const Menu = () => {
               </ul>
             </li>
 
+          
             <li className="nav-item has-treeview">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-edit" />
@@ -273,27 +345,27 @@ const Menu = () => {
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-users" />
                 <p>
-                  Utilisateur
+                  Gestion des utilisateur
                   <i className="fas fa-angle-left right" />
                 </p>
               </a>
               <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <a href="pages/tables/simple.html" className="nav-link">
+                  <a href="/AddUser" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>Simple Tables</p>
+                    <p>Créer un utilisateur</p>
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="pages/tables/data.html" className="nav-link">
+                  <a href="/UserTable" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>DataTables</p>
+                    <p>Tous les utilisateurs</p>
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="pages/tables/jsgrid.html" className="nav-link">
+                  <a href="/ListRoles" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>jsGrid</p>
+                    <p>Rôles et autorisations</p>
                   </a>
                 </li>
               </ul>

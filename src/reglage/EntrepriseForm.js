@@ -115,88 +115,98 @@ const EntrepriseForm = () => {
   
 
   return (
-    <div className="card-body">
-      <h2 className="text-center mb-4">Mise à jour des informations de l'entreprise</h2>
-      {alert(alertMessage)}
+    <div className="container ajouter-cmd-four Myfont">
+    <div className="row">
+        <div className="col-12">
+            <div className="card">
+                <div className="card-body">
+                    <h2 className="text-center mb-4" style={{ color: '#0275d8' }}>Mise à jour des informations de l'entreprise</h2>
+                    {/* alert(alertMessage) is assumed to be a function call here */}
+                    {alert && alert(alertMessage)}
 
-      <form onSubmit={handleSubmit}>
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <label className="col-form-label">Nom de l'entreprise:</label>
-            <input
-              type="text"
-              className="form-control"
-              name="nom"
-              value={formData.nom}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="col-md-6">
-            <label className="col-form-label">Adresse:</label>
-            <input
-              type="text"
-              className="form-control"
-              name="adresse"
-              value={formData.adresse}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+                    <form onSubmit={handleSubmit}>
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <label className="col-form-label" style={{ fontWeight: 'bold' }}>Nom de l'entreprise:</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="nom"
+                                    value={formData.nom}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <label className="col-form-label" style={{ fontWeight: 'bold' }}>Adresse:</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="adresse"
+                                    value={formData.adresse}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <label className="col-form-label" style={{ fontWeight: 'bold' }}>Téléphone:</label>
+                                <input
+                                    type="tel"
+                                    className="form-control"
+                                    name="telephone"
+                                    value={formData.telephone}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <label className="col-form-label" style={{ fontWeight: 'bold' }}>Email:</label>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <label className="col-form-label" style={{ fontWeight: 'bold' }}>Logo:</label>
+                                <input
+                                    type="file"
+                                    className="form-control"
+                                    name="logo"
+                                    onChange={handleFileChange}
+                                    ref={logoInputRef}
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <label className="col-form-label" style={{ fontWeight: 'bold' }}>Signature:</label>
+                                <input
+                                    type="file"
+                                    className="form-control"
+                                    name="signature"
+                                    onChange={handleFileChange}
+                                    ref={signatureInputRef}
+                                />
+                            </div>
+                        </div>
+                        <div className="mt-4 text-center">
+                            <button type="submit" className="btn btn-primary">Enregistrer</button>
+                            <button type="reset" className="btn btn-danger" onClick={handleReset}>Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <label className="col-form-label">Téléphone:</label>
-            <input
-              type="tel"
-              className="form-control"
-              name="telephone"
-              value={formData.telephone}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="col-md-6">
-            <label className="col-form-label">Email:</label>
-            <input
-              type="email"
-              className="form-control"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-        </div>
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <label className="col-form-label">Logo:</label>
-            <input
-              type="file"
-              className="form-control"
-              name="logo"
-              onChange={handleFileChange}
-              ref={logoInputRef}
-            />
-          </div>
-          <div className="col-md-6">
-            <label className="col-form-label">Signature:</label>
-            <input
-              type="file"
-              className="form-control"
-              name="signature"
-              onChange={handleFileChange}
-              ref={signatureInputRef}
-            />
-          </div>
-          
-        </div>
-        <div className="mt-4 text-center">
-          <button type="submit" className="btn btn-primary">Enregistrer</button>
-          <button type="reset" className="btn btn-danger" onClick={handleReset}>Reset</button>
-        </div>
-      </form>
     </div>
+</div>
+
+
   );
 };
 

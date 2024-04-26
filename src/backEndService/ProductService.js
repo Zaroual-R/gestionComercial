@@ -1,32 +1,35 @@
-import axios from "axios";
+import axiosInstance from './axisConfig';
 
 const API_URL = 'http://localhost:8088/api/Product';
 
 class ProductService {
    
     createProduct(produitDto) {
-        return axios.post(`${API_URL}/create`, produitDto);
+        return axiosInstance.post(`${API_URL}/create`, produitDto);
     }
 
     updateProduct(produitDto ,id) {
-        return axios.put(`${API_URL}/update/${id}`, produitDto);
+        return axiosInstance.put(`${API_URL}/update/${id}`, produitDto);
     }
 
     deleteProduct(id) {
-        return axios.delete(`${API_URL}/delete/${id}`);
+        return axiosInstance.delete(`${API_URL}/delete/${id}`);
     }
 
     getProduct(id) {
-        return axios.get(`${API_URL}/${id}`);
+        return axiosInstance.get(`${API_URL}/${id}`);
     }
 
     getAllProducts() {
-        return axios.get(`${API_URL}/all`);
+        return axiosInstance.get(`${API_URL}/all`);
     }
 
     searchProducts(rechPDto) {
-        return axios.post(`${API_URL}/recherche`,rechPDto);
+        return axiosInstance.post(`${API_URL}/recherche`,rechPDto);
     }
+    getTopProductsByClient(clientId) {
+        return axiosInstance.get(`${API_URL}/top/${clientId}`); // Update the path to your actual API endpoint
+      }
 
 }
 

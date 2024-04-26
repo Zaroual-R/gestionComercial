@@ -1,45 +1,53 @@
-import axios from "axios";
+import axiosInstance from './axisConfig';
 
 const API_URL = 'http://localhost:8088/api/commandes';
 
 class ServiceCommande{
 
     ajouterCommande(commandeDto){
-        return axios.post(`${API_URL}`, commandeDto);
+        return axiosInstance.post(`${API_URL}`, commandeDto);
     }
 
     updateCommande(commandeDto,id){
-        return axios.put(`${API_URL}/${id}`, commandeDto);
+        return axiosInstance.put(`${API_URL}/${id}`, commandeDto);
     }
 
     deleteCommande(id){
-        return axios.delete(`${API_URL}/${id}`);
+        return axiosInstance.delete(`${API_URL}/${id}`);
     }
 
     getCommande(id){
-        return axios.get(`${API_URL}/${id}`);
+        return axiosInstance.get(`${API_URL}/${id}`);
     }
 
     getAllCommande(){
-        return axios.get(`${API_URL}`);
+        return axiosInstance.get(`${API_URL}`);
     }
 
     getLignesCommande(id){
-        return axios.get(`${API_URL}/lignes/${id}`);
+        return axiosInstance.get(`${API_URL}/lignes/${id}`);
     }
 
     searchCommande(rechCmdDto) {
-        return axios.post(`${API_URL}/recherche`,rechCmdDto);
+        return axiosInstance.post(`${API_URL}/recherche`,rechCmdDto);
     }
 
     createFacture(factureDTO, id){
-        return axios.post(`${API_URL}/${id}/facture`,factureDTO);
+        return axiosInstance.post(`${API_URL}/${id}/facture`,factureDTO);
     }
     createLivraison(livraisonDto, id){
-        return axios.post(`${API_URL}/${id}/livraison`,livraisonDto);
+        return axiosInstance.post(`${API_URL}/${id}/livraison`,livraisonDto);
     }
-    
+    updateCommandeStatus(id, statusCommandeDto){
+        return axiosInstance.put(`${API_URL}/${id}/status`,statusCommandeDto);
+    }
 
+    updateLivraisonStatus(id, statusLivraisonDto){
+        return axiosInstance.put(`${API_URL}/${id}/status`,statusLivraisonDto);
+    }
+    getCommandesByClientId(clientId){
+        return axiosInstance.get(`${API_URL}/client/${clientId}`);
+      }
 }
 export default new ServiceCommande();
 

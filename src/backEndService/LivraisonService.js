@@ -1,34 +1,42 @@
-import axios from "axios";
+import axiosInstance from './axisConfig';
 
 const API_URL = 'http://localhost:8088/api/livraisons';
 
 class LivraisonService{
 
     ajouterLivraison(livraisonDTO){
-        return axios.post(`${API_URL}`, livraisonDTO);
+        return axiosInstance.post(`${API_URL}`, livraisonDTO);
     }
 
     updateLivraison(livraisonDTO,id){
-        return axios.put(`${API_URL}/${id}`, livraisonDTO);
+        return axiosInstance.put(`${API_URL}/${id}`, livraisonDTO);
     }
 
     deleteLivraison(id){
-        return axios.delete(`${API_URL}/${id}`);
+        return axiosInstance.delete(`${API_URL}/${id}`);
     }
 
     getLivraison(id){
-        return axios.get(`${API_URL}/${id}`);
+        return axiosInstance.get(`${API_URL}/${id}`);
     }
 
     getAllLivraisons(){
-        return axios.get(`${API_URL}`);
+        return axiosInstance.get(`${API_URL}`);
     }
 
 
     searchLivraison(rechCmdDto) {
-        return axios.post(`${API_URL}/recherche`,rechCmdDto);
+        return axiosInstance.post(`${API_URL}/recherche`,rechCmdDto);
+    }
+    updateLivraisonStatus(id, statusLivraisonDto){
+        return axiosInstance.put(`${API_URL}/${id}/status`,statusLivraisonDto);
+    }
+    generateLivraison(id){
+        return axiosInstance.get(`${API_URL}/generate/${id}`,{ responseType: 'blob' })
     }
 
+    
+    
 }
 export default new LivraisonService();
 

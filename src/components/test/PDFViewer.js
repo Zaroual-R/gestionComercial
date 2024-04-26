@@ -1,10 +1,11 @@
-import axios from 'axios';
+import axiosInstance from '../../backEndService/axisConfig';
 import { useState, useEffect } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
-
+import { faPrint, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -16,7 +17,7 @@ const PDFViewer = ({ devisId, setShowPDF }) => {
     const apiUrl = `http://localhost:8088/api/devis/generate/${devisId}`;
     
     // Assurez-vous que votre serveur autorise les requêtes CORS si nécessaire
-    axios.get(apiUrl, { responseType: 'blob' }) 
+    axiosInstance.get(apiUrl, { responseType: 'blob' }) 
       .then(response => {
         const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
         setFile(URL.createObjectURL(pdfBlob));
@@ -35,6 +36,14 @@ const PDFViewer = ({ devisId, setShowPDF }) => {
   const onDocumentLoadSuccess = ({ numPages }) => {
     console.log("le nombre de page : ",numPages); // Vérifiez cette sortie
     setNumPages(numPages);
+  };
+
+  const handlePrint = () => {
+    const printWindow = window.open(file, '_blank');
+    printWindow.onload = function () {
+      printWindow.focus(); // Nécessaire pour certains navigateurs
+      printWindow.print();
+    };
   };
 
   return (
@@ -62,15 +71,13 @@ const PDFViewer = ({ devisId, setShowPDF }) => {
             <Page key={`page_${index + 1}`} pageNumber={index + 1} />
           ))}
         </Document>
+        <button onClick={handlePrint} style={{ position: 'absolute', top: '10px', right: '90px', padding: '6px'}}>
+          Imprimer
+        </button>
+
       </div>
-      <button onClick={() => setShowPDF(false)} style={{
-        position: 'absolute',
-        top: '10px',
-        right: '10px',
-        zIndex: 10000, // Encore plus haut pour être sûr qu'il est au-dessus du PDF
-      }}>
-        Fermer
-      </button>
+
+        
     </div>
   );
 };

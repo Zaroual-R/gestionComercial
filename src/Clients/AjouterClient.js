@@ -1,256 +1,186 @@
-import React, { useEffect } from 'react'
-import { useRef, useState } from 'react'
-import ServiceClient from '../backEndService/ServiceClient';
-import { addTokenToHeader } from '../backEndService/AxiosConfig';
+import React, { useRef, useState } from 'react';
+import ClientService from '../backEndService/ServiceClient';
 
 const AjouterClient = () => {
-    const nomClientField = useRef();
-    const prenomClientField = useRef();
-    const societeField = useRef();
-    const paysField = useRef();
-    const villeField = useRef();
-    const telField = useRef();
-    const emailField = useRef();
-    const codePostalField = useRef();
-    const [errors, setErrors] = useState({});
-    const [alertMessage,setAlertMessage]=useState("");
-    let isValide=true;
-    const [client,setClient]=useState(
-        {"nomClient":'',
-        "prenomClient":'',
-        "codePostal":'', 
-        "ville":'',
-        "pays":''
-        ,"tel":'',
-        "email":'',
-        "societe":'',
-        })
+    const nomClientRef = useRef();
+    const prenomClientRef = useRef();
+    const societeRef = useRef();
+    const paysRef = useRef();
+    const villeRef = useRef();
+    const telRef = useRef();
+    const emailRef = useRef();
+    const codePostalRef = useRef();
+    const codeComptableRef = useRef();
+    const addressRef = useRef();
+    const rcRef = useRef();
+    const cnssRef = useRef();
 
-    //function to reset fields of form 
-    useEffect (() => {
-        addTokenToHeader();
-    },[])
-    /*start form validation function*/
-    const validatForm = () => {
-        setErrors({});
-        const nomValue = nomClientField.current.value;
-        const prenomValue = prenomClientField.current.value;
-        const societeValue = societeField.current.value;
-        const paysValue = paysField.current.value;
-        const villeValue = villeField.current.value;
-        const telValue = telField.current.value;
-        const emailValue = emailField.current.value;
-        const codePostalValue = codePostalField.current.value;
+    const [client, setClient] = useState({
+        nomClient: '',
+        prenomClient: '',
+        societe: '',
+        pays: '',
+        ville: '',
+        tel: '',
+        email: '',
+        codePostal: '',
+        codeComptable: '',
+        address: '',
+        rc: '',
+        cnss: ''
+    });
 
-        if (nomValue.trim() == '') {
-            setErrors(prevState => { return { ...prevState, ...{ nomClientField: "nom required" } } });
-            isValide = false;
-        }
-        if (prenomValue.trim() == '') {
-            setErrors(prevState => { return { ...prevState, ...{ prenomClientField: "prenom required" } } });
-            isValide = false;
-        }
-        if (paysValue.trim() == '') {
-            const paysValue = paysField.current.value;
-            setErrors(prevState => { return { ...prevState, ...{ paysField: "pays required" } } });
-            isValide = false;
-        }
-        if (villeValue.trim() == '') {
-            setErrors(prevState => { return { ...prevState, ...{ villeField: "ville required" } } });
-            isValide = false;
-        }
-        if (telValue.trim() == '') {
-            setErrors(prevState => { return { ...prevState, ...{ telField: "tel required" } } });
-            isValide = false;
-        }
-        if (!emailValue.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-            setErrors(prevState => { return { ...prevState, ...{ emailField: "email required" } } });
-            isValide = false;
-        }
-        if (codePostalValue.trim() == '') {
-            setErrors(prevState => { return { ...prevState, ...{ codePostalField: "codePostal required" } } });
-            isValide = false;
-        }
-        return isValide;
-    }
-    /*end form validation function*/
-    const handleReset2 = () => {
-        nomClientField.current.value=''
-        prenomClientField.current.value=''
-        societeField.current.value=''
-        paysField.current.value=''
-        villeField.current.value=''
-        telField.current.value=''
-        emailField.current.value=''
-        codePostalField.current.value=''
-    }
-    // start handle Reset 
-    const handleReset = (e) => {
-        e.preventDefault();
-        nomClientField.current.value=''
-        prenomClientField.current.value=''
-        societeField.current.value=''
-        paysField.current.value=''
-        villeField.current.value=''
-        telField.current.value=''
-        emailField.current.value=''
-        codePostalField.current.value=''
-    }
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertType, setAlertType] = useState(""); 
 
-    //start get error function of given field
-    const getError = (field) =>{
-        return errors[field];
-    }
-
-    //start has error function of given field
-    const hasError = (field) =>{
-        return (getError(field)!==undefined);
-    }
-
-    /*start display errors function */
-    const displayErr = (field) =>{
-        const element=document.querySelector(`#${field}`);
-        if(hasError(field)){
-            element.style.border="1px solid red";
-            return (
-                <div>
-                    <div className='text text-danger'>{getError(field)}</div>
-                </div>
-            )
-        }
-        if(element!==null){
-            element.removeAttribute('style');
-        }
-        return null;
-    }
-    /*end display error function*/
-
-    //start handle change function 
-    const handleChange = (event) =>{
-        validatForm();
-        const {name, value} =event.target;
-        setClient(prevClient =>(
-            {...prevClient,[name]:value}
-        ));
-        console.log(client);
+    const handleReset = () => {
+        const resetFields = [nomClientRef, prenomClientRef, societeRef, paysRef, villeRef, telRef, emailRef, codePostalRef, codeComptableRef, addressRef, rcRef, cnssRef];
+        resetFields.forEach(ref => {
+            if (ref.current) {
+                ref.current.value = '';
+            }
+        });
+        setClient({
+            nomClient: '',
+            prenomClient: '',
+            societe: '',
+            pays: '',
+            ville: '',
+            tel: '',
+            email: '',
+            codePostal: '',
+            codeComptable: '',
+            address: '',
+            rc: '',
+            cnss: ''
+        });
         setAlertMessage("");
-    }
+        setAlertType("");
+    };
 
-    //start hundle submit functio 
-    const handleSubmit = (e) =>{
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setClient(prevClient => ({
+            ...prevClient,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        if(validatForm()){
-            ServiceClient.ajouterClient(client)
-                .then(response =>{
-                    console.log("le client a été ajouté avec succes",response.data);
-                    console.log("le token ",localStorage.getItem('token'));
-                    setClient(
-                        {"nomClient":'',
-                        "prenomClient":'',
-                        "codePostal":'', 
-                        "ville":'',
-                        "pays":'',
-                        "tel":'',
-                        "email":'',
-                        "societe":'',
-                        }
-                    );
-                    handleReset2();
-                    setAlertMessage("success");
-                })
-                .catch(error =>{
-                    console.error("error pour l'ajout de client ");
-                    setAlertMessage("error");
-                })
-        }
-    }
-    const alertOfSucces = () =>{
-        return (<div className='alert alert-success ' role="alert">
-            le client a été ajouté avec succés
-         </div>)
-     }
-     //function to return alert of error
-     //function to return error
-     const alertOfError = () =>{
-         return(
-             <div className='alert alert-danger' role="alert">
-                 error dans l'ajout de client 
-             </div>
-         )
-     }
- 
-     //function to return a correspondant alert
-     const alert = (message) =>{
-         switch(message){
-             case "error":
-                 return  alertOfError();
-             case "success":
-                 return  alertOfSucces();
-             default :
-                 return null;
-             
-         }
-           
-     }
+        ClientService.ajouterClient(client)
+            .then(response => {
+                console.log("Client added successfully", response.data);
+                handleReset();
+                setAlertMessage("Client successfully added.");
+                setAlertType("success");
+            })
+            .catch(error => {
+                console.error("Error adding client", error);
+                setAlertMessage("Failed to add client.");
+                setAlertType("error");
+
+            });
+
+    };
+    const renderAlert = () => {
+        if (!alertMessage) return null;
+        const alertClass = alertType === "success" ? "alert-success" : "alert-danger";
+        return (
+            <div className={`alert ${alertClass}`} role="alert">
+                {alertMessage}
+            </div>
+        );
+    };
+
+
 
     return (
-        <div className="container ajouter-client">
-            <div className='row '>
-                <div className='col-8 ' >
-                    <form onSubmit={handleSubmit}>
-                        <h1 className='text-dark'>Nouveau Client</h1>
-                        {alert(alertMessage)}
-                        <hr></hr>
-                        <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="nomClient">Nom</label>
-                            <input type="text" name="nomClient" id="nomClientField" className="form-control" placeholder='nom' ref={nomClientField} onChange={handleChange} />
-                            {displayErr("nomClientField")}
+        <div className="container ajouter-four">
+            <div className="row">
+                <div className="col-12">
+                    <div className="card">
+                        <div className="card-header bg-info text-white">
+                            <h3>Add New Client</h3>
                         </div>
-                        <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="prenomClient">Prenom</label>
-                            <input type="text" name="prenomClient" id="prenomClientField" className="form-control" placeholder='prenom' ref={prenomClientField} onChange={handleChange} />
-                            {displayErr("prenomClientField")}
+                        <div className="card-body">
+                        {renderAlert()}
+                            <form onSubmit={handleSubmit}>
+                                <div className="form-row">
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="nomClient">Nom</label>
+                                        <input type="text" className="form-control" name="nomClient" id="nomClient" ref={nomClientRef} placeholder="Nom" onChange={handleChange} />
+                                    </div>
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="prenomClient">Prénom</label>
+                                        <input type="text" className="form-control" name="prenomClient" id="prenomClient" ref={prenomClientRef} placeholder="Prénom" onChange={handleChange} />
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="societe">Société</label>
+                                        <input type="text" className="form-control" name="societe" id="societe" ref={societeRef} placeholder="Société" onChange={handleChange} />
+                                    </div>
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="pays">Pays</label>
+                                        <input type="text" className="form-control" name="pays" id="pays" ref={paysRef} placeholder="Pays" onChange={handleChange} />
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="ville">Ville</label>
+                                        <input type="text" className="form-control" name="ville" id="ville" ref={villeRef} placeholder="Ville" onChange={handleChange} />
+                                    </div>
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="tel">Téléphone</label>
+                                        <input type="tel" className="form-control" name="tel" id="tel" ref={telRef} placeholder="Téléphone" onChange={handleChange} />
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="email">Email</label>
+                                        <input type="email" className="form-control" name="email" id="email" ref={emailRef} placeholder="Email" onChange={handleChange} />
+                                    </div>
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="codePostal">Code Postal</label>
+                                        <input type="text" className="form-control" name="codePostal" id="codePostal" ref={codePostalRef} placeholder="Code Postal" onChange={handleChange} />
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="codeComptable">Code Comptable</label>
+                                        <input type="text" className="form-control" name="codeComptable" id="codeComptable" ref={codeComptableRef} placeholder="Code Comptable" onChange={handleChange} />
+                                    </div>
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="address">Adresse</label>
+                                        <input type="text" className="form-control" name="address" id="address" ref={addressRef} placeholder="Adresse" onChange={handleChange} />
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="rc">Registre de Commerce</label>
+                                        <input type="text" className="form-control" name="rc" id="rc" ref={rcRef} placeholder="Registre de Commerce" onChange={handleChange} />
+                                    </div>
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="cnss">CNSS</label>
+                                        <input type="text" className="form-control" name="cnss" id="cnss" ref={cnssRef} placeholder="CNSS" onChange={handleChange} />
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="col-12">
+                                        <button type="submit" className="btn btn-primary">Ajouter client</button>
+                                    </div>
+                                    <div className="col-12">
+                                        <button type="reset" className="btn btn-danger">Effacer</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="societe">Société</label>
-                            <input type="text" name="societe" id="societeField" className="form-control" placeholder='société' ref={societeField} onChange={handleChange} />
-                            {displayErr("societeField")}
-                        </div>
-                        <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="pays">Pays</label>
-                            <input type="text" name="pays" id="paysField" className="form-control" placeholder='pays' ref={paysField} onChange={handleChange} />
-                            {displayErr("paysField")}
-                        </div>
-                        <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="ville">Ville</label>
-                            <input type="text" name="ville" id="villeField" className="form-control" placeholder='ville' ref={villeField} onChange={handleChange} />
-                            {displayErr("villeField")}
-                        </div>
-                        <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="tel">Tel</label>
-                            <input type="tel" name="tel" id="telField" className="form-control" placeholder='tel' ref={telField} onChange={handleChange} />
-                            {displayErr("telField")}
-                        </div>
-                        <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="email">Email</label>
-                            <input type="email" name="email" id="emailField" className="form-control" placeholder='email' ref={emailField} onChange={handleChange} />
-                            {displayErr("emailField")}
-                        </div>
-                        <div className="form-outline mb-4">
-                            <label className="form-label" htmlFor="codePostal">Code postal</label>
-                            <input type="text" name="codePostal" id="codePostalField" className="form-control" placeholder='code  postal'ref={codePostalField} onChange={handleChange} />
-                             {displayErr("emailField")}
-                        </div>
-                        <div>
-                            <input type="submit" value="Ajouter" className='btn btn-primary'></input>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <input type="reset" value="Reset" className='btn btn-danger' onClick={handleReset}></input>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default AjouterClient
+export default AjouterClient;

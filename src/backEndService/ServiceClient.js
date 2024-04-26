@@ -1,30 +1,31 @@
-import axios from "axios";
+import axiosInstance from './axisConfig'; // Assurez-vous que le chemin d'importation est correct
 
 const API_URL="http://localhost:8088/api/client";
 
 class ServiceClient{
 
   ajouterClient(client){
-        return axios.post(`${API_URL}/create`, client);        
+        return axiosInstance.post(`${API_URL}/create`, client);        
   }
 
   deleteClient(id){
-    return axios.delete(`${API_URL}/delete/${id}`);
+    return axiosInstance.delete(`${API_URL}/delete/${id}`);
   }
 
   getClient(id){
-    return axios.get(`${API_URL}/${id}`);
+    return axiosInstance.get(`${API_URL}/${id}`);
   }
   updateClient(client , id){
-    return axios.put(`${API_URL}/update/${id}`,client);
+    return axiosInstance.put(`${API_URL}/update/${id}`,client);
   }
 
   getAllClients(){
-    return axios.get(`${API_URL}/all`);
+    return axiosInstance.get(`${API_URL}/all`);
   }
 
   rechercheClients(searchClient){
-    return axios.post(`${API_URL}/recherche`,searchClient);
+    return axiosInstance.post(`${API_URL}/recherche`,searchClient);
   }
+
 }
 export default new ServiceClient();
