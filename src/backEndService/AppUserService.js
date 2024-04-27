@@ -17,12 +17,15 @@ class AppUserService {
         const refreshTokenDTO = {
             "refreshToken": refreshTokenValue
         }
-        return axios.post(`${API_URL}/refresh-token`, refreshTokenDTO);
+        return axiosInstance.post(`${API_URL}/refresh-token`, refreshTokenDTO);
     }
     getAllUsers = async () => {
-            return axios.get(API_URL);
+            return axiosInstance.get(API_URL);
            
-      };
+    };
+    addUser(userDto){
+        return axiosInstance.post(`${API_URL}/create`,userDto);
+    }
 }
 
 

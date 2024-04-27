@@ -7,16 +7,30 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    position: relative;
 
 }
 .AppRegister {
-    width: 1000px;
+    width: 900px;
+    height: 40%;
     background: rgba(143, 169, 191, 0.952) /* Bleu-gris avec une touche de transparence */ ;
     color: rgba(255, 255, 255, 1) /* Blanc pur */;
     border-radius: 10px;
     padding: 30px 40px;
+    z-index: 2;
   }
 
+
+  .toute::before {
+    content: ''; /* Pseudo-elements require the content property to display */
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.719); /* Adjust the last value to make it darker/lighter */
+    z-index: 1; /* Position the overlay behind the content */
+  }
   
 
   
@@ -61,7 +75,7 @@
   }
   .AppRegister .Field {
     position: relative;
-    padding-bottom: 24px;
+    padding-bottom: 12px;
     display: flex;
     flex-direction: column;
   }

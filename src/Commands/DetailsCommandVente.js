@@ -8,6 +8,12 @@ import { useState } from "react";
 import FactureService from "../backEndService/FactureService";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+
+
+
+
+
+
 const DetailsCommandVente = ()=>{
   const location = useLocation();
   const { state } = location.state; 

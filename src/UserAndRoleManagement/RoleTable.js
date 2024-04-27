@@ -46,6 +46,7 @@ const colors = {
   }
 
   return (
+    <div className="addRole">
     <div className='container mt-2 Myfont'>
       <div className='card ' style={{ maxHeight: 'calc(100vh - 90px)', overflow: 'auto' }}>
         <div className="card-header bg-dark">
@@ -100,6 +101,7 @@ const colors = {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -54,6 +54,11 @@ code {
   margin-bottom: 300px;
  
 }
+.addRole {
+  margin-left:17.7%;
+
+  margin-bottom: 500px;
+}
 
 .card-produits{
   display:flex;
@@ -149,6 +154,7 @@ code {
   padding:10px;
   padding-bottom:300px;
 }
+
 
 /*ens style ajouter fournisseur*/
 

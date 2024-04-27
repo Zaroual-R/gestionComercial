@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AppUserService from '../backEndService/AppUserService'; // Update this import based on your actual service file
-
+import AppUserService from '../backEndService/AppUserService';
 
 
 const UserTable = () => {
@@ -28,43 +27,47 @@ const UserTable = () => {
     };
 
     return (
-        <div className='container'>
-            <div className="row">
-                <div className="col-12 d-flex justify-content-between align-items-center mb-4">
-                    <h4 className="text-primary">Liste des Utilisateurs</h4>
-                    <button className="btn btn-success">+Nouveau Utilisateur</button>
+<div className='container mt-2 list-user Myfont'>
+            <div className='card ' style={{ maxHeight: 'calc(100vh - 90px)', overflow: 'auto' }}>
+                <div className="card-header bg-dark">
+                    <h3 className="text-white">Liste des Utilisateurs</h3>
                 </div>
-            </div>
-            <div className="table-responsive">
-                <table className="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Email</th>
-                            <th>Téléphone</th>
-                            <th>Adresse</th>
-                            <th>Rôle</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map(user => (
-                            <tr key={user.id}>
-                                <td>{user.lastName}</td>
-                                <td>{user.firstName}</td>
-                                <td>{user.email}</td>
-                                <td>{user.phoneNumber}</td>
-                                <td>{user.address}</td>
-                                <td>{user.role && user.role.name}</td>
-                                <td>
-                                    <button onClick={() => handleEdit(user.id)} className="btn btn-primary mr-2">Modifier</button>
-                                    <button onClick={() => handleDelete(user.id)} className="btn btn-danger">Supprimer</button>
-                                </td>
+                <div className='card-body ' >
+                    <button className='btn btn-dark mb-3' onClick={() => {/* navigate to add user page */}}>
+                        <i className='fas fa-plus-circle' /> Ajouter Utilisateur
+                    </button>
+                    <table className="table custom-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                <th>Adresse</th>
+                                <th>Action</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {users.map(user => (
+                                <tr key={user.id}>
+                                    <td>{user.lastname}</td>
+                                    <td>{user.firstname}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.phoneNumber}</td>
+                                    <td>{user.address}</td>
+                                    <td>
+                                        <button onClick={() => handleEdit(user.id)} className="btn btn-primary mr-2">
+                                            <i className='fas fa-edit' /> Modifier
+                                        </button>
+                                        <button onClick={() => handleDelete(user.id)} className="btn btn-danger">
+                                            <i className='fas fa-trash' /> Supprimer
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

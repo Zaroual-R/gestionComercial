@@ -60,12 +60,12 @@ const LoginForm = () => {
     };
     return (
         <div className="tout">  
-            <div className="wrapper">
+            <div className="Mywrapper">
                 <form onSubmit={handleSubmit}>
                     <h1>Login</h1>
                     {error && <div className="error-message">{error}</div>} {/* Afficher le message d'erreur ici */}
 
-                    <div className="input-box">
+                    <div className="Myinput-box">
                         <input 
                             type="text" 
                             placeholder="Email" 
@@ -76,7 +76,7 @@ const LoginForm = () => {
                         />
                         <FaUser className="icon"/>
                     </div>
-                    <div className="input-box">
+                    <div className="Myinput-box">
                         <input 
                             type="password" 
                             placeholder="Password"

@@ -8,6 +8,10 @@ const AddRole = () => {
         previlegeSet: []
     });
 
+    const [alertMessage,setAlertMessage]=useState("");
+    const [errors,setErrors]=useState({});
+    const [showAlert, setShowAlert] = useState(true);
+
     const options = [
         { value: 'CREATE_USER', label: 'Créer utilisateur' },
         { value: 'READ_USER', label: 'Lire utilisateur' },
@@ -69,17 +73,65 @@ const AddRole = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        RoleService.createRole(formData).then(response => response.data).then(data => console.log(data)).catch(error => console.log(error));
+        RoleService.createRole(formData).then(response => response.data).then(data => {
+            console.log(data)
+            setAlertMessage("success")
+        }).catch(error => {
+            console.log(error)
+            setAlertMessage("error")
+        });
     };
+    //handle success alert function
+    const closeAlert = () => {
+        setShowAlert(false);
+      };
+      const alertOfSucces = () => {
+        return (
+          <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+            <span >le rôle à été ajouté avec succés </span>
+            <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>)
+      }
+      //function to return alert of error
+      //function to return error
+      const alertOfError = () => {
+        return (
+          <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ width: '100%', fontFamily: ' Arial, sans-serif', textAlign: 'center' }}>
+            <span >error dans l'jout de rôle </span>
+            <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={closeAlert}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        )
+      }
+ 
+     //function to return a correspondant alert
+     const alert = (message) =>{
+         switch(message){
+             case "error":
+                 return  alertOfError();
+             case "success":
+                 return  alertOfSucces();
+             default :
+                 return null;
+             
+         }
+           
+     }
+
 
     return (
-<div className="container ajouter-four"> {/* Changed class to match AjouterFournisseur */}
+        <div className='addRole'>
+<div className="container"> {/* Changed class to match AjouterFournisseur */}
             <div className="row">
                 <div className="col-12">
                     <div className="card">
                         <div className="card-header bg-dark text-white"> {/* You may want to adjust the color to match your header */}
                             <h3>Nouveau Role</h3>
                         </div>
+                        {alert(alertMessage)}
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>
                                 <div className="form-row">
@@ -102,6 +154,7 @@ const AddRole = () => {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 }

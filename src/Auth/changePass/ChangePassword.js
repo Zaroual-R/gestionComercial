@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'
 import { useLocation } from 'react-router-dom';
+import './ChangePassword.css'
 
 const ChangePassword = () => {
     const [password, setPassword] = useState('');
@@ -42,27 +43,29 @@ const ChangePassword = () => {
       };
 
     return (
-        <div className="toute">
-            <div className="App">
+        <div className="toutet">
+            <div className="ApppForget">
                 <form onSubmit={handleSubmit}>
                     <h2>Changer le mot de passe</h2>
-                    <div className="Field">
+                    <div className="Fieldo">
                         <input
+                            className='inputo'
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Entrez le nouveau mot de passe"
                         />
                     </div>
-                    <div className="Field">
+                    <div className="Fieldo">
                         <input
+                        className='inputo'
                             type="password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             placeholder="Confirmez le nouveau mot de passe"
                         />
                     </div>
-                    <button className="button" type="submit" disabled={!getIsFormValid()}>
+                    <button className="buttono" type="submit" disabled={!getIsFormValid()}>
                         Changer le mot de passe
                     </button>
                 </form>

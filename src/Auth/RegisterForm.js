@@ -19,18 +19,27 @@ function RegisterForm() {
       value: "", 
       isTouched: false, 
     }); 
+    const [passwordConfirmation, setPasswordConfirmation] = useState({
+        value: "",
+        isTouched: false,
+      });
     const [address, setAddress] = useState("");
     const [birthday, setBirthday] = useState("");
     const [genre, setGenre] = useState(""); // Assurez-vous que les valeurs correspondent aux énumérations définies dans votre backend si nécessaire
 
+    const [error, setError] = useState(""); 
+
+    const getIsFormValid = () => {
+  return (
+    firstName && lastName &&
+    validateEmail(email) && 
+    password.value.length >= 8 &&
+    password.value === passwordConfirmation.value // vérification de la correspondance des mots de passe
+  );
+};
+
     
-    const getIsFormValid = () => { 
-      return ( 
-        firstName && lastName &&
-        validateEmail(email) && 
-        password.value.length >= 8 
-    ); 
-    }; 
+
     
     const clearForm = () => { 
       setFirstName(""); 
@@ -63,11 +72,11 @@ function RegisterForm() {
         // Stockez le token dans localStorage ou les cookies
         localStorage.setItem('token', token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        navigate('/');
+        navigate('/login');
         clearForm();
         alert("Account created!"); 
     } ).catch(error => {
-        alert("An error occurred!");
+        setError(error.response?.data?.message || "Une erreur de réseau est survenue. Veuillez réessayer.");
         console.error("There was an error!", error);
       });
       
@@ -79,6 +88,7 @@ function RegisterForm() {
             <div className="AppRegister"> 
             <form onSubmit={handleSubmit}> 
                 <h2>Sign Up</h2> 
+                {error && <div className="error-message">{error}</div>} {/* Afficher le message d'erreur ici */}
                 <div className="FieldRow">
                     <div className="Field"> 
                     <label> 
@@ -136,6 +146,25 @@ function RegisterForm() {
                 {password.isTouched && password.value.length < 8 ? ( 
                     <PasswordErrorMessage /> 
                 ) : null} 
+                <div className="Field">
+                    <label>
+                        Confirm Password <sup>*</sup>
+                    </label>
+                    <input
+                        type="password"
+                        value={passwordConfirmation.value}
+                        onChange={(e) =>
+                        setPasswordConfirmation({ ...passwordConfirmation, value: e.target.value })
+                        }
+                        onBlur={() =>
+                        setPasswordConfirmation({ ...passwordConfirmation, isTouched: true })
+                        }
+                        placeholder="Confirm Password"
+                    />
+                    {(passwordConfirmation.isTouched && passwordConfirmation.value !== password.value) ? (
+                        <p className="FieldError">Passwords do not match</p>
+                    ) : null}
+                </div>
                 </div> 
                 <div className="Field">
                         <label>

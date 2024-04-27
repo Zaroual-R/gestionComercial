@@ -11,7 +11,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(0, 0, 0, 0.438); /* Adjust the last value to make it darker/lighter */
+    background: rgba(0, 0, 0, 0.719); /* Adjust the last value to make it darker/lighter */
     z-index: 1; /* Position the overlay behind the content */
   }
   
@@ -32,7 +32,7 @@
   
   }
 
-.wrapper {
+.Mywrapper {
     width: 420px;
     background: rgba(143, 169, 191, 0.945);
     color:  rgba(255, 255, 255, 1);
@@ -42,17 +42,17 @@
     z-index: 2;
 
 }
-.wrapper h1 {
+.Mywrapper h1 {
     font-size: 36px;
     text-align: center;
 }
-.wrapper .input-box {
+.Mywrapper .Myinput-box {
     position: relative;
     width: 100%;
     height: 50px;
     margin: 30px 0;
 }
-.input-box input {
+.Myinput-box input {
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.8);
@@ -64,10 +64,10 @@
     padding: 20px 45px 20px 20px;
     color: rgba(0, 0, 0, 0.7);
 }
-.input-box input::placeholder {
+.Myinput-box input::placeholder {
     color: #000000;
 }
-.input-box .icon {
+.Myinput-box .icon {
     position: absolute;
     right: 20px;
     top: 50%;
@@ -75,7 +75,7 @@
     font-size: 16px;
 
 }
-.wrapper .remember-forgot {
+.Mywrapper .remember-forgot {
     display: flex;
     justify-content: space-between;
     font-size: 14.5;
@@ -95,7 +95,7 @@
     text-decoration: underline;
 }
 
-.wrapper button {
+.Mywrapper button {
     width: 100%;
     height: 45px;
     background: #fff;
@@ -109,7 +109,7 @@
     font-weight: 700;
 
 }
-.wrapper .register-link {
+.Mywrapper .register-link {
     font-size: 14.5px;
     text-align: center;
     margin: 20px 0 15px;

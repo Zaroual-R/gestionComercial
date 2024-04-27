@@ -16,7 +16,7 @@ const ForgetPassword = () => {
     
         try {
             const params = new URLSearchParams({ email: email }).toString();
-            const response = await axios.post(`http://localhost:8080/forgot-password?${params}`);
+            const response = await axios.post(`http://localhost:8088/api/appUser/forgot-password?${params}`);
             console.log('Response:', response.data);
             alert('Un lien de réinitialisation de mot de passe a été envoyé à votre adresse e-mail.');
         } catch (error) {
@@ -27,15 +27,16 @@ const ForgetPassword = () => {
     
 
     return (
-        <div className="toute">
-            <div className="App">
+        <div className="Forgetoute">
+            <div className="AppForget">
                 <form onSubmit={handleSubmit}>
                     <h2>mot de passe oublié</h2>
-                    <div className="Field">
-                        <label>
+                    <div className="NoField">
+                        <label className='labelIkhan'>
                             Nous vous enverrons les instructions de réinitialisation de votre mot de passe par e-mail.
                         </label>
                         <input
+                            className='hoola'
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -43,7 +44,7 @@ const ForgetPassword = () => {
                             required
                         />
                     </div>
-                    <button className="button" type="submit" disabled={!getIsFormValid()}>
+                    <button className="Monbutton" type="submit" disabled={!getIsFormValid()}>
                         Envoyez moi un email
                     </button>
                     <div className="loggin">

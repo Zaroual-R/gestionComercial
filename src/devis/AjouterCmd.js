@@ -315,7 +315,7 @@ const AjouterCmd = () => {
                         </div>
                         {alert(alertMessage)}
                         <div className="card-body">
-                            <form onSubmit={handleSubmit}>
+                            <form>
                                 <div className="form-row">
                                     <div className="form-group col-md-6">
                                         <label className="form-label" htmlFor="dateCmdField">Date de devis</label>
@@ -398,7 +398,7 @@ const AjouterCmd = () => {
                                     </table>
                                 </div>
                          
-                                <button type="submit" className="btn btn-primary Myfont"><i className='fas fa-plus'></i> Ajouter devis</button>
+                                <button type="submit" onClick={handleSubmit} className="btn btn-primary Myfont"><i className='fas fa-plus'></i> Ajouter devis</button>
                                 <button type="reset" className="btn btn-danger Myfont" onClick={handleReset}>Réinitialiser</button>
                             </form>
                         </div>
