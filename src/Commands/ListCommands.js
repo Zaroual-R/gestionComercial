@@ -8,11 +8,19 @@ import MyModal from '../components/MyModal';
 const ListCommands = () => {
   const [listCommande, setListCommande] = useState([]);
   const searchKeyword = useRef();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [currentId, setCurrentId] = useState(false);
   const [alertMessage, setAlertMessage] = useState(false);
-  const [showAlert,setShowAlert]=useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage] = useState(5); // Nombre de produits par page
+  const indexOfLastCommande = currentPage * rowsPerPage;
+  const indexOfFirstCommande = indexOfLastCommande - rowsPerPage;
+  const currentCommandes = listCommande.slice(indexOfFirstCommande, indexOfLastCommande);
+  const totalPages = Math.ceil(listCommande.length / rowsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 
   useEffect(() => {
@@ -63,29 +71,29 @@ const ListCommands = () => {
     return `${year}-${month}-${day}`;
   };
 
-  const handelDeleteCommande = (id) =>{
+  const handelDeleteCommande = (id) => {
     setShowModal(true);
     setCurrentId(id);
   }
 
-  const confirmDelete = () =>{
+  const confirmDelete = () => {
     ServiceCommand.deleteCommande(currentId)
-    .then(response => {
-      setShowModal(true);
-      setAlertMessage("success");
-      getAllCommande();
-      console.log("this commande has been deleted successfully", response.data); 
-    })
-    .catch(error => {
-      setShowModal(true);
-      setAlertMessage("error");
-      console.error("error to delete this commande", error);
-    });
+      .then(response => {
+        setShowModal(true);
+        setAlertMessage("success");
+        getAllCommande();
+        console.log("this commande has been deleted successfully", response.data);
+      })
+      .catch(error => {
+        setShowModal(true);
+        setAlertMessage("error");
+        console.error("error to delete this commande", error);
+      });
   }
 
 
-  const addCommande = () =>{
-      navigate("/AddCommand");
+  const addCommande = () => {
+    navigate("/AddCommand");
   }
 
   const closeAlert = () => {
@@ -118,7 +126,7 @@ const ListCommands = () => {
     }
   }
 
-  const datashow = listCommande.map((item, key) => <LigneListCommand idCommande={item.idCommande} idClient={item.idClient} nomClient={item.nomClient} dateCommand={item.dateCommand} montantTotalHT={item.montantTotalHT} montantTotalTTC={item.montantTotalTTC} status={item.status} onDelete={handelDeleteCommande} />)
+  const datashow = currentCommandes.map((item, key) => <LigneListCommand idCommande={item.idCommande} idClient={item.idClient} nomClient={item.nomClient} dateCommand={item.dateCommand} montantTotalHT={item.montantTotalHT} montantTotalTTC={item.montantTotalTTC} status={item.status} onDelete={handelDeleteCommande} />)
   return (
     <div className='container mt-2 Myfont list-client'>
       <div className='card' style={{ width: '100%', maxHeight: 'calc(100vh - 100px)', overflow: 'auto' }}>
@@ -126,7 +134,7 @@ const ListCommands = () => {
           <h3 className="text-light">Liste des commandes</h3>
         </div>
         <div className='card-body cardBody'>
-           {alertMsg(alertMessage)}
+          {alertMsg(alertMessage)}
           <form method="get">
             <div className='form-row'>
               <div className='col-8'>
@@ -137,7 +145,7 @@ const ListCommands = () => {
                   <div className="input-group-prepend">
                     <div className="input-group-text " style={{ backgroundColor: '#CDCDC7' }}><i className='fas fa-search'></i></div>
                   </div>
-                  <input type="text" id="searchKeyword"  className="form-control" style={{ width: "250px" }} placeholder="Nom client" onChange={handleChange} />
+                  <input type="text" id="searchKeyword" className="form-control" style={{ width: "250px" }} placeholder="Nom client" onChange={handleChange} />
                 </div>
               </div>
               <div className='col-md-6'></div>
@@ -158,6 +166,24 @@ const ListCommands = () => {
               {datashow}
             </tbody>
           </table>
+          <br />
+          <nav>
+            <ul className='pagination'>
+              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage - 1)}>Previous</button>
+              </li>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+                  <button className='page-link' onClick={() => paginate(index + 1)}>
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage + 1)}>Next</button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
       <MyModal show={showModal} onHide={() => setShowModal(false)} onConfirm={confirmDelete} />

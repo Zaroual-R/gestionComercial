@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import FactureService from "../backEndService/FactureService";
 import LigneListFacture from "./LigneListFacture";
 import MyModal from '../components/MyModal';
+import { useNavigate } from "react-router-dom";
 
 const ListFactures = () => {
   const [listFactures, setListFactures] = useState([]);
@@ -13,6 +14,15 @@ const ListFactures = () => {
   const [currentId, setCurrentId] = useState(false);
   const [alertMessage, setAlertMessage] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage] = useState(5); // Nombre de produits par page
+  const navigate = useNavigate();
+  const indexOfLastFacture = currentPage * rowsPerPage;
+  const indexOfFirstFacture = indexOfLastFacture - rowsPerPage;
+  const currentFactures = listFactures.slice(indexOfFirstFacture, indexOfLastFacture);
+  const totalPages = Math.ceil(listFactures.length / rowsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 
   useEffect(() => {
@@ -119,7 +129,7 @@ const ListFactures = () => {
         )
     }
   }
-  const datashow = listFactures.map((item, key) => <LigneListFacture idFacture={item.idFacture} idClient={item.idClient} nomClient={item.nomClient} dateFacture={item.dateFacture} dateReelPayement={item.dateReelPayement} datePrevuePayement={item.datePrevuePayement} modPayement={item.modPayement} statusFacture={item.statusFacture} onDelete={handleDeleteFacture} onUpdateStatus={updateFactureStatus} />)
+  const datashow = currentFactures.map((item, key) => <LigneListFacture idFacture={item.idFacture} idClient={item.idClient} nomClient={item.nomClient} dateFacture={item.dateFacture} dateReelPayement={item.dateReelPayement} datePrevuePayement={item.datePrevuePayement} modPayement={item.modPayement} statusFacture={item.statusFacture} onDelete={handleDeleteFacture} onUpdateStatus={updateFactureStatus} />)
 
 
   return (
@@ -162,6 +172,24 @@ const ListFactures = () => {
               {datashow}
             </tbody>
           </table>
+          <br />
+          <nav>
+            <ul className='pagination'>
+              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage - 1)}>Previous</button>
+              </li>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+                  <button className='page-link' onClick={() => paginate(index + 1)}>
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage + 1)}>Next</button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
       <MyModal show={showModal} onHide={() => setShowModal(false)} onConfirm={confirmDelete} />

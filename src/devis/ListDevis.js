@@ -13,6 +13,14 @@ const ListDevis = () => {
   const [currentId, setCurrentId] = useState(null);
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage] = useState(5); // Nombre de produits par page
+  const indexOfLastDevid = currentPage * rowsPerPage;
+  const indexOfFirstDevis = indexOfLastDevid - rowsPerPage;
+  const currentFactures = listCommande.slice(indexOfFirstDevis, indexOfLastDevid);
+  const totalPages = Math.ceil(listCommande.length / rowsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
     getAllCommande();
@@ -124,7 +132,7 @@ const ListDevis = () => {
       });
   }
 
-  const datashow = listCommande.map((item, key) => <LigneListDevis idDevis={item.idDevis} idClient={item.idClient} nomClient={item.nomClient} dateDevis={item.dateDevis} dateExpiration={item.dateExpiration} montantTotalHT={item.montantTotalHT} montantTotalTTC={item.montantTotalTTC} status={item.status} onDelete={handleDeleteDevis} onStatusChange={handleStatusChange} />)
+  const datashow = currentFactures.map((item, key) => <LigneListDevis idDevis={item.idDevis} idClient={item.idClient} nomClient={item.nomClient} dateDevis={item.dateDevis} dateExpiration={item.dateExpiration} montantTotalHT={item.montantTotalHT} montantTotalTTC={item.montantTotalTTC} status={item.status} onDelete={handleDeleteDevis} onStatusChange={handleStatusChange} />)
   return (
     <div className='container mt-2 Myfont list-client'>
       <div className='card' style={{ width: '100%', maxHeight: 'calc(100vh - 100px)', overflow: 'auto' }}>
@@ -169,6 +177,24 @@ const ListDevis = () => {
               {datashow}
             </tbody>
           </table>
+          <br />
+          <nav>
+            <ul className='pagination'>
+              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage - 1)}>Previous</button>
+              </li>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+                  <button className='page-link' onClick={() => paginate(index + 1)}>
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage + 1)}>Next</button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
       <MyModal show={showModal} onHide={() => setShowModal(false)} onConfirm={confirmDelete} />

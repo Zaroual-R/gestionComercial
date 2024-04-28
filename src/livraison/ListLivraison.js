@@ -5,6 +5,7 @@ import LivraisonService from "../backEndService/LivraisonService";
 import LigneListLivraison from "./LigneListLivraison";
 import { useRef } from "react";
 import MyModal from '../components/MyModal';
+import { useNavigate } from "react-router-dom";
 
 const ListLivraison = () => {
 
@@ -13,7 +14,16 @@ const ListLivraison = () => {
   const [showModal, setShowModal] = useState(false);
   const [currentId, setCurrentId] = useState(false);
   const [alertMessage, setAlertMessage] = useState(false);
-  const [showAlert,setShowAlert]=useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage] = useState(5); // Nombre de produits par page
+  const navigate = useNavigate();
+  const indexOfLastLivraison = currentPage * rowsPerPage;
+  const indexOfFirstLivraison = indexOfLastLivraison - rowsPerPage;
+  const currentLivraison = listLivraison.slice(indexOfFirstLivraison, indexOfLastLivraison);
+  const totalPages = Math.ceil(listLivraison.length / rowsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 
   useEffect(() => {
@@ -72,24 +82,24 @@ const ListLivraison = () => {
       })
   }
 
-  const handleDeleteLivraison = (id) =>{
+  const handleDeleteLivraison = (id) => {
     setShowModal(true);
     setCurrentId(id);
   }
 
-  const confirmDelete = () =>{
+  const confirmDelete = () => {
     LivraisonService.deleteLivraison(currentId)
-    .then(response => {
-      setShowModal(false);
-      setAlertMessage("success");
-      getAllLivraison();
-      console.log("this livraison has been deleted successfully", response.data);
-    })
-    .catch(error => {
-      setShowModal(false);
-      setAlertMessage("error");
-      console.error("error to delete this livraison",currentId," ", error);
-    });
+      .then(response => {
+        setShowModal(false);
+        setAlertMessage("success");
+        getAllLivraison();
+        console.log("this livraison has been deleted successfully", response.data);
+      })
+      .catch(error => {
+        setShowModal(false);
+        setAlertMessage("error");
+        console.error("error to delete this livraison", currentId, " ", error);
+      });
   }
 
   const closeAlert = () => {
@@ -123,7 +133,7 @@ const ListLivraison = () => {
   }
 
 
-  const datashow = listLivraison.map((item, key) => <LigneListLivraison idLivraison={item.idLivraison} idClient={item.idClient} nomClient={item.nomClient} dateLivraison={item.dateLaivrison} datePrevue={item.datePrevue} dateReception={item.dateReception} adresseLivraison={item.adresseLivraison} statusLivraison={item.statusLivraison} onDelete={handleDeleteLivraison} onUpdateStatus={updateLivraisonStatus} />)
+  const datashow = currentLivraison.map((item, key) => <LigneListLivraison idLivraison={item.idLivraison} idClient={item.idClient} nomClient={item.nomClient} dateLivraison={item.dateLaivrison} datePrevue={item.datePrevue} dateReception={item.dateReception} adresseLivraison={item.adresseLivraison} statusLivraison={item.statusLivraison} onDelete={handleDeleteLivraison} onUpdateStatus={updateLivraisonStatus} />)
 
 
   return (
@@ -133,7 +143,7 @@ const ListLivraison = () => {
           <h3 className="text-light">Liste des livraisons</h3>
         </div>
         <div className='card-body cardBody'>
-           {alertMsg(alertMessage)}
+          {alertMsg(alertMessage)}
           <form method="get">
             <div className='form-row'>
               <div className='col-8'></div>
@@ -165,7 +175,24 @@ const ListLivraison = () => {
               {datashow}
             </tbody>
           </table>
-          {/* Pagination can go here */}
+          <br />
+          <nav>
+            <ul className='pagination'>
+              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage - 1)}>Previous</button>
+              </li>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+                  <button className='page-link' onClick={() => paginate(index + 1)}>
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage + 1)}>Next</button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
       <MyModal show={showModal} onHide={() => setShowModal(false)} onConfirm={confirmDelete} />
