@@ -11,9 +11,17 @@ const ListeClients = () => {
   const [showModal, setShowModal] = useState(false);
   const [currentId, setCurrentId] = useState(false);
   const [alertMessage, setAlertMessage] = useState(false);
-  const [showAlert,setShowAlert]=useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const searchKeyClient = useRef();
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage] = useState(5); // Nombre de produits par page
+  const indexOfLastClient = currentPage * rowsPerPage;
+  const indexOfFirstClient = indexOfLastClient - rowsPerPage;
+  const currentClients = listClient.slice(indexOfFirstClient, indexOfLastClient);
+  const totalPages = Math.ceil(listClient.length / rowsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
     getAllClients();
@@ -108,7 +116,7 @@ const ListeClients = () => {
     }
   }
 
-  const datashow = listClient.map((item, key) => <LignClient key={item.idClient} id={item.idClient} nom={item.nomClient} prenom={item.prenomClient} societe={item.societe} pays={item.pays} ville={item.ville} tel={item.tel} email={item.email} codePostal={item.codePostal} onDelete={handleDeleteClient} />)
+  const datashow = currentClients.map((item, key) => <LignClient key={item.idClient} id={item.idClient} nom={item.nomClient} prenom={item.prenomClient} societe={item.societe} pays={item.pays} ville={item.ville} tel={item.tel} email={item.email} codePostal={item.codePostal} onDelete={handleDeleteClient} />)
 
   return (
     <div className='container mt-2 Myfont list-client'>
@@ -137,7 +145,7 @@ const ListeClients = () => {
           <table className=" custom-table">
             <thead className="thead-dark">
               <tr>
-                <th scope="col" style={{ textAlign: "center" }}>#ID</th>
+                <th scope="col" style={{ textAlign: "center" }}>#Réference</th>
                 <th scope="col" style={{ textAlign: "center" }}>Nom</th>
                 <th scope="col" style={{ textAlign: "center" }}>Prénom</th>
                 <th scope="col" style={{ textAlign: "center" }}>Société</th>
@@ -150,6 +158,24 @@ const ListeClients = () => {
               {datashow}
             </tbody>
           </table>
+          <br />
+          <nav>
+            <ul className='pagination'>
+              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage - 1)}>Previous</button>
+              </li>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+                  <button className='page-link' onClick={() => paginate(index + 1)}>
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage + 1)}>Next</button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
       <MyModal show={showModal} onHide={() => setShowModal(false)} onConfirm={confirmDelete} />

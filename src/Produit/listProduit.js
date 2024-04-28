@@ -164,20 +164,18 @@ const ListProduit = () => {
                             </div>
                             <input type="text" id="searchKeyProduct" ref={searchKeyProduct} className="form-control col-2" style={{ width: "200px" }} placeholder=" nom produit" onChange={handleChange} />
                             <div className="input-group-append position-relative ">
-                                <select className="form-control product-listCategore-serach" id="categorieProduct" ref={categorieProduct} onChange={handleChange}>
+                                <select className="form-select product-listCategore-serach" id="categorieProduct" ref={categorieProduct} onChange={handleChange}>
                                     <option value="">Toutes les catégories</option>
                                     {ListCategorie.map((item, key) => (<option key={item.idCategorie} value={item.idCategorie}>{item.nomCategorie}</option>))}
                                 </select>
-                                <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                             </div>
                             <div className="input-group-append position-relative ">
-                                <select className="form-control product-listCategore-serach" id="idFournisseur" ref={idFournisseur} onChange={handleChange}>
+                                <select className="form-select product-listCategore-serach" id="idFournisseur" ref={idFournisseur} onChange={handleChange}>
                                     <option value="">Toutes les fournisseur</option>
                                     {fournisseurs.map(fournisseur => (
                                         <option key={fournisseur.idFournisseur} value={fournisseur.idFournisseur}>{fournisseur.raisonSocial}</option>
                                     ))}
                                 </select>
-                                <i className="fas fa-chevron-down position-absolute" style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#495057' }}></i>
                             </div>
                         </div>
                     </form>

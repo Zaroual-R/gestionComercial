@@ -4,8 +4,16 @@ import ServiceClient from '../backEndService/ServiceClient';
 
 
 const AddDevis = () => {
-  const [clients, setClients] = useState();
+  const [clients, setClients] = useState([]);
   const searchKeyClient = useRef();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage] = useState(5); // Nombre de produits par page
+  const indexOfLastClient = currentPage * rowsPerPage;
+  const indexOfFirstClient = indexOfLastClient - rowsPerPage;
+  const currentClients = clients.slice(indexOfFirstClient, indexOfLastClient);
+  const totalPages = Math.ceil(clients.length / rowsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 
   useEffect(() => {
@@ -47,7 +55,7 @@ const AddDevis = () => {
     }
   }
 
-  const datashow = clients ? clients.map((item, key) => <LignAddDevis key={key.id} id={item.idClient} nom={item.nomClient} prenom={item.prenomClient} societe={item.societe} pays={item.pays} ville={item.ville} tel={item.tel} />) : null;
+  const datashow = currentClients ? currentClients.map((item, key) => <LignAddDevis key={key.id} id={item.idClient} nom={item.nomClient} prenom={item.prenomClient} societe={item.societe} pays={item.pays} ville={item.ville} tel={item.tel} />) : null;
   return (
     <div className='container mt-2 list-client Myfont' style={{ width: '100%' }}>
       <div className='card' style={{ width: '100%', maxHeight: 'calc(100vh - 100px)' }}>
@@ -73,20 +81,38 @@ const AddDevis = () => {
           <table className="custom-table " style={{ width: '100%', paddingRight: "0px" }}>
             <thead>
               <tr>
-                <th scope="col" style={{width:"80px",  textAlign: "center" }}>#ID</th>
-                <th scope="col" style={{width:"100px",   textAlign: "center" }}>Nom</th>
-                <th scope="col" style={{width:"100px",   textAlign: "center" }}>Prénom</th>
-                <th scope="col" style={{width:"100px",   textAlign: "center" }}>Société</th>
-                <th scope="col" style={{width:"100px",   textAlign: "center" }}>Pays</th>
-                <th scope="col" style={{width:"100px",  textAlign: "center" }}>Ville</th>
-                <th scope="col" style={{ width:"140px", textAlign: "center" }}>Tel</th>
-                <th scope="col" style={{ width:"80px", textAlign: "center" }}>Action</th>
+                <th scope="col" style={{ width: "80px", textAlign: "center" }}>#Réference</th>
+                <th scope="col" style={{ width: "100px", textAlign: "center" }}>Nom</th>
+                <th scope="col" style={{ width: "100px", textAlign: "center" }}>Prénom</th>
+                <th scope="col" style={{ width: "100px", textAlign: "center" }}>Société</th>
+                <th scope="col" style={{ width: "100px", textAlign: "center" }}>Pays</th>
+                <th scope="col" style={{ width: "100px", textAlign: "center" }}>Ville</th>
+                <th scope="col" style={{ width: "140px", textAlign: "center" }}>Tel</th>
+                <th scope="col" style={{ width: "80px", textAlign: "center" }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {datashow}
             </tbody>
           </table>
+          <br />
+          <nav>
+            <ul className='pagination'>
+              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage - 1)}>Previous</button>
+              </li>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+                  <button className='page-link' onClick={() => paginate(index + 1)}>
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <button className='page-link' onClick={() => paginate(currentPage + 1)}>Next</button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>

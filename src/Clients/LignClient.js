@@ -20,7 +20,7 @@ const LignClient = (props) => {
     }
     return (
         <tr>
-            <td style={{ width: "50px", textAlign: "center",fontWeight:"bold" }}>#{props.id}</td>
+            <td style={{ width: "80px", textAlign: "center",fontWeight:"bold" }}>#{props.id}</td>
             <td style={{ width: "90px", textAlign: "center" }}>{props.nom}</td>
             <td style={{ width: "90px", textAlign: "center" }}>{props.prenom}</td>
             <td style={{ width: "100px", textAlign: "center" }}>{props.societe}</td>
@@ -30,7 +30,7 @@ const LignClient = (props) => {
                 <i className="fas fa-info"></i> plus
             </button>
             </td>
-            <td style={{ width: "400px", textAlign: "center" }}>
+            <td style={{ width: "100px", textAlign: "center" }}>
             <div className="dropdown " >
                 <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" >
                     Actions
