@@ -21,20 +21,23 @@ const CreateEmail = () => {
 
     useEffect(()=>{
         getFournisseur();
+        if (email){
+            destinataire.current.value=email;
+        }
+       
     },[])
     //function to get fournisseur
     const getFournisseur = () =>{
         FournisseurService.getFournisseur(idFournisseur)
             .then(response =>{
                 console.log("get fournisseur was succed");
-                setEmail(response.data.emailResponsable);
+                setEmail(response.data.emailResponsable);               
             })
     }
 
     const toggleForm = () => {
         setShowForm(!showForm);
     };
-
 
     const closeAlert = () => {
         setShowAlert(false);
@@ -115,7 +118,7 @@ const CreateEmail = () => {
                 <form className="container mt-4 border rounded p-4 emaile-form" style={{ width: '80%' }}>
                     <div className="form-group">
                         <label htmlFor="destinataire">Email de Destination :</label>
-                        <input type="email" id="destinataire" ref={destinataire} name="destinataire" style={{fontWeight:'bold'}}  className="form-control " value={email} />
+                        <input type="email" id="destinataire" ref={destinataire} name="destinataire" style={{fontWeight:'bold'}}  className="form-control "  />
                     </div>
                     <div className="form-group">
                         <label htmlFor="sujet">Sujet :</label>

@@ -57,13 +57,14 @@ const ManageCommande = () => {
     })
 
     useEffect(()=>{
-        getCommande()
+        getCommande();
+        initForm();
     },[])
 
     const getCommande = () =>{
         CommandeFourService.getCompletCommande(idCmd)
             .then(res =>{
-                setCommande(res.data);
+                setUpdateCommande(res.data);
             })
             .catch(error =>{
                 console.error("error to get commande",error);

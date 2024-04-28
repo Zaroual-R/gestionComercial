@@ -284,11 +284,11 @@ const DetailsCommande = () => {
         if (!visible) return null;
         else {
             return (
-                <div className="container">
+                <div className="container Myfont cardBody">
                     <form onSubmit={handleSubmit}>
-                        <div className="form-row align-items-center">
+                        <div className="form-row align-items-center  cardBody">
                             {/* État field with label */}
-                            <div className="col-auto d-flex align-items-center">
+                            <div className="col-auto d-flex align-items-center cardBody">
                                 <label htmlFor="etat" className="mr-2" style={{ minWidth: '40px', fontWeight: 'bolder' }}>État:</label>
                                 <select className="form-control" id="etat" name="etat" ref={etat} style={{ width: '200px', height: '40px' }}  onChange={handleChange}>
                                     <option disabled selected>Changer l'état ici</option>
@@ -400,17 +400,17 @@ const DetailsCommande = () => {
         <LignCmdFourDetails key={`${item.idProduit}-${key}`} idProduit={item.idProduit} refProduit={item.refProduit} nomProduit={item.nomProduit} prix={item.prix} quantite={item.quantite} totalHT={item.montantTotalHt} tva={item.tva} totalTTC={item.montantTotalTTC} />
     ));
     return (
-        <div className='container mt-2 details-cmd '>
+        <div className='container mt-2 details-cmd Myfont'>
             <div className='card'>
-                <div className='card-header bg-dark' style={{ textAlign: 'center' }}>
+                <div className='card-header text-white cardHeader' style={{ textAlign: 'center' }}>
                     <h3>Details de la commande</h3>
                     {alertMsg(alertMessage)}
                 </div>
-                <div className='card-body'>
+                <div className='card-body cardBody'>
                     <table className='table '>
                         <tr>
                             <td style={{ fontWeight: 'bolder' }}>Reference :</td>
-                            <td>{commande.idCommande}</td>
+                            <td style={{ fontWeight: 'bolder' }}>#{commande.idCommande}</td>
                             <td style={{ fontWeight: 'bolder' }}>Date commande :</td>
                             <td>{formatDate(commande.dateCommande)}</td>
                         </tr>
@@ -425,7 +425,7 @@ const DetailsCommande = () => {
                             <td style={{ fontWeight: 'bolder' }}>Date sortie :</td>
                             <td>{formatDate(commande.dateSortie)}</td>
                             <td style={{ fontWeight: 'bolder' }}>Etat :</td>
-                            <td className='badge badge-success'><span >{commande.etat}</span></td>
+                            <td className='badge badge-success'>{commande.etat}</td>
                         </tr>
                         <tr>
                             <td style={{ fontWeight: 'bolder' }}>Moyenne réglement :</td>
@@ -471,7 +471,7 @@ const DetailsCommande = () => {
                         </tr>
                         <tr>
                             <td >
-                                <div className="d-flex align-items-center">
+                                <div className="d-flex align-items-center " style={{backgroundColor:"#ECF0F1"}}>
                                     <button className="action-button bg-dark" style={{ width: '40%', height: '40px', marginRight: '10px' }} onClick={()=>{handleDocCommande(commande.idCommande)}} >Document</button>
                                     <button className="action-button bg-success" style={{ width: '60%', height: '40px', marginRight: '10px' }} onClick={() => { handleClickManageCommande() }}>Gérer l'état </button>
                                 </div>

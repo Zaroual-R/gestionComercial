@@ -162,11 +162,11 @@ const ModefierBonLivraisonFour = () => {
       <div className='row'>
         <div className='col-12'>
           <div className='card' style={{ maxHeight: 'calc(100vh - 100px)', width: "800" }}>
-            <div className='card-header bg-dark '>
+            <div className='card-header bg-info '>
               <h3>Modefier Bon livraison</h3>
               {alert(alertMessage)}
             </div>
-            <div className='card-body'>
+            <div className='card-body cardBody'>
               <form onSubmit={handleSubmit}>
                 <div className="form-row">
                   <div className="form-group col-md-6">

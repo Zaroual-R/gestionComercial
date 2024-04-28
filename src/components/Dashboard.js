@@ -3,17 +3,23 @@ import { NavLink } from 'react-router-dom'
 import ServiceClient from '../backEndService/ServiceClient';
 import FournisseurService from '../backEndService/FournisseurService';
 import CommandeFourService from '../backEndService/CommandeFourService';
-import ServiceCommande from '../backEndService/ServiceCommande';
+import ServiceCommande from '../backEndService/ServiceCommand';
+import LinesChart from './LinesChart';
+import BasicDateCalendar from './Calender';
+import { PieChart } from '@mui/x-charts/PieChart';
 const Dashboard = () => {
   const [nbrCmdClient, setNbrCmdClient] = useState(0);
   const [nbrCmdFour, setNbrCmdFour] = useState(0);
   const [nbrClient, setNbrClient] = useState(0);
   const [nbrFournisseur, setNbrFournisseur] = useState(0);
+  const [nbrCmdFourByStatus, setBbrCmdFourByStatus] = useState([]);
+  const [nbrCmdClientByState, setNbrCmdClientByState] = useState([]);
   useEffect(() => {
     getNbrClient();
     getNbrCmdClient();
     getNbrCmdFour();
     getNbrFournisseur();
+    getNbrCmdFourByState();
   })
   const getNbrClient = () => {
     ServiceClient.getAllClients()
@@ -59,8 +65,20 @@ const Dashboard = () => {
         console.error("error to get nbr cmdfour");
       })
   }
+
+  const getNbrCmdFourByState = () => {
+    CommandeFourService.getNbrCommandeByState()
+      .then(res => {
+        setBbrCmdFourByStatus(res.data);
+        console.log("all nbrcmdfourby stata was fetched");
+      })
+      .catch(error => {
+        console.error("error to get nbr cmd four by state");
+      })
+  }
+
   return (
-    <div className="content-wrapper">
+    <div className="content-wrapper Myfont">
       {/* Content Header (Page header) */}
       <div className="content-header">
         <div className="container-fluid">
@@ -146,23 +164,21 @@ const Dashboard = () => {
           <div className="row">
             {/* Left col */}
             <section className="col-lg-7 connectedSortable">
-              {/* Custom tabs (Charts with tabs)*/}
+              {/* Custom vente achat chart (Charts with tabs)*/}
               <div className="card">
-                <div className="card-header">
+                <div className="card-header bg-dark">
                   <h3 className="card-title">
                     <i className="fas fa-chart-pie mr-1" />
-                     les ventes
+                    les achat-vente de chaque mois
                   </h3>
                 </div>{/* /.card-header */}
                 <div className="card-body">
                   <div className="tab-content p-0">
-                    {/* Morris chart - Sales */}
-                    <div className="chart tab-pane active" id="revenue-chart" style={{ position: 'relative', height: 300 }}>
-                      <canvas id="revenue-chart-canvas" height={300} style={{ height: 300 }} />
-                    </div>
-                    <div className="chart tab-pane" id="sales-chart" style={{ position: 'relative', height: 300 }}>
-                      <canvas id="sales-chart-canvas" height={300} style={{ height: 300 }} />
-                    </div>
+                    {/* start chart - Sales */}
+
+                    <LinesChart />
+
+                    {/* endChart chart - Sales */}
                   </div>
                 </div>{/* /.card-body */}
               </div>
@@ -301,12 +317,57 @@ const Dashboard = () => {
             {/* /.Left col */}
             {/* right col (We are only adding the ID to make the widgets sortable)*/}
             <section className="col-lg-5 connectedSortable">
+              {/*The chart commande fournisseur  */}
+              <div className="card ">
+                <div className="card-header border-0 bg-gradient-primary">
+                  <h3 className="card-title">
+                    <i className="far fa-calendar-alt" />
+                    &nbsp;&nbsp;nombre de commandes fournisseur par état 2024
+                  </h3>
+                </div>
+                {/* /.card-header */}
+                <div className="card-body pt-0">
+                  {/*The chart commande client  */}
+                  <PieChart
+                    colors={['green', 'red', 'blue', 'yellow']}
+                    series={[{
+                      data: nbrCmdFourByStatus,
+                      innerRadius: 30,
+                      outerRadius: 100,
+                      paddingAngle: 5,
+                      cornerRadius: 5,
+                      startAngle: -90,
+                      endAngle: 180,
+                      cx: 150,
+                      cy: 150,
+                    }]}
+                    width={400}
+                    height={300}
+                  />
+                </div>
+                {/* /.card-body */}
+              </div>
+              {/*The chart commande client  */}
+              <div className="card bg-gradient-primary">
+                <div className="card-header border-0">
+                  <h3 className="card-title">
+                    <i className="far fa-calendar-alt" />
+                    &nbsp;&nbsp;nombre de commandes client par état 2024
+                  </h3>
+                </div>
+                {/* /.card-header */}
+                <div className="card-body pt-0">
+                  {/*The chart commande client  */}
+
+                </div>
+                {/* /.card-body */}
+              </div>
               {/* Calendar */}
               <div className="card bg-gradient-success">
                 <div className="card-header border-0">
                   <h3 className="card-title">
                     <i className="far fa-calendar-alt" />
-                    Calendar
+                    &nbsp;&nbsp;Calendar
                   </h3>
                   {/* tools card */}
                   <div className="card-tools">
@@ -333,7 +394,7 @@ const Dashboard = () => {
                 {/* /.card-header */}
                 <div className="card-body pt-0">
                   {/*The calendar */}
-                  <div id="calendar" style={{ width: '100%' }} />
+                  <BasicDateCalendar />
                 </div>
                 {/* /.card-body */}
               </div>

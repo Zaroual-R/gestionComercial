@@ -147,13 +147,13 @@ const ListProduit = () => {
     const datashow = currentProducts.map((item, key) => <LignProduit key={item.idProduit} id={item.idProduit} refProduit={item.refProd} nom={item.nomProd} prix={item.prixUnitaireHT} categorie={item.categoryName} details={item.details} tvaN={item.tva} idFournisseur={item.idFournisseur} prixAchat={item.prixAchatHT} onDelete={handleDeleteProduct} />)
 
     return (
-        <div className='container mt-2 list-produit'>
+        <div className='container mt-2 list-produit Myfont'>
             <div className='card ' style={{ width: "800" }}>
-                <div className="card-header bg-dark">
+                <div className="card-header text-white cardHeader">
                     <h3>Liste des produits</h3>
                     {alertError(alertMessage)}
                 </div>
-                <div className='card-body ' >
+                <div className='card-body cardBody' >
                     <form method="get" >
                         <div className="input-group mb-2">
                             <div className='col-4'>

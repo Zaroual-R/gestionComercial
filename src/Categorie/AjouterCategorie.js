@@ -103,15 +103,15 @@ const AjouterCategorie = () => {
 
     }
     return (
-        <div className="container ajouter-categorie">
+        <div className="container ajouter-categorie Myfont">
             <div className="row">
                 <div className="col-md-8 card-categorie">
                     <div className="card ">
-                        <div className="card-header bg-info text-white">
-                            <h4>Nouvelle Catégorie</h4>
-                            {alert(alertMessage)}
+                        <div className="card-header cardHeader text-white">
+                            <h4>Nouvelle Catégorie</h4>                           
                         </div>
-                        <div className="card-body">
+                        <div className="card-body cardBody">
+                        {alert(alertMessage)}
                             <form onSubmit={handleSubmit}>
                                 <div className="form-outline mb-4">
                                     <label className="form-label" htmlFor="nomCategorieField">Nom catégorie :</label>

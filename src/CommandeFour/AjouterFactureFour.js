@@ -128,11 +128,11 @@ return (
     <div className='row'>
       <div className='col-12'>
         <div className='card' style={{ maxHeight: 'calc(100vh - 100px)', width: "800" }}>
-          <div className='card-header bg-dark '>
-            <h3>Ajouter Facture</h3>
-            {alert(alertMessage)}
+          <div className='card-header bg-info '>
+            <h3>Ajouter Facture</h3>           
           </div>
-          <div className='card-body'>
+          <div className='card-body cardBody'>
+          {alert(alertMessage)}
             <form onSubmit={handleSubmit}>
               <div className="form-row">
                 <div className="form-group col-md-6">

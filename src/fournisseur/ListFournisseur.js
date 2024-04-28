@@ -121,11 +121,11 @@ const ListFournisseur = () => {
     return (
         <div className='container mt-2 list-fournisseur Myfont'>
             <div className='card ' style={{ maxHeight: 'calc(100vh - 90px)', width: "800" }}>
-                <div className="card-header bg-dark">
+                <div className="card-header text-white cardHeader">
                    <h3>Consulter les fournisseur</h3>
                     {alertMsg(alertMessage)}
                 </div>
-                <div className='card-body ' >
+                <div className='card-body cardBody' >
                     <form method="get" >
                         <div className='form-row'>
                             <div className='col-6'>

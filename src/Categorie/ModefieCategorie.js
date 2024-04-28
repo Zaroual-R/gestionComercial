@@ -105,7 +105,7 @@ const ModefieCategorie = () => {
            
      }
   return (
-    <div className='container modefie-categorie'>
+    <div className='container modefie-categorie Myfont'>
     <div className='row'>
         <div className='col-8'>
             <form onSubmit={handleSubmit}>

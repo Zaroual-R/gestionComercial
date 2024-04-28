@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 const Header = () => {
     return (
@@ -10,10 +11,10 @@ const Header = () => {
                         <a className="nav-link" data-widget="pushmenu" href="#"><i className="fas fa-bars" /></a>
                     </li>
                     <li className="nav-item d-none d-sm-inline-block">
-                        <a href="index3.html" className="nav-link">Home</a>
+                        <NavLink to="/" className="nav-link">Home</NavLink>
                     </li>
                     <li className="nav-item d-none d-sm-inline-block">
-                        <a href="#" className="nav-link">Contact</a>
+                        <a href="#" className="nav-link"></a>
                     </li>
                 </ul>
                 {/* SEARCH FORM */}

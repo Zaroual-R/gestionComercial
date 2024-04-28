@@ -101,10 +101,10 @@ const ContacterFournisseur = () => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card-header bg-info text-white" style={{textAlign:'center'}}>
-                            <h3>Contacter le  Fournisseur</h3>
-                            {alertMsg(alertMessage)}
+                            <h3>Contacter le  Fournisseur</h3>        
                         </div>
                         <div className="card-body  card-mail">
+                            {alertMsg(alertMessage)}
                             <form className="container mt-4 email-form" style={{ backgroundBlendMode: 'darken' }} onSubmit={handleSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="destinataire">Email de Destination :</label>

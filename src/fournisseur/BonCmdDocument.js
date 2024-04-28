@@ -152,9 +152,9 @@ const BonCmdDocument = () => {
         const signatureStartY = doc.lastAutoTable.finalY + 10
         doc.text("Mode de règlement:"+getModeReglement(commande.moyenneReglement), 14, signatureStartY);
         // Signature et date
-        const signature = '../dist/img/signature2.png'; // Remplacez par votre signature en Base64
+        const signature = '../dist/img/signature.png'; // Remplacez par votre signature en Base64
         doc.text("signature:", 14, signatureStartY+7);
-        doc.addImage(signature, 'JPEG', 10 , signatureStartY+10, 50, 40);
+        doc.addImage(signature, 'JPEG', 12 , signatureStartY+15, 50, 40);
        // doc.text(`Date: ${new Date().toLocaleDateString()}`, 10, doc.lastAutoTable.finalY + 60);
 
         // Générer le PDF

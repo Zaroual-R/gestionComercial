@@ -39,12 +39,12 @@ const MoreDetails = () => {
 
 
   return (
-    <div className="container mt-2 details-cmd ">
+    <div className="container mt-2 details-cmd Myfont">
       <div className="card" >
         <div className="card-header bg-info" style={{ textAlign: 'center' }}>
           <h3>Détails du Fournisseur</h3>
         </div>
-        <div className='card-body Myfont'>
+        <div className='card-body cardBody'>
           <table className='table' style={{ width: '100%' }}>
             <tr>
               <td style={{ fontWeight: 'bold' }}>Référece de fournisseur:</td>

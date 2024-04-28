@@ -59,10 +59,10 @@ const ListCategorie = () => {
 
 
     return (
-        <div className='container mt-2 list-categorie'>
+        <div className='container mt-2 list-categorie Myfont'>
             <div className='card ' style={{ maxHeight: 'calc(100vh - 100px)' }}>
-                <div class="card-header bg-dark"> <h2>Listes des Categories</h2></div>
-                <div className='card-body ' style={{ overflowY: 'auto' }}>
+                <div class="card-header text-white cardHeader"> <h2>Listes des Categories</h2></div>
+                <div className='card-body cardBody ' style={{ overflowY: 'auto' }}>
                     <form method="get" >
                         <div className="form-row">
                             <div className='form-group col-2'>

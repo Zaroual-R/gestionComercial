@@ -144,13 +144,13 @@ const ListCmdFour = () => {
     return (
         <div>
             {!loader ? <div>...loading</div> :
-                <div className='container mt-2 list-produit'>
+                <div className='container mt-2 list-produit Myfont'>
                     <div className='card ' style={{ maxHeight: 'calc(100vh - 100px)', width: "800" }}>
-                        <div className="card-header bg-dark">
+                        <div className="card-header text-white cardHeader">
                             <h3>List commandes fournisseur </h3>
                             {alertMsg(alertMessage)}
                          </div>
-                        <div className='card-body ' >
+                        <div className='card-body cardBody' >
                             <form method="get"  >
                                 <div className='input-group mb-2'>
                                     <div className='col-6'>

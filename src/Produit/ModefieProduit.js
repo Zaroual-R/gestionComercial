@@ -252,15 +252,15 @@ const ModefieProduit = () => {
   }
   return (
    <>
-        <div className="container ajouter-produit">
+        <div className="container ajouter-produit Myfont">
       <div className="row">
         <div className="col-12">
           <div className="card">
-            <div className="card-header bg-info text-white">
-              <h3>Modefier Produit</h3>
-              {alert(alertMessage)}
+            <div className="card-header cardHeader text-white">
+              <h3>Modefier Produit</h3>           
             </div>
-            <div className="card-body">
+            <div className="card-body cardBody">
+             {alert(alertMessage)}
               <form onSubmit={handleSubmit}>
                 <div className='form-row'>
                   <div className="form-group col-md-6">

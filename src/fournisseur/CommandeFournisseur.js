@@ -328,11 +328,11 @@ const CommandeFournisseur = () => {
             <div className="row">
                 <div className="col-12">
                     <div className="card">
-                        <div className="card-header bg-info text-white">
+                        <div className="card-header cardHeader text-white">
                             <h3>Nouveau commande fournisseur</h3>
-                            {alert(alertMessage)}
                         </div>
-                        <div className="card-body">
+                        <div className="card-body cardBody">
+                            {alert(alertMessage)}
                             <form onSubmit={handleSubmit}>
                                 <div className="form-row">
                                     <div className="form-group col-md-6">
@@ -385,7 +385,7 @@ const CommandeFournisseur = () => {
                                 <div className="form-row">
                                     <div className="form-group col-md-4">
                                         <label htmlFor="produitField">Produit</label>
-                                        <select className="form-control" id="produitField" ref={produitField} onChange={handleChange} >
+                                        <select className="form-select" id="produitField" ref={produitField} onChange={handleChange} >
                                             <option value=''>Select Produit-Reference</option>
                                             {productList.map((item, key) => <option key={item.key} value={item.idProduit}>{item.nomProd}-{item.refProd}</option>)}
                                         </select>
@@ -397,7 +397,7 @@ const CommandeFournisseur = () => {
                                     <div className='form-group col-md-4 align-self-end'>
                                         <button type="button" className="btn btn-dark" onClick={handleClickAddProduct}><i className='fas fa-plus'></i> &nbsp;&nbsp;Ajouter</button>
                                     </div>
-                                    <table class="table table-bordered  table-striped" >
+                                    <table class="custom-table" >
                                         <thead >
                                             <tr>
                                                 <th scope="col" style={{ textAlign: "center" }}>Refernce </th>

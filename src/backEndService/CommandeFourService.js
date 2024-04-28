@@ -39,6 +39,10 @@ class CommandeFournisseur {
         return axios.patch(`${API_URL}/editState/${id}`,stateDto);
     }
 
+    getNbrCommandeByState(){
+        return axios.get(`${API_URL}/NbrCmdByState`);
+    }
+
     
 }
 export default new CommandeFournisseur();

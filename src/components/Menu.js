@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import ProductService from '../backEndService/ProductService';
+import { Nav } from 'react-bootstrap';
 const Menu = () => {
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     getNbrProduit();
   })
-  const [nbrProduit,setNbrProduit]=useState(0);
-  const getNbrProduit = () =>{
+  const [nbrProduit, setNbrProduit] = useState(0);
+  const getNbrProduit = () => {
     ProductService.getAllProducts()
-      .then(response =>{
+      .then(response => {
         setNbrProduit(response.data.length);
       })
-      .catch(error =>{
+      .catch(error => {
         console.log("error to get produits")
       })
   }
   return (
-    <aside className="main-sidebar sidebar-dark-primary elevation-4 my-aside">
+    <aside className="main-sidebar sidebar-dark-primary elevation-4 my-aside Myfont">
       {/* Brand Logo */}
       <NavLink to='/' className='brand-link'>
-        <img src="../dist/img/meta.png" alt="logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} />
+        <img src="../dist/img/metaMa.png" alt="logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} />
         <span className="brand-text font-weight-light">MetaCommerce</span>
       </NavLink>
       {/* Sidebar */}
@@ -31,7 +32,7 @@ const Menu = () => {
             <img src="../dist/img/avatar5.png" className="img-circle elevation-2" alt="UserImage" />
           </div>
           <div className="info">
-            <a href="#" className="d-block text-md">Rachid Zaroual</a>
+            <NavLink to="/EditProfil" className="d-block text-md">Rachid Zaroual</NavLink>
           </div>
         </div>
         {/* Sidebar Menu */}
@@ -39,15 +40,15 @@ const Menu = () => {
           <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             {/* Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library */}
-         <li class="nav-item has-treeview menu-open">
-            <NavLink to='/' className='nav-link active'>
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-                <i class=""></i>
-              </p>
-            </NavLink>
-          </li>
+            <li class="nav-item has-treeview menu-open">
+              <NavLink to='/' className='nav-link active'>
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Dashboard
+                  <i class=""></i>
+                </p>
+              </NavLink>
+            </li>
             <li className="nav-item">
               <NavLink to='/' className='nav-link'>
                 <i className="nav-icon fas fa-th" />
@@ -57,6 +58,8 @@ const Menu = () => {
                 </p>
               </NavLink>
             </li>
+
+            {/*Produit*/}
             <li className="nav-item has-treeview">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-copy" />
@@ -93,6 +96,8 @@ const Menu = () => {
                 </li>
               </ul>
             </li>
+
+            {/*Clients*/}
             <li className="nav-item has-treeview">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-user" />
@@ -116,34 +121,62 @@ const Menu = () => {
                 </li>
               </ul>
             </li>
+
+            {/*Client commande */}
             <li className="nav-item has-treeview">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-edit" />
                 <p>
-                  Commandes
+                  Vente
                   <i className="fas fa-angle-left right" />
                 </p>
               </a>
               <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <NavLink to="/AddCmd" className="nav-link">
+                  <NavLink to="/AddDevis" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>Ajouter commande</p>
+                    <p>Ajouter devis</p>
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink to="/ListCommande" className="nav-link">
+                  <NavLink to="/ListDevis" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Listes devis</p>
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/ListFacture" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Listes factures</p>
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/ListLivraison" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Listes de livraisons</p>
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/AddCommand" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>ajouter une commande</p>
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/ListCommand" className="nav-link">
                     <i className="far fa-circle nav-icon" />
                     <p>Listes commandes</p>
                   </NavLink>
                 </li>
               </ul>
             </li>
+
+            {/*fournisseur*/}
             <li className="nav-item has-treeview">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-warehouse" />
                 <p>
-                  Gestion Fournisseur
+                  Fournisseur
                   <i className="fas fa-angle-left right" />
                 </p>
               </a>
@@ -162,9 +195,11 @@ const Menu = () => {
                 </li>
               </ul>
             </li>
+
+            {/*Achat*/}
             <li className="nav-item has-treeview">
               <a href="#" className="nav-link">
-                <i className="nav-icon fas fa-file-invoice" />
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;
                 <p>
                   Achat
                   <i className="fas fa-angle-left right" />
@@ -185,315 +220,72 @@ const Menu = () => {
                 </li>
               </ul>
             </li>
+
+            {/*utilisateur*/}
             <li className="nav-item has-treeview">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-users" />
                 <p>
-                  Utilisateur
+                  Utilisateurs
                   <i className="fas fa-angle-left right" />
                 </p>
               </a>
               <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <a href="pages/tables/simple.html" className="nav-link">
+                  <NavLink to="/AddUser" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>Simple Tables</p>
-                  </a>
+                    <p>Nouveau utilisateur</p>
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a href="pages/tables/data.html" className="nav-link">
+                  <Link to="/UserTable" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>DataTables</p>
-                  </a>
+                    <p>les utilisateurs</p>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a href="pages/tables/jsgrid.html" className="nav-link">
+                  <Link to="/AddRole" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>jsGrid</p>
-                  </a>
+                    <p>Nouveau role</p>
+                  </Link>
                 </li>
+                <li className="nav-item">
+                  <Link to="/ListRoles" className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>list des role</p>
+                  </Link>
+                </li>
+
               </ul>
             </li>
-            <li className="nav-header">EXAMPLES</li>
-            <li className="nav-item">
-              <a href="pages/calendar.html" className="nav-link">
-                <i className="nav-icon far fa-calendar-alt" />
-                <p>
-                  Calendar
-                  <span className="badge badge-info right">2</span>
-                </p>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="pages/gallery.html" className="nav-link">
-                <i className="nav-icon far fa-image" />
-                <p>
-                  Gallery
-                </p>
-              </a>
-            </li>
+
+            {/*Reglage*/}
             <li className="nav-item has-treeview">
               <a href="#" className="nav-link">
-                <i className="nav-icon far fa-envelope" />
+                <i className="nav-icon fas fa-edit" />
                 <p>
-                  Mailbox
+                  Reglage
                   <i className="fas fa-angle-left right" />
                 </p>
               </a>
               <ul className="nav nav-treeview">
                 <li className="nav-item">
-                  <a href="pages/mailbox/mailbox.html" className="nav-link">
+                  <NavLink to="/entreprise" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>Inbox</p>
-                  </a>
+                    <p>modifier les informations de l'entreprises</p>
+                  </NavLink>
+
                 </li>
                 <li className="nav-item">
-                  <a href="pages/mailbox/compose.html" className="nav-link">
+                  <NavLink to="/remarqueAndCondition" className="nav-link">
                     <i className="far fa-circle nav-icon" />
-                    <p>Compose</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/mailbox/read-mail.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Read</p>
-                  </a>
+                    <p>remarques et conditions pour les papiers</p>
+                  </NavLink>
                 </li>
               </ul>
+              
             </li>
-            <li className="nav-item has-treeview">
-              <a href="#" className="nav-link">
-                <i className="nav-icon fas fa-book" />
-                <p>
-                  Pages
-                  <i className="fas fa-angle-left right" />
-                </p>
-              </a>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <a href="pages/examples/invoice.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Invoice</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/profile.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Profile</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/e_commerce.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>E-commerce</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/projects.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Projects</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/project_add.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Project Add</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/project_edit.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Project Edit</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/project_detail.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Project Detail</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/contacts.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Contacts</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li className="nav-item has-treeview">
-              <a href="#" className="nav-link">
-                <i className="nav-icon far fa-plus-square" />
-                <p>
-                  Extras
-                  <i className="fas fa-angle-left right" />
-                </p>
-              </a>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <a href="pages/examples/login.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Login</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/register.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Register</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/forgot-password.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Forgot Password</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/recover-password.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Recover Password</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/lockscreen.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Lockscreen</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/legacy-user-menu.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Legacy User Menu</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/language-menu.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Language Menu</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/404.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Error 404</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/500.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Error 500</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/pace.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Pace</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/examples/blank.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Blank Page</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="starter.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Starter Page</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li className="nav-header">MISCELLANEOUS</li>
-            <li className="nav-item">
-              <a href="https://adminlte.io/docs/3.0" className="nav-link">
-                <i className="nav-icon fas fa-file" />
-                <p>Documentation</p>
-              </a>
-            </li>
-            <li className="nav-header">MULTI LEVEL EXAMPLE</li>
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                <i className="fas fa-circle nav-icon" />
-                <p>Level 1</p>
-              </a>
-            </li>
-            <li className="nav-item has-treeview">
-              <a href="#" className="nav-link">
-                <i className="nav-icon fas fa-circle" />
-                <p>
-                  Level 1
-                  <i className="right fas fa-angle-left" />
-                </p>
-              </a>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Level 2</p>
-                  </a>
-                </li>
-                <li className="nav-item has-treeview">
-                  <a href="#" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>
-                      Level 2
-                      <i className="right fas fa-angle-left" />
-                    </p>
-                  </a>
-                  <ul className="nav nav-treeview">
-                    <li className="nav-item">
-                      <a href="#" className="nav-link">
-                        <i className="far fa-dot-circle nav-icon" />
-                        <p>Level 3</p>
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a href="#" className="nav-link">
-                        <i className="far fa-dot-circle nav-icon" />
-                        <p>Level 3</p>
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a href="#" className="nav-link">
-                        <i className="far fa-dot-circle nav-icon" />
-                        <p>Level 3</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Level 2</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                <i className="fas fa-circle nav-icon" />
-                <p>Level 1</p>
-              </a>
-            </li>
-            <li className="nav-header">LABELS</li>
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                <i className="nav-icon far fa-circle text-danger" />
-                <p className="text">Important</p>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                <i className="nav-icon far fa-circle text-warning" />
-                <p>Warning</p>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="#" className="nav-link">
-                <i className="nav-icon far fa-circle text-info" />
-                <p>Informational</p>
-              </a>
-            </li>
+
           </ul>
         </nav>
         {/* /.sidebar-menu */}

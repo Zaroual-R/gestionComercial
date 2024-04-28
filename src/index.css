@@ -38,9 +38,9 @@ code {
 .ajouter-categorie{
   margin-left:17.8%;
   padding:10px;
-  margin-bottom: 300px;
+  margin-bottom: 100px;
   
-  padding-bottom: 400px;
+  padding-bottom: 200px;
 }
 .list-categorie{
   margin-left:18%;
@@ -133,7 +133,7 @@ code {
   margin-left:17.7%;
   margin-top: 0px;
   padding:10px;
-  padding-bottom:100px;
+  padding-bottom:45px;
   width:85%;
 }
 
@@ -255,13 +255,13 @@ code {
 .email-form input, .email-form textarea {
   background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
   border: 1px solid #ddd;
-  color: #333;
+  color: #1b1818;
   padding: 10px;
   border-radius: 4px;
 }
 
 .email-form label {
-  color: #ffffff; /* White color for labels for better visibility */
+  color: #141313; /* White color for labels for better visibility */
 }
 
 .email-form button {
@@ -364,7 +364,146 @@ code {
   background-color: #d0d7d0;
 }
 
-
-
-
 /*end of styling the data table */
+
+/*style card*/
+.cardHeader{
+  background-color: #2C3E50;
+}
+.cardBody{
+  background-color: #ECF0F1;
+}
+
+/*end style card*/
+
+/*strat style of profile */
+body {
+  background-color: rgb(99, 39, 120)
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #BA68C8
+}
+
+.profile-button {
+  background: rgb(99, 39, 120);
+  box-shadow: none;
+  border: none;
+  margin-top:0px;
+}
+
+.profile-button:hover {
+  background: #682773
+}
+
+.profile-button:focus {
+  background: #682773;
+  box-shadow: none
+}
+
+.profile-button:active {
+  background: #682773;
+  box-shadow: none;
+  
+}
+
+.back:hover {
+  color: #682773;
+  cursor: pointer
+}
+
+.labels {
+  font-size: 11px
+}
+
+.add-experience:hover {
+  background: #BA68C8;
+  color: #fff;
+  cursor: pointer;
+  border: solid 1px #BA68C8
+}
+.Myprofil{
+  margin-left:17.5%;
+  margin-top: 0px;
+  padding:10px;
+  padding-bottom:400px;
+}
+.left-side{
+  background-color: #f0f0f0; /* Light grey background for image side */
+}
+.right-side{
+ 
+  
+}
+
+.ajouter-user{
+  margin-left:17.5%;
+  margin-top: 0px;
+  padding:10px;
+  padding-bottom:120px;
+}
+.ajouter-role{
+  margin-left:17.5%;
+  margin-top: 0px;
+  padding:10px;
+  padding-bottom:180px;
+}
+.ajouter-entreprise{
+  margin-left:17.5%;
+  margin-top: 0px;
+  padding:10px;
+  padding-bottom:106px;
+}
+.ajouter-terms{
+  margin-left:17.5%;
+  margin-top: 0px;
+  padding:10px;
+  padding-bottom:50px;
+}
+/*end style of profile*/
+
+/*style of select*/
+.monSelect {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.monSelect__control {
+  background-color: #fff;
+  height: 200px; /* Hauteur ajustée à 200px */
+  min-height: 200px; /* Assurez-vous que le minimum est aussi à 200px */
+  display: flex;
+  align-items: center; /* Centrage vertical des éléments à l'intérieur */
+}
+
+.monSelect__value-container {
+  padding: 0 8px;
+  height: 100%; /* Utilise toute la hauteur du contrôle */
+  display: flex;
+  align-items: center; /* Centrage vertical des valeurs/tags */
+}
+
+.monSelect__multi-value {
+  background-color: #e0e0e0;
+  height: auto; /* Hauteur automatique pour s'adapter au contenu */
+  margin: 5px; /* Ajoutez une marge pour un peu d'espace autour des tags */
+}
+
+.monSelect__multi-value__label {
+  padding: 5px;
+}
+
+.monSelect__multi-value__remove {
+  color: #666;
+  cursor: pointer;
+}
+
+.monSelect__dropdown-indicator {
+  color: #888;
+}
+
+
+
+
+/*end of slect*/

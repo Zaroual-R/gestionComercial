@@ -119,7 +119,6 @@ const AjouterFournisseur = () => {
         }
         return null;
     }
-
     const handleChange =(event) =>{
         formValidate();
         const {name,value}=event.target;
@@ -181,15 +180,15 @@ const AjouterFournisseur = () => {
 
 
     return (
-        <div className="container ajouter-four">
+        <div className="container ajouter-four Myfont">
             <div className="row">
                 <div className="col-12">
                     <div className="card">
-                        <div className="card-header bg-info text-white">
+                        <div className="card-header cardHeader text-white">
                             <h3>Enregistrement Fournisseur</h3>
                             {alert(alertMessage)}
                         </div>
-                        <div className="card-body">
+                        <div className="card-body  cardBody">
                             <form onSubmit={handleSubmit}>
                                 <div className="form-row">
                                     <div className="form-group col-md-6">
