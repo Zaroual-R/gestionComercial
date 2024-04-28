@@ -57,8 +57,8 @@ const colors = {
             <FontAwesomeIcon icon="fa-solid fa-plus" /> Nouveau Role
             </button>
           </div>
-          <div className="table-responsive">
-            <table className="table custom-table">
+          <div >
+            <table className=" custom-table">
               <thead className="thead-dark">
                 <tr>
                   <th style={{width:"20%" ,textAlign:"center" }}>Nom</th>
